@@ -19,6 +19,8 @@ flow format: txt to flow
 
 from __future__ import print_function, division
 from subprocess import check_call
+import time
+import os
 
 
 # from CythonUtil import c_parse_records_tshark
@@ -73,7 +75,7 @@ def change_to_flows(pkts_records, name, *args, **kwargs):
         for f_tuple, (st_tm, pre_tm, pkts_lst, intr_tm_lst) in open_flows.items():
             if kwargs.get('time_out') is not None:
                 time_out = kwargs.get('time_out')
-                if curr_tm - pre_tm > time_out:  # time out : curr_tm-pre_tm
+                if curr_tm - pre_tm >= time_out:  # time out : curr_tm-pre_tm
                     # if t - st_tm > time_out:  # flow_duration: curr_tm-st_tm
                     flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
                     res_flow.append((st_tm, curr_tm) + f_tuple + (
@@ -83,21 +85,21 @@ def change_to_flows(pkts_records, name, *args, **kwargs):
                     remove_flows.append(f_tuple)
             elif kwargs.get('flow_duration') is not None:
                 flow_duration = kwargs.get('flow_duration')
-                if curr_tm - st_tm > flow_duration:  # flow_duration: curr_tm-st_tm
+                if curr_tm - st_tm >= flow_duration:  # flow_duration: curr_tm-st_tm
                     flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
                     res_flow.append((st_tm, curr_tm) + f_tuple + (
                         pkts_lst, flow_dur, intr_tm_lst))  # pkts_lst: the packets size in the same flow
                     # intr_tm_lst: Inter Arrival Time, the time between two packets sent single direction
-                    # print('f_tuple',f_tuple)
+                    print('f_tuple', f_tuple, pkts_lst)
                     remove_flows.append(f_tuple)
             elif kwargs.get('first_n_pkts') is not None:
                 first_n_pkts = kwargs.get('first_n_pkts')
-                if len(pkts_lst) > first_n_pkts:
+                if len(pkts_lst) >= first_n_pkts:
                     flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
                     res_flow.append((st_tm, curr_tm) + f_tuple + (
                         pkts_lst, flow_dur, intr_tm_lst))  # pkts_lst: the packets size in the same flow
                     # intr_tm_lst: Inter Arrival Time, the time between two packets sent single direction
-                    # print('f_tuple',f_tuple)
+                    # print('f_tuple',f_tuple, pkts_lst)
                     remove_flows.append(f_tuple)
             else:
                 print('input params is not right')
@@ -188,6 +190,8 @@ def save_flow(flows, f_name):
 
 
 def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
+    print('start time:', time.asctime())
+    start_time = time.time()
     if kwargs.get('time_out') is not None:
         time_out = kwargs.get('time_out')
         txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_time_out_' + str(time_out) + '_tshark.txt'
@@ -208,14 +212,43 @@ def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
     records, name = parse_records_tshark(txt_f_name)
     res_flows = change_to_flows(records, name, **kwargs)
     save_flow(res_flows, flow_file_name)
+    print('finish time:', time.asctime())
+    print('It takes time: %.2f s', time.time() - start_time)
+
+
+def txt2flow(txt_f_name, flow_file_name, *args, **kwargs):
+    """
+
+    :param txt_f_name: pcap to txt: five tuple
+    :param flow_file_name: the results file name
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    print('start time:', time.asctime())
+    start_time = time.time()
+
+    records, name = parse_records_tshark(txt_f_name)
+    res_flows = change_to_flows(records, name, **kwargs)
+    save_flow(res_flows, flow_file_name)
+    print('finish time:', time.asctime())
+    print('It takes time: %.2f s' % (time.time() - start_time))
 
 
 if __name__ == '__main__':
-    input_file = '../data/WorldOfWarcraft.pcap'
-    # output_file = './time_out=0.01+flow.txt'
-    # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
-    output_file = './first_n_pkts=5+flow.txt'
-    pcap2flow(input_file, output_file, first_n_pkts=1)  # the first n packets of the same flow
-    # output_file = './low_duration=0.1+flow.txt'
-    # pcap2flow(input_file, output_file, flow_duration=0.1)  # current_time - start_time>0.1
-    #
+    pcap_file_name = '../data/WorldOfWarcraft.pcap'
+    pcap_file_name = '../data/BitTorrent.pcap'
+    root_dir = '../results'
+    if not os.path.exists(root_dir):
+        os.mkdir(root_dir)
+
+    txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_tshark.txt'
+    export_to_txt(pcap_file_name, txt_f_name)
+
+    for i in range(1, 21):  # [1,21)
+        # output_file = './time_out=0.01+flow.txt'
+        # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
+        output_file = os.path.join(root_dir, 'first_n_pkts=%d_flow.txt' % i)
+        txt2flow(txt_f_name, output_file, first_n_pkts=i)  # the first n packets of the same flow
+        # output_file = './low_duration=0.03+flow.txt'
+        # pcap2flow(input_file, output_file, flow_duration=0.03)  # current_time - start_time>0.1
