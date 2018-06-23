@@ -21,6 +21,7 @@ from __future__ import print_function, division
 from subprocess import check_call
 import time
 import os
+import matplotlib.pyplot as plt
 
 
 # from CythonUtil import c_parse_records_tshark
@@ -30,6 +31,18 @@ def export_to_txt(f_name, txt_f_name):
     cmd = """tshark -o gui.column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (
         f_name, txt_f_name)
 
+    print('--> ', cmd)
+    check_call(cmd, shell=True)
+
+
+def extract_packet_payload(f_name, txt_f_name):
+    # cmd = """tshark -r %s -T fields -e data -w %s""" % (
+    #     f_name, txt_f_name)
+    # cmd = """tshark -o gui.column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD", "Info","%%i"' -x -r %s  > %s""" % (
+    #     f_name, txt_f_name)
+    # cmd = """tshark -r BitTorrent.pcap -T fields -e frame.number -e frame.protocols -e frame.time -e ip.addr -e ip.proto -e tcp.port > a.txt"""
+    # cmd = """tcpdump -qns 0 -tttt -vvv -x -S -r %s > %s"""%(f_name,txt_f_name)
+    cmd = """tcpdump -qns 0 -tt -x -r %s > %s""" % (f_name, txt_f_name)
     print('--> ', cmd)
     check_call(cmd, shell=True)
 
@@ -182,11 +195,11 @@ Remain subFlows: [%i]
     return res_flow
 
 
-def save_flow(flows, f_name):
+def save_flow(flows, f_name, label='-1'):
     with open(f_name, 'w') as fid:
         for f in flows:
             # print(f)
-            fid.write(' '.join([str(v) for v in f]) + '\n')
+            fid.write(','.join([str(v) for v in f]) + ',' + label + '\n')
 
 
 def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
@@ -230,25 +243,69 @@ def txt2flow(txt_f_name, flow_file_name, *args, **kwargs):
 
     records, name = parse_records_tshark(txt_f_name)
     res_flows = change_to_flows(records, name, **kwargs)
-    save_flow(res_flows, flow_file_name)
+    # save_flow(res_flows, flow_file_name)
     print('finish time:', time.asctime())
     print('It takes time: %.2f s' % (time.time() - start_time))
 
+    return res_flows
+
+
+def show_figure(data_lst):
+    data = data_lst.split(',')[-4]
+    plt.plot(len(data), data)
+    plt.show()
+
+
+def append_data_to_file(all_in_one_file, new_file):
+    with open(all_in_one_file, 'a') as fid_out:
+        with open(new_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                line_arr = line.split(',')
+                # line_tmp = first_n_pkts_list+flow_duration+interval_time_list+label
+                line_tmp = ','.join([str(v) for v in line_arr[-4]]) + ',' + line_arr[-3] + ','.join(
+                    [str(v) for v in line_arr[-2]]) + ',' + line_arr[-1]
+                fid_out.write(line_tmp)
+                line = fid_in.readline()
+
 
 if __name__ == '__main__':
-    pcap_file_name = '../data/WorldOfWarcraft.pcap'
-    pcap_file_name = '../data/BitTorrent.pcap'
+    # pcap_file_name = '../data/WorldOfWarcraft.pcap'
+    # pcap_file_name = '../data/BitTorrent.pcap'
+    # extract_packet_payload(pcap_file_name, 'payload.txt')
+    # exit(-1)
+    # pcap_file_name = '../data/FILE-TRANSFER_gate_FTP_transfer.pcap'
+    # # pcap_file_name='../data/VIDEO_Vimeo_Gateway.pcap'
+    # pcap_file_name='../data/P2P_tor_p2p_multipleSpeed.pcap'
     root_dir = '../results'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
 
-    txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_tshark.txt'
-    export_to_txt(pcap_file_name, txt_f_name)
+    pcap_root_dir = '../data'
+    file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap']
+    all_in_one_file = os.path.join(root_dir, file_lst[0][:5] + '_all_in_one_file.txt')
+    if os.path.exists(all_in_one_file):
+        os.remove(all_in_one_file)
+    print('all_in_one_file:', all_in_one_file)
+    for file_tmp in file_lst:
+        pcap_file_name = os.path.join(pcap_root_dir, file_tmp)
+        print(pcap_file_name)
+        file_name_prefix = os.path.basename(pcap_file_name)
+        res_root_dir = os.path.join(root_dir, file_name_prefix)
+        if not os.path.exists(res_root_dir):
+            os.mkdir(res_root_dir)
 
-    for i in range(1, 21):  # [1,21)
-        # output_file = './time_out=0.01+flow.txt'
-        # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
-        output_file = os.path.join(root_dir, 'first_n_pkts=%d_flow.txt' % i)
-        txt2flow(txt_f_name, output_file, first_n_pkts=i)  # the first n packets of the same flow
+        txt_f_name = pcap_file_name.split('.pcap')[0] + '_tshark.txt'  # tshark: pcap to five tuple
+        export_to_txt(pcap_file_name, txt_f_name)
+
+        for i in range(20, 21):  # [1,21)
+            # output_file = './time_out=0.01+flow.txt'
+            # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
+            output_file = os.path.join(res_root_dir, file_name_prefix + '_first_n_pkts=%d_flow.txt' % i)
+            res_flows = txt2flow(txt_f_name, output_file, first_n_pkts=i)  # the first n packets of the same flow
+            save_flow(res_flows[:1000], output_file, label=file_name_prefix)
+
+        # show_figure(res_flows[0])
+        append_data_to_file(all_in_one_file, output_file)
         # output_file = './low_duration=0.03+flow.txt'
         # pcap2flow(input_file, output_file, flow_duration=0.03)  # current_time - start_time>0.1
