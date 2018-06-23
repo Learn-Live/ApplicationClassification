@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
     @ Pcap Converter: convert pcap to text or flows.
+
+    return: start_time, end_time, src_ip, dst_ip, protocol, src_port, dst_port, pkts_lst=[],flow_duration, intr_tm_lst=[]
+
     refer to:  https://github.com/hbhzwj/pcap-converter
 
 txt format: pcap to txt
@@ -43,27 +46,113 @@ def parse_records_tshark(f_name):
     return records, NAME
 
 
-def change_to_flows(records, name, time_out):  # name=['start_time','src_ip',  'dst_ip',, 'protocol','length', 'src_port', 'dst_port']
-    t_seq = name.index('start_time')
-    length_seq = name.index('length')
-    # five_tuple_seq = [name.index(k) for k in ['src_ip', 'src_port', 'dst_ip', 'dst_port', 'protocol']]
-    five_tuple_seq = [name.index(k) for k in ['src_ip', 'dst_ip', 'protocol','src_port', 'dst_port']]
+def change_to_flows(pkts_records, name, *args, **kwargs):
+# def change_to_flows(pkts_records, name, time_out=0.1, flow_duration=1, first_n_pkts=5):
+    """
+
+    :param pkts_records: packets_records
+    :param name: ['start_time','src_ip',  'dst_ip',, 'protocol','length', 'src_port', 'dst_port']
+    :param time_out: the current time - the previous time
+    :param flow_duration: the current time - the start time
+    :param first_n_pkts: the first n packets of the flow
+    :return:
+    """
+    st_idx = name.index('start_time')  # start time index
+    len_idx = name.index('length')  # length index
+    five_tuple_seq = [name.index(k) for k in ['src_ip', 'dst_ip', 'protocol', 'src_port', 'dst_port']]
     open_flows = dict()  # key: five_tuple, value:(start_time, end_time, length_lst, interval_time_diff_lst)
     res_flow = []
-    for rec in records:
-        # five_tuple = get_five_tuple(rec)
-        five_tuple = tuple(rec[seq] for seq in five_tuple_seq)
-        t = rec[t_seq]
-        length = rec[length_seq]
-        interval_time=0.0
+    for rec in pkts_records:
+        five_tuple = tuple(rec[seq] for seq in five_tuple_seq)  # current packet's five tuple
+        curr_tm = rec[st_idx]  # current time
+        curr_len = rec[len_idx]  # current packet length
+        intr_tm = 0.0  # Inter Arrival Time, the time between two packets sent single direction
         # check time out
         remove_flows = []
-        for f_tuple, (st_time, last_time, fs, interval_diff) in open_flows.items():
-            if t - last_time > time_out:  # time out : t-last_time
-            # if t - st_time > time_out:  # flow_duration: t-start_time
-                flow_duration = t - st_time
-                res_flow.append((st_time,t) + f_tuple + (fs, flow_duration,interval_diff))
-                print('f_tuple',f_tuple)
+        for f_tuple, (st_tm, pre_tm, pkts_lst, intr_tm_lst) in open_flows.items():
+            if kwargs.get('time_out') is not None:
+                time_out = kwargs.get('time_out')
+                if curr_tm - pre_tm > time_out:  # time out : curr_tm-pre_tm
+                    # if t - st_tm > time_out:  # flow_duration: curr_tm-st_tm
+                    flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
+                    res_flow.append((st_tm, curr_tm) + f_tuple + (
+                        pkts_lst, flow_dur, intr_tm_lst))  # pkts_lst: the packets size in the same flow
+                    # intr_tm_lst: Inter Arrival Time, the time between two packets sent single direction
+                    # print('f_tuple',f_tuple)
+                    remove_flows.append(f_tuple)
+            elif kwargs.get('flow_duration') is not None:
+                flow_duration = kwargs.get('flow_duration')
+                if curr_tm - st_tm > flow_duration:  # flow_duration: curr_tm-st_tm
+                    flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
+                    res_flow.append((st_tm, curr_tm) + f_tuple + (
+                        pkts_lst, flow_dur, intr_tm_lst))  # pkts_lst: the packets size in the same flow
+                    # intr_tm_lst: Inter Arrival Time, the time between two packets sent single direction
+                    # print('f_tuple',f_tuple)
+                    remove_flows.append(f_tuple)
+            elif kwargs.get('first_n_pkts') is not None:
+                first_n_pkts = kwargs.get('first_n_pkts')
+                if len(pkts_lst) > first_n_pkts:
+                    flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
+                    res_flow.append((st_tm, curr_tm) + f_tuple + (
+                        pkts_lst, flow_dur, intr_tm_lst))  # pkts_lst: the packets size in the same flow
+                    # intr_tm_lst: Inter Arrival Time, the time between two packets sent single direction
+                    # print('f_tuple',f_tuple)
+                    remove_flows.append(f_tuple)
+            else:
+                print('input params is not right')
+                exit(-1)
+        for f_tuple in remove_flows:
+            # print('---f_tuple:',five_tuple)
+            del open_flows[f_tuple]
+
+        stored_rec = open_flows.get(five_tuple)
+        if stored_rec is not None:  # if already exists
+            (st_tm, pre_pre_tm, pre_pkts_lst, pre_intr_tm_lst) = stored_rec
+            # open_flows[five_tuple] = (st_tm_pre, t, pkts_lst_pre + length)
+            pre_pkts_lst.append(curr_len)  # return None
+            pre_intr_tm_lst.append(curr_tm - pre_pre_tm)  # return None
+            open_flows[five_tuple] = (st_tm, curr_tm, pre_pkts_lst, pre_intr_tm_lst)
+            # print(open_flows[five_tuple],pkts_lst_pre.append(length),pkts_lst_pre,length)
+        else:  # not exisit
+            open_flows[five_tuple] = (curr_tm, curr_tm, [curr_len], [intr_tm])
+
+    print("""
+Totoal Packets: [%i]
+Exported subFlows: [%i]
+Remain subFlows: [%i]
+            """ % (len(pkts_records), len(res_flow), len(open_flows)))
+
+    return res_flow
+
+def change_to_flows_backup(pkts_records, name, first_n_pkts=5):
+    """
+
+    :param pkts_records: packets_records
+    :param name: ['start_time','src_ip',  'dst_ip',, 'protocol','length', 'src_port', 'dst_port']
+    :param first_n_pkts: the first n packets of the flow
+    :return:
+    """
+    st_idx = name.index('start_time')  # start time index
+    len_idx = name.index('length')  # length index
+    five_tuple_seq = [name.index(k) for k in ['src_ip', 'dst_ip', 'protocol', 'src_port', 'dst_port']]
+    open_flows = dict()  # key: five_tuple, value:(start_time, end_time, length_lst, interval_time_diff_lst)
+    res_flow = []
+    for rec in pkts_records:
+        five_tuple = tuple(rec[seq] for seq in five_tuple_seq)  # current packet's five tuple
+        curr_tm = rec[st_idx]  # current time
+        curr_len = rec[len_idx]  # current packet length
+        intr_tm = 0.0  # Inter Arrival Time, the time between two packets sent single direction
+        # check time out
+        remove_flows = []
+        for f_tuple, (st_tm, pre_tm, pkts_lst, intr_tm_lst) in open_flows.items():
+            # if curr_tm - pre_tm > time_out:  # time out : curr_tm-pre_tm
+            if len(pkts_lst) > first_n_pkts:
+                # if t - st_tm > time_out:  # flow_duration: curr_tm-st_tm
+                flow_dur = curr_tm - st_tm  # flow_dur: flow_duration
+                res_flow.append((st_tm, curr_tm) + f_tuple + (
+                    pkts_lst, flow_dur, intr_tm_lst))  # pkts_lst: the packets size in the same flow
+                # intr_tm_lst: Inter Arrival Time, the time between two packets sent single direction
+                # print('f_tuple',f_tuple)
                 remove_flows.append(f_tuple)
         for f_tuple in remove_flows:
             # print('---f_tuple:',five_tuple)
@@ -71,42 +160,59 @@ def change_to_flows(records, name, time_out):  # name=['start_time','src_ip',  '
 
         stored_rec = open_flows.get(five_tuple)
         if stored_rec is not None:  # if already exists
-            (st_time_old, last_time_old, fs_old, interval_old) = stored_rec
-            # open_flows[five_tuple] = (st_time_old, t, fs_old + length)
-            fs_old.append(length)   # return None
-            interval_old.append(t - last_time_old)  # return None
-            open_flows[five_tuple] = (st_time_old, t,fs_old , interval_old)
-            # print(open_flows[five_tuple],fs_old.append(length),fs_old,length)
+            (st_tm, pre_pre_tm, pre_pkts_lst, pre_intr_tm_lst) = stored_rec
+            # open_flows[five_tuple] = (st_tm_pre, t, pkts_lst_pre + length)
+            pre_pkts_lst.append(curr_len)  # return None
+            pre_intr_tm_lst.append(curr_tm - pre_pre_tm)  # return None
+            open_flows[five_tuple] = (st_tm, curr_tm, pre_pkts_lst, pre_intr_tm_lst)
+            # print(open_flows[five_tuple],pkts_lst_pre.append(length),pkts_lst_pre,length)
         else:  # not exisit
-            open_flows[five_tuple] = (t, t, [length], [interval_time])
-
+            open_flows[five_tuple] = (curr_tm, curr_tm, [curr_len], [intr_tm])
 
     print("""
 Totoal Packets: [%i]
-Exported Flows: [%i]
-Open Flows: [%i]
-            """ % (len(records), len(res_flow), len(open_flows)))
+Exported subFlows: [%i]
+Remain subFlows: [%i]
+            """ % (len(pkts_records), len(res_flow), len(open_flows)))
 
     return res_flow
 
 
-def write_flow(flows, f_name):
-    fid = open(f_name, 'w')
-    for f in flows:
-        # print(f)
-        fid.write(' '.join([str(v) for v in f]) + '\n')
-    fid.close()
+def save_flow(flows, f_name):
+    with open(f_name, 'w') as fid:
+        for f in flows:
+            # print(f)
+            fid.write(' '.join([str(v) for v in f]) + '\n')
 
 
-def pcap2flow(pcap_file_name, flow_file_name, time_out):
-    txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_tshark.txt'
+def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
+    if kwargs.get('time_out') is not None:
+        time_out = kwargs.get('time_out')
+        txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_time_out_' + str(time_out) + '_tshark.txt'
+        param_str='time_out=%f'%time_out
+    elif kwargs.get('flow_duration') is not None:
+        flow_duration = kwargs.get('flow_duration')
+        txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_flow_duration_' + str(flow_duration) + '_tshark.txt'
+        param_str='flow_duration=%f'%flow_duration
+    elif kwargs.get('first_n_pkts') is not None:
+        first_n_pkts = kwargs.get('first_n_pkts')
+        txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_first_n_pkts_' + str(first_n_pkts) + '_tshark.txt'
+        param_str='first_n_pkts=%d'%first_n_pkts
+    else:
+        print('input params is not right.')
+        exit(-1)
+    # txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_first_n_pkts_' + str('5') + '_tshark.txt'
     export_to_txt(pcap_file_name, txt_f_name)
     records, name = parse_records_tshark(txt_f_name)
-    res_flows = change_to_flows(records, name, time_out)
-    write_flow(res_flows, flow_file_name)
+    res_flows = change_to_flows(records, name, **kwargs)
+    save_flow(res_flows, flow_file_name)
 
 
 if __name__ == '__main__':
     input_file = '../data/WorldOfWarcraft.pcap'
     output_file = './flow.txt'
-    pcap2flow(input_file, output_file, time_out=0.1)
+    pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
+    pcap2flow(input_file,output_file,first_n_pkts=5)  # the first n packets of the same flow
+    pcap2flow(input_file, output_file, flow_duration=0.1)
+
+
