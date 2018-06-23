@@ -47,7 +47,7 @@ def parse_records_tshark(f_name):
 
 
 def change_to_flows(pkts_records, name, *args, **kwargs):
-# def change_to_flows(pkts_records, name, time_out=0.1, flow_duration=1, first_n_pkts=5):
+    # def change_to_flows(pkts_records, name, time_out=0.1, flow_duration=1, first_n_pkts=5):
     """
 
     :param pkts_records: packets_records
@@ -57,6 +57,7 @@ def change_to_flows(pkts_records, name, *args, **kwargs):
     :param first_n_pkts: the first n packets of the flow
     :return:
     """
+    print('**kwargs:', kwargs.items())
     st_idx = name.index('start_time')  # start time index
     len_idx = name.index('length')  # length index
     five_tuple_seq = [name.index(k) for k in ['src_ip', 'dst_ip', 'protocol', 'src_port', 'dst_port']]
@@ -124,6 +125,7 @@ Remain subFlows: [%i]
 
     return res_flow
 
+
 def change_to_flows_backup(pkts_records, name, first_n_pkts=5):
     """
 
@@ -189,15 +191,15 @@ def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
     if kwargs.get('time_out') is not None:
         time_out = kwargs.get('time_out')
         txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_time_out_' + str(time_out) + '_tshark.txt'
-        param_str='time_out=%f'%time_out
+        param_str = 'time_out=%f' % time_out
     elif kwargs.get('flow_duration') is not None:
         flow_duration = kwargs.get('flow_duration')
         txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_flow_duration_' + str(flow_duration) + '_tshark.txt'
-        param_str='flow_duration=%f'%flow_duration
+        param_str = 'flow_duration=%f' % flow_duration
     elif kwargs.get('first_n_pkts') is not None:
         first_n_pkts = kwargs.get('first_n_pkts')
         txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_first_n_pkts_' + str(first_n_pkts) + '_tshark.txt'
-        param_str='first_n_pkts=%d'%first_n_pkts
+        param_str = 'first_n_pkts=%d' % first_n_pkts
     else:
         print('input params is not right.')
         exit(-1)
@@ -210,9 +212,10 @@ def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
 
 if __name__ == '__main__':
     input_file = '../data/WorldOfWarcraft.pcap'
-    output_file = './flow.txt'
-    pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
-    pcap2flow(input_file,output_file,first_n_pkts=5)  # the first n packets of the same flow
-    pcap2flow(input_file, output_file, flow_duration=0.1)
-
-
+    # output_file = './time_out=0.01+flow.txt'
+    # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
+    output_file = './first_n_pkts=5+flow.txt'
+    pcap2flow(input_file, output_file, first_n_pkts=1)  # the first n packets of the same flow
+    # output_file = './low_duration=0.1+flow.txt'
+    # pcap2flow(input_file, output_file, flow_duration=0.1)  # current_time - start_time>0.1
+    #
