@@ -199,7 +199,7 @@ def save_flow(flows, f_name, label='-1'):
     with open(f_name, 'w') as fid:
         for f in flows:
             # print(f)
-            fid.write(','.join([str(v) for v in f]) + ',' + label + '\n')
+            fid.write('|'.join([str(v) for v in f]) + '|' + label + '\n')
 
 
 def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
@@ -261,13 +261,34 @@ def append_data_to_file(all_in_one_file, new_file):
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
             while line:
-                line_arr = line.split(',')
+                line_arr = line.split('|')
+                # print(line_arr[-4], ','.join([str(v) for v in line_arr[-4]]))
                 # line_tmp = first_n_pkts_list+flow_duration+interval_time_list+label
-                line_tmp = ','.join([str(v) for v in line_arr[-4]]) + ',' + line_arr[-3] + ','.join(
-                    [str(v) for v in line_arr[-2]]) + ',' + line_arr[-1]
+                line_tmp = ','.join([str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3]+',' + ','.join(
+                    [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[-1]   # line_arr[-4]='[1140,1470]', so use eval() to change str to list
+                # print(line_tmp)
                 fid_out.write(line_tmp)
                 line = fid_in.readline()
 
+
+def add_arff_header(all_in_one_file, attributes_num=2, label=['a','b','c']):
+
+    output_file= os.path.splitext(all_in_one_file)[0]+'.arff'
+    print(output_file)
+
+    with open(output_file,'w') as fid_out:
+        fid_out.write('@Relation test\n')
+        for i in range(attributes_num):
+            fid_out.write('@Attribute feature_%s numeric\n'%i)
+        label_tmp=','.join([str(v) for v in label])
+        print('label_tmp:',label_tmp)
+        fid_out.write('@Attribute class {%s}\n'%(label_tmp))
+        fid_out.write('@data\n')
+        with open(all_in_one_file,'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                fid_out.write(line)
+                line=fid_in.readline()
 
 if __name__ == '__main__':
     # pcap_file_name = '../data/WorldOfWarcraft.pcap'
@@ -280,10 +301,11 @@ if __name__ == '__main__':
     root_dir = '../results'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
-
+    first_n_pkts=100
     pcap_root_dir = '../data'
-    file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap']
-    all_in_one_file = os.path.join(root_dir, file_lst[0][:5] + '_all_in_one_file.txt')
+    file_lst=['AUDIO_tor_spotify2.pcap','VIDEO_Youtube_Flash_Gateway.pcap','P2P_tor_p2p_vuze.pcap']
+    # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
+    all_in_one_file = os.path.join(root_dir, file_lst[0][:5] +'_first_n_pkts_'+ str(first_n_pkts) +'_all_in_one_file.txt')
     if os.path.exists(all_in_one_file):
         os.remove(all_in_one_file)
     print('all_in_one_file:', all_in_one_file)
@@ -298,7 +320,7 @@ if __name__ == '__main__':
         txt_f_name = pcap_file_name.split('.pcap')[0] + '_tshark.txt'  # tshark: pcap to five tuple
         export_to_txt(pcap_file_name, txt_f_name)
 
-        for i in range(20, 21):  # [1,21)
+        for i in range(first_n_pkts, first_n_pkts+1):  # [1,21)
             # output_file = './time_out=0.01+flow.txt'
             # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
             output_file = os.path.join(res_root_dir, file_name_prefix + '_first_n_pkts=%d_flow.txt' % i)
@@ -309,3 +331,5 @@ if __name__ == '__main__':
         append_data_to_file(all_in_one_file, output_file)
         # output_file = './low_duration=0.03+flow.txt'
         # pcap2flow(input_file, output_file, flow_duration=0.03)  # current_time - start_time>0.1
+
+    add_arff_header(all_in_one_file,attributes_num=2*first_n_pkts+1 , label=file_lst)
