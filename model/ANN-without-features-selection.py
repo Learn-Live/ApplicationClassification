@@ -180,12 +180,10 @@ class ANN(nn.Module):
 
         return accuracy
 
-
 def show_figure(loss):
     data = list(loss)
     plt.plot(range(len(data)), data)
     plt.show()
-
 
 def one_hot(ids, out_tensor):
     """
@@ -198,7 +196,6 @@ def one_hot(ids, out_tensor):
     out_tensor.zero_()
     return out_tensor.scatter_(dim=1, index=ids, value=1)
 
-
 # out_tensor.scatter_(1, ids, 1.0)
 
 
@@ -209,6 +206,7 @@ def one_hot_sklearn(label_integer):
     onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
 
     return np.array(onehot_encoded, dtype=int)
+
 
 
 if __name__ == '__main__':
