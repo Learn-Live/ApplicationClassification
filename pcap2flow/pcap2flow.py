@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 
 
 # from CythonUtil import c_parse_records_tshark
+from preprocess.data_preprocess import compute_mean
 
 
 def export_to_txt(f_name, txt_f_name):
@@ -267,6 +268,26 @@ def append_data_to_file(all_in_one_file, new_file):
                 line_tmp = ','.join([str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3]+',' + ','.join(
                     [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[-1]   # line_arr[-4]='[1140,1470]', so use eval() to change str to list
                 # print(line_tmp)
+                fid_out.write(line_tmp)
+                line = fid_in.readline()
+
+
+def append_data_to_file_with_mean(all_in_one_file, new_file):
+    with open(all_in_one_file, 'a') as fid_out:
+        with open(new_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                line_arr = line.split('|')
+                # print(line_arr[-4], ','.join([str(v) for v in line_arr[-4]]))
+                # line_tmp = first_n_pkts_list+flow_duration+interval_time_list+label
+                # line_tmp = ','.join([str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3]+',' + ','.join(
+                #     [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[-1]   # line_arr[-4]='[1140,1470]', so use eval() to change str to list
+                # # print(line_tmp)
+                pkts_mean = compute_mean(eval(line_arr[-4]))
+                flow_dur = line_arr[-3]
+                intr_tm_mean = compute_mean(eval(line_arr[-2])[1:])  # line_arr[first_n+1] always is 0
+
+                line_tmp =str(pkts_mean) +',' +str(flow_dur) +',' +str(intr_tm_mean)
                 fid_out.write(line_tmp)
                 line = fid_in.readline()
 
