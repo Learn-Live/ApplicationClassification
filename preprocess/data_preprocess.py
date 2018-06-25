@@ -8,11 +8,9 @@ from collections import Counter
 __author__ = 'Learn-Live'
 
 # standard library
-import os
 import numpy as np
 
 # third party library
-import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 
@@ -24,6 +22,34 @@ def load_data(input_file, separator=','):
         while line:
             line_arr = line.split(separator)
             data.append(line_arr[:-1])
+            label.append(line_arr[-1].split('\n')[0])
+            line = fid_in.readline()
+
+    return data, label
+
+
+def compute_mean(data_lst):
+    sum = 0.0
+    for i in range(len(data_lst)):
+        sum += float(data_lst[i])
+
+    return sum / len(data_lst)
+
+
+def load_data_compute_mean(input_file, separator=','):
+    data = []
+    label = []
+    with open(input_file, 'r') as fid_in:
+        line = fid_in.readline()
+        while line:
+            line_arr = line.split(separator)
+            first_n = int(len(line_arr) / 2)
+            # data.append(line_arr[:-1])
+            pkts_mean = compute_mean(line_arr[:first_n])
+            flow_dur = line_arr[first_n]
+            intr_tm_mean = compute_mean(line_arr[first_n + 1:-1])
+
+            data.append([pkts_mean, flow_dur, intr_tm_mean])
             label.append(line_arr[-1].split('\n')[0])
             line = fid_in.readline()
 
