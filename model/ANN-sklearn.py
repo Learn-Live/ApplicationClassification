@@ -52,7 +52,8 @@ class MLP():
         self.small_in_size = first_n_pkts
         self.small_h_size = 5
         self.small_out_size = 2
-        self.clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(128, 64, 32, 16, 8), random_state=1)
+        self.clf = MLPClassifier(solver='sgd', alpha=1e-5, hidden_layer_sizes=(128, 64, 32, 16, 8), random_state=1,
+                                 activation='tanh')
 
     def train(self, training_set):
         X = training_set[0]
