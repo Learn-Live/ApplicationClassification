@@ -286,9 +286,9 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
                 # # print(line_tmp)
                 pkts_mean = compute_mean(eval(line_arr[-4]))
                 flow_dur = float(line_arr[-3])
-                intr_tm_mean = compute_mean(eval(line_arr[-2])[1:])  # line_arr[first_n+1] always is 0
-
-                line_tmp = str(pkts_mean) + ',' + str(flow_dur) + ',' + str(intr_tm_mean) + ',' + line_arr[-1]
+                # intr_tm_mean = compute_mean(eval(line_arr[-2])[1:])  # line_arr[first_n+1] always is 0, there is no need to compute intr_tm_mean, it is equal to flow_dur/len
+                # line_tmp = str(pkts_mean) + ',' + str(flow_dur) + ',' + str(intr_tm_mean) + ',' + line_arr[-1]
+                line_tmp = str(pkts_mean) + ',' + str(flow_dur) + ',' + line_arr[-1]
                 fid_out.write(line_tmp)
                 line = fid_in.readline()
 
@@ -323,7 +323,7 @@ if __name__ == '__main__':
     root_dir = '../results'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
-    first_n_pkts = 10
+    first_n_pkts = 1
     pcap_root_dir = '../data'
     file_lst = ['AUDIO_tor_spotify2.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
     # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
