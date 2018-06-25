@@ -43,10 +43,10 @@ def load_data_compute_mean(input_file, separator=','):
         line = fid_in.readline()
         while line:
             line_arr = line.split(separator)
-            first_n = int(len(line_arr) / 2)
+            first_n = int((len(line_arr) - 1) / 2)  # len(line_arr)-1  to exclude "class"
             # data.append(line_arr[:-1])
             pkts_mean = compute_mean(line_arr[:first_n])
-            flow_dur = line_arr[first_n]
+            flow_dur = float(line_arr[first_n])
             intr_tm_mean = compute_mean(line_arr[first_n + 2:-1])   # line_arr[first_n+1] always is 0
 
             data.append([pkts_mean, flow_dur, intr_tm_mean])
@@ -117,6 +117,6 @@ def achieve_train_test_data(X, Y, train_size=0.7, shuffle=True):
 if __name__ == '__main__':
     input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
     X, Y = load_data(input_file, separator=',')
-    X = normalize_data(X, range_value=[-1, 1], eps=1e-5)
+    X = normalize_data(np.asarray(X, dtype=float), range_value=[-1, 1], eps=1e-5)
     Y = change_label(Y)
     X_train, X_test, y_train, y_test = achieve_train_test_data(X, Y, train_size=0.2, shuffle=True)

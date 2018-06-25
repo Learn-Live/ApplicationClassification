@@ -18,11 +18,12 @@ flow format: txt to flow
 """
 
 from __future__ import print_function, division
-from subprocess import check_call
-import time
-import os
-import matplotlib.pyplot as plt
 
+import os
+import time
+from subprocess import check_call
+
+import matplotlib.pyplot as plt
 
 # from CythonUtil import c_parse_records_tshark
 from preprocess.data_preprocess import compute_mean
@@ -284,10 +285,10 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
                 #     [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[-1]   # line_arr[-4]='[1140,1470]', so use eval() to change str to list
                 # # print(line_tmp)
                 pkts_mean = compute_mean(eval(line_arr[-4]))
-                flow_dur = line_arr[-3]
+                flow_dur = float(line_arr[-3])
                 intr_tm_mean = compute_mean(eval(line_arr[-2])[1:])  # line_arr[first_n+1] always is 0
 
-                line_tmp =str(pkts_mean) +',' +str(flow_dur) +',' +str(intr_tm_mean)
+                line_tmp = str(pkts_mean) + ',' + str(flow_dur) + ',' + str(intr_tm_mean) + ',' + line_arr[-1]
                 fid_out.write(line_tmp)
                 line = fid_in.readline()
 
@@ -322,14 +323,15 @@ if __name__ == '__main__':
     root_dir = '../results'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
-    first_n_pkts=100
+    first_n_pkts = 10
     pcap_root_dir = '../data'
-    file_lst=['AUDIO_tor_spotify2.pcap','VIDEO_Youtube_Flash_Gateway.pcap','P2P_tor_p2p_vuze.pcap']
+    file_lst = ['AUDIO_tor_spotify2.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
     # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
     all_in_one_file = os.path.join(root_dir, file_lst[0][:5] +'_first_n_pkts_'+ str(first_n_pkts) +'_all_in_one_file.txt')
     if os.path.exists(all_in_one_file):
         os.remove(all_in_one_file)
     print('all_in_one_file:', all_in_one_file)
+    with_mean_flg = True  # if compute mean.
     for file_tmp in file_lst:
         pcap_file_name = os.path.join(pcap_root_dir, file_tmp)
         print(pcap_file_name)
@@ -349,8 +351,14 @@ if __name__ == '__main__':
             save_flow(res_flows[:1000], output_file, label=file_name_prefix)
 
         # show_figure(res_flows[0])
-        append_data_to_file(all_in_one_file, output_file)
+        if with_mean_flg:
+            append_data_to_file_with_mean(all_in_one_file, output_file)
+        else:
+            append_data_to_file(all_in_one_file, output_file)
         # output_file = './low_duration=0.03+flow.txt'
         # pcap2flow(input_file, output_file, flow_duration=0.03)  # current_time - start_time>0.1
 
-    add_arff_header(all_in_one_file,attributes_num=2*first_n_pkts+1 , label=file_lst)
+    if with_mean_flg:
+        add_arff_header(all_in_one_file, attributes_num=2 * 1 + 1, label=file_lst)
+    else:
+        add_arff_header(all_in_one_file, attributes_num=2 * first_n_pkts + 1, label=file_lst)
