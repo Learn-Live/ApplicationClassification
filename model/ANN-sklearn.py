@@ -11,29 +11,26 @@ Dependencies:
     matplotlib
 
 """
-import os
 from collections import Counter
 
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.preprocessing import OneHotEncoder
-
 from torch import optim
 from torch.autograd import Variable
 
-from preprocess.data_preprocess import achieve_train_test_data, load_data, normalize_data, change_label
+from preprocess.data_preprocess import achieve_train_test_data, normalize_data, change_label, \
+    load_data_compute_mean
 
 __author__ = 'Learn_live'
 
 # library
 # standard library
-import os
 
 # third-party library
 import torch
 import torch.nn as nn
 import torch.utils.data as Data
-import torchvision
 import matplotlib.pyplot as plt
 
 from sklearn.neural_network import MLPClassifier
@@ -235,7 +232,8 @@ if __name__ == '__main__':
     torch.manual_seed(1)  # reproducible
 
     input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
-    X, Y = load_data(input_file)
+    # X, Y = load_data(input_file)
+    X, Y = load_data_compute_mean(input_file)
     X = normalize_data(np.asarray(X, dtype=float), range_value=[0, 1], eps=1e-5)
     Y = change_label(Y)
     X_train, X_test, y_train, y_test = achieve_train_test_data(X, Y, train_size=0.9, shuffle=True)

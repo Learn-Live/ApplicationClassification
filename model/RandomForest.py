@@ -11,18 +11,10 @@ Dependencies:
     matplotlib
 
 """
-import os
 from collections import Counter
 
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.svm import SVC
-
-from torch import optim
-from torch.autograd import Variable
 
 from preprocess.data_preprocess import achieve_train_test_data, load_data, normalize_data, change_label
 
@@ -30,14 +22,9 @@ __author__ = 'Learn_live'
 
 # library
 # standard library
-import os
 
 # third-party library
 import torch
-import torch.nn as nn
-import torch.utils.data as Data
-import torchvision
-import matplotlib.pyplot as plt
 
 from sklearn.neural_network import MLPClassifier
 

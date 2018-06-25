@@ -11,12 +11,10 @@ Dependencies:
     matplotlib
 
 """
-import os
 from collections import Counter
 
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-
 from torch import optim
 from torch.autograd import Variable
 
@@ -26,13 +24,11 @@ __author__ = 'Learn_live'
 
 # library
 # standard library
-import os
 
 # third-party library
 import torch
 import torch.nn as nn
 import torch.utils.data as Data
-import torchvision
 import matplotlib.pyplot as plt
 
 
