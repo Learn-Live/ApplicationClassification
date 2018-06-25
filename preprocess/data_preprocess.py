@@ -47,7 +47,7 @@ def load_data_compute_mean(input_file, separator=','):
             # data.append(line_arr[:-1])
             pkts_mean = compute_mean(line_arr[:first_n])
             flow_dur = line_arr[first_n]
-            intr_tm_mean = compute_mean(line_arr[first_n + 1:-1])
+            intr_tm_mean = compute_mean(line_arr[first_n + 2:-1])   # line_arr[first_n+1] always is 0
 
             data.append([pkts_mean, flow_dur, intr_tm_mean])
             label.append(line_arr[-1].split('\n')[0])
