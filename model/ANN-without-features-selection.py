@@ -60,17 +60,18 @@ class ANN(nn.Module):
         self.small_h_size = 5
         self.small_out_size = 2
 
-        self.pkts_ann = nn.Sequential(nn.Linear(self.small_in_size, self.small_h_size * 2), nn.Tanh(),
-                                      nn.Linear(self.small_h_size * 2, self.small_h_size), nn.Tanh(),
-                                      nn.Linear(self.small_h_size, self.small_out_size)
-                                      )
+        # self.pkts_ann = nn.Sequential(nn.Linear(self.small_in_size, self.small_h_size * 2), nn.Tanh(),
+        #                               nn.Linear(self.small_h_size * 2, self.small_h_size), nn.Tanh(),
+        #                               nn.Linear(self.small_h_size, self.small_out_size)
+        #                               )
+        #
+        # self.intr_tm_ann = nn.Sequential(nn.Linear(self.small_in_size, self.small_h_size * 2), nn.Tanh(),
+        #                                  nn.Linear(self.small_h_size * 2, self.small_h_size), nn.Tanh(),
+        #                                  nn.Linear(self.small_h_size, self.small_out_size)
+        #                                  )
 
-        self.intr_tm_ann = nn.Sequential(nn.Linear(self.small_in_size, self.small_h_size * 2), nn.Tanh(),
-                                         nn.Linear(self.small_h_size * 2, self.small_h_size), nn.Tanh(),
-                                         nn.Linear(self.small_h_size, self.small_out_size)
-                                         )
-
-        self.in_size = 2 * self.small_out_size + 1  # first_n_pkts_list, flow_duration, intr_time_list
+        # self.in_size = 2 * self.small_out_size + 1  # first_n_pkts_list, flow_duration, intr_time_list
+        self.in_size = 2 * first_n_pkts + 1
         self.h_size = 5
         # self.out_size = 1  # number of label, one-hot coding
         self.classify_ann = nn.Sequential(nn.Linear(self.in_size, self.h_size * 2), nn.Tanh(),
@@ -79,42 +80,49 @@ class ANN(nn.Module):
                                           )
 
         print('---------- Networks architecture -------------')
-        print_network('pkts_ann:', self.pkts_ann)
-        print_network('intr_tm_ann:', self.intr_tm_ann)
+        # print_network('pkts_ann:', self.pkts_ann)
+        # print_network('intr_tm_ann:', self.intr_tm_ann)
         print_network('classify_ann:', self.classify_ann)
         print('-----------------------------------------------')
 
-        # self.criterion = nn.MSELoss(size_average=False)
-        self.criterion = nn.MultiLabelMarginLoss()
-        self.d_learning_rate = 1e-4
-        self.g_learning_rate = 1e-4
+        self.criterion = nn.MSELoss(size_average=False)
+        # self.criterion = nn.MultiLabelMarginLoss()
+        self.learning_rate = 1e-4
         # self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
         # self.optimizer = optim.Adam([self.pkts_ann, self.intr_tm_ann, self.classify_ann], lr=self.d_learning_rate,
         #                             betas=(0.5, 0.9))
-        params = list(self.pkts_ann.parameters()) + list(self.intr_tm_ann.parameters()) + list(
-            self.classify_ann.parameters())
-        self.optimizer = optim.Adam(params, lr=self.g_learning_rate, betas=(0.5, 0.9))
+        # params = list(self.pkts_ann.parameters()) + list(self.intr_tm_ann.parameters()) + list(
+        #     self.classify_ann.parameters())
+        params = list(self.classify_ann.parameters())
+        self.optimizer = optim.Adam(params, lr=self.learning_rate, betas=(0.5, 0.9))
+
+    # def forward(self, X):
+    #
+    #     pkts_x = X[:, 0:self.first_n_pkts]
+    #     flow_dur = X[:, self.first_n_pkts]
+    #     intr_x = X[:, self.first_n_pkts + 1:2 * self.first_n_pkts + 1]
+    #
+    #     pkts_outputs = self.pkts_ann(pkts_x)
+    #     # flow_dur = flow_dur
+    #     intr_outputs = self.intr_tm_ann(intr_x)
+    #
+    #     new_X = []
+    #     for i in range(len(X)):
+    #         lst_tmp = []
+    #         lst_tmp.append(flow_dur[i].data.tolist())
+    #         lst_tmp.extend(pkts_outputs[i].data.tolist())
+    #         lst_tmp.extend(intr_outputs[i].data.tolist())
+    #         new_X.append(lst_tmp)
+    #     # X = [pkts_outputs, flow_dur, intr_outputs]
+    #     new_X = torch.Tensor(new_X)
+    #     y_preds = self.classify_ann(new_X)
+    #     # _, y_preds=y_preds.data.max(dim=1) # get max value of each row
+    #
+    #     return y_preds
 
     def forward(self, X):
 
-        pkts_x = X[:, 0:self.first_n_pkts]
-        flow_dur = X[:, self.first_n_pkts]
-        intr_x = X[:, self.first_n_pkts + 1:2 * self.first_n_pkts + 1]
-
-        pkts_outputs = self.pkts_ann(pkts_x)
-        # flow_dur = flow_dur
-        intr_outputs = self.intr_tm_ann(intr_x)
-
-        new_X = []
-        for i in range(len(X)):
-            lst_tmp = []
-            lst_tmp.append(flow_dur[i].data.tolist())
-            lst_tmp.extend(pkts_outputs[i].data.tolist())
-            lst_tmp.extend(intr_outputs[i].data.tolist())
-            new_X.append(lst_tmp)
-        # X = [pkts_outputs, flow_dur, intr_outputs]
-        new_X = torch.Tensor(new_X)
-        y_preds = self.classify_ann(new_X)
+        y_preds = self.classify_ann(X)
         # _, y_preds=y_preds.data.max(dim=1) # get max value of each row
 
         return y_preds
