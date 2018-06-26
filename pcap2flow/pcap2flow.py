@@ -90,7 +90,7 @@ def change_to_flows(pkts_records, name, *args, **kwargs):
         five_tuple = tuple(rec[seq] for seq in five_tuple_seq)  # current packet's five tuple
         curr_tm = rec[st_idx]  # current time
         curr_len = rec[len_idx]  # current packet length
-        intr_tm = 0.0  # Inter Arrival Time, the time between two packets sent single direction
+        intr_tm = 1e-5  # Inter Arrival Time, the time between two packets sent single direction
         # check time out
         remove_flows = []
         for f_tuple, (st_tm, pre_tm, pkts_lst, intr_tm_lst) in open_flows.items():
