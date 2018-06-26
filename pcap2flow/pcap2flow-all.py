@@ -265,6 +265,8 @@ def show_figure(data_lst):
 
 
 def append_data_to_file(all_in_one_file, new_file):
+    if os.path.join(all_in_one_file):
+        os.remove(all_in_one_file)
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
@@ -281,6 +283,8 @@ def append_data_to_file(all_in_one_file, new_file):
 
 
 def append_data_to_file_with_mean(all_in_one_file, new_file):
+    if os.path.join(all_in_one_file):
+        os.remove(all_in_one_file)
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
@@ -303,6 +307,8 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
 def add_arff_header(all_in_one_file, attributes_num=2, label=['a', 'b', 'c']):
     output_file = os.path.splitext(all_in_one_file)[0] + '.arff'
     print(output_file)
+    if os.path.join(output_file):
+        os.remove(output_file)
 
     with open(output_file, 'w') as fid_out:
         fid_out.write('@Relation test\n')
