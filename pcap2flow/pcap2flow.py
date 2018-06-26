@@ -208,7 +208,7 @@ def save_flow(flows, f_name, label='-1'):
         for f in flows:
             # print(f)
             fid.write('|'.join([str(v) for v in f]) + '|' + label + '\n')
-
+        fid.flush()
 
 def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
     print('start time:', time.asctime())

@@ -208,7 +208,7 @@ def save_flow(flows, f_name, label='-1'):
         for f in flows:
             # print(f)
             fid.write('|'.join([str(v) for v in f]) + '|' + label + '\n')
-
+        fid.flush()
 
 def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
     print('start time:', time.asctime())
@@ -303,7 +303,7 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
 def add_arff_header(all_in_one_file, attributes_num=2, label=['a', 'b', 'c']):
     output_file = os.path.splitext(all_in_one_file)[0] + '.arff'
     print(output_file)
-    if os.path.join(output_file):
+    if os.path.exists(output_file):
         os.remove(output_file)
 
     with open(output_file, 'w') as fid_out:
@@ -335,10 +335,13 @@ if __name__ == '__main__':
     first_n_pkts = 5
 
     pcap_root_dir = '../data'
-    # file_lst = ['AUDIO_tor_spotify2.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
-    # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
-    file_lst = ['FILE-TRANSFER_gate_SFTP_filetransfer.pcap', 'CHAT_facebookchatgateway.pcap',
-                'MAIL_gate_Email_IMAP_filetransfer.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
+    # # file_lst = ['AUDIO_tor_spotify2.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
+    # # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
+    # file_lst = ['FILE-TRANSFER_gate_SFTP_filetransfer.pcap', 'CHAT_facebookchatgateway.pcap',
+    #             'MAIL_gate_Email_IMAP_filetransfer.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
+
+    file_lst = ['MAIL_gate_Email_IMAP_filetransfer.pcap', 'MAIL_gate_POP_filetransfer.pcap',
+                'MAIL_Gateway_Thunderbird_Imap.pcap']
     file_lst_name = '_'.join([v[:10] for v in file_lst])
     all_in_one_file_dir = os.path.join(root_dir, file_lst_name)
     print('results-all_in_one_dir :', file_lst_name)
@@ -353,7 +356,7 @@ if __name__ == '__main__':
         export_to_txt(pcap_file_name, txt_f_name)
         txt_f_name_lst.append(txt_f_name)
 
-    with_mean_flg = False  # if compute mean.
+    with_mean_flg = True  # if compute mean.
     for i in range(1, first_n_pkts + 1):  # [1,21)
         i_dir = os.path.join(all_in_one_file_dir, 'first_%d_pkts' % i)
         # if os.path.exists(i_dir):
@@ -366,7 +369,7 @@ if __name__ == '__main__':
             all_in_one_file_i = os.path.join(i_dir, str(i) + '_all_in_one' + '_compute_mean''.txt')
         else:
             all_in_one_file_i = os.path.join(i_dir, str(i) + '_all_in_one.txt')
-        if os.path.join(all_in_one_file_i):
+        if os.path.exists(all_in_one_file_i):
             os.remove(all_in_one_file_i)
         for txt_f, label_name in zip(txt_f_name_lst, file_lst):
             file_name_prefix = os.path.basename(txt_f)
