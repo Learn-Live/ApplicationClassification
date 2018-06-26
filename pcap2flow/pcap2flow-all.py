@@ -265,8 +265,6 @@ def show_figure(data_lst):
 
 
 def append_data_to_file(all_in_one_file, new_file):
-    if os.path.join(all_in_one_file):
-        os.remove(all_in_one_file)
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
@@ -283,8 +281,6 @@ def append_data_to_file(all_in_one_file, new_file):
 
 
 def append_data_to_file_with_mean(all_in_one_file, new_file):
-    if os.path.join(all_in_one_file):
-        os.remove(all_in_one_file)
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
@@ -370,6 +366,8 @@ if __name__ == '__main__':
             all_in_one_file_i = os.path.join(i_dir, str(i) + '_all_in_one' + '_compute_mean''.txt')
         else:
             all_in_one_file_i = os.path.join(i_dir, str(i) + '_all_in_one.txt')
+        if os.path.join(all_in_one_file_i):
+            os.remove(all_in_one_file_i)
         for txt_f, label_name in zip(txt_f_name_lst, file_lst):
             file_name_prefix = os.path.basename(txt_f)
             output_file = os.path.join(i_dir, file_name_prefix + '_first_%d_pkts_flow.txt' % i)
