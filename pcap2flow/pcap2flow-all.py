@@ -264,6 +264,28 @@ def show_figure(data_lst):
     plt.show()
 
 
+def IP2Int(ip):
+    ## o = map(int, ip.split('.'))
+    # print(ip)
+    tmp_lst = ip.split('.')
+    o = [int(v) for v in tmp_lst]
+    res = (16777216 * o[0]) + (65536 * o[1]) + (256 * o[2]) + o[3]
+    return res
+
+
+def Int2IP(ipnum):
+    o1 = int(ipnum / 16777216) % 256
+    o2 = int(ipnum / 65536) % 256
+    o3 = int(ipnum / 256) % 256
+    o4 = int(ipnum) % 256
+    return '%(o1)s.%(o2)s.%(o3)s.%(o4)s' % locals()
+
+
+# # Example
+# print('192.168.0.1 -> %s' % IP2Int('192.168.0.1'))
+# print('3232235521 -> %s' % Int2IP(3232235521))
+
+
 def append_data_to_file(all_in_one_file, new_file):
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
@@ -272,7 +294,11 @@ def append_data_to_file(all_in_one_file, new_file):
                 line_arr = line.split('|')
                 # print(line_arr[-4], ','.join([str(v) for v in line_arr[-4]]))
                 # line_tmp = first_n_pkts_list+flow_duration+interval_time_list+label
-                line_tmp = ','.join([str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3] + ',' + ','.join(
+                # print(IP2Int(line_arr[2]), line_arr[2])
+                ### srcport, dstport, len(pkts), pkts_lst, flow_duration, intr_time_lst, label
+                line_tmp = str(IP2Int(line_arr[2])) + ',' + str(IP2Int(line_arr[3])) + ',' + str(
+                    line_arr[-6]) + ',' + str(line_arr[-5]) + ',' + str(len(eval(line_arr[-4]))) + ',' + ','.join(
+                    [str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3] + ',' + ','.join(
                     [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[
                                -1]  # line_arr[-4]='[1140,1470]', so use eval() to change str to list
                 # print(line_tmp)
@@ -294,7 +320,9 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
                 pkts_mean = compute_mean(eval(line_arr[-4]))
                 flow_dur = float(line_arr[-3])
                 intr_tm_mean = compute_mean(eval(line_arr[-2])[1:])  # line_arr[first_n+1] always is 0
-                line_tmp = str(pkts_mean) + ',' + str(flow_dur) + ',' + str(intr_tm_mean) + ',' + line_arr[-1]
+                line_tmp = str(IP2Int(line_arr[2])) + ',' + str(IP2Int(line_arr[3])) + ',' + str(
+                    line_arr[-6]) + ',' + str(line_arr[-5]) + ',' + str(len(eval(line_arr[-4]))) + ',' + str(
+                    pkts_mean) + ',' + str(flow_dur) + ',' + str(intr_tm_mean) + ',' + line_arr[-1]
                 # line_tmp = str(pkts_mean) + ',' + str(flow_dur) + ',' + line_arr[-1]
                 fid_out.write(line_tmp)
                 line = fid_in.readline()
@@ -332,16 +360,16 @@ if __name__ == '__main__':
     root_dir = '../results'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
-    first_n_pkts = 5
+    first_n_pkts = 40
 
     pcap_root_dir = '../data'
     # # file_lst = ['AUDIO_tor_spotify2.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
     # # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
-    # file_lst = ['FILE-TRANSFER_gate_SFTP_filetransfer.pcap', 'CHAT_facebookchatgateway.pcap',
-    #             'MAIL_gate_Email_IMAP_filetransfer.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
+    file_lst = ['FILE-TRANSFER_gate_SFTP_filetransfer.pcap', 'CHAT_facebookchatgateway.pcap',
+                'MAIL_gate_Email_IMAP_filetransfer.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
 
-    file_lst = ['MAIL_gate_Email_IMAP_filetransfer.pcap', 'MAIL_gate_POP_filetransfer.pcap',
-                'MAIL_Gateway_Thunderbird_Imap.pcap']
+    # file_lst = ['MAIL_gate_Email_IMAP_filetransfer.pcap', 'MAIL_gate_POP_filetransfer.pcap',
+    #             'MAIL_Gateway_Thunderbird_Imap.pcap']
     file_lst_name = '_'.join([v[:10] for v in file_lst])
     all_in_one_file_dir = os.path.join(root_dir, file_lst_name)
     print('results-all_in_one_dir :', file_lst_name)
@@ -357,7 +385,7 @@ if __name__ == '__main__':
         txt_f_name_lst.append(txt_f_name)
 
     with_mean_flg = True  # if compute mean.
-    for i in range(1, first_n_pkts + 1):  # [1,21)
+    for i in range(1, first_n_pkts + 1):  # [1,21)  ,step=4
         i_dir = os.path.join(all_in_one_file_dir, 'first_%d_pkts' % i)
         # if os.path.exists(i_dir):
         #     cmd = """rm -rf %s""" % (i_dir)
@@ -384,8 +412,13 @@ if __name__ == '__main__':
             else:
                 append_data_to_file(all_in_one_file_i, output_file)
 
+        with open(all_in_one_file_i, 'r') as fid_in:
+            line = fid_in.readline()
+        features_num = len(line.split(',')) - 1  # last value is label
         if with_mean_flg:
-            add_arff_header(all_in_one_file_i, attributes_num=2 * 1 + 1, label=file_lst)
+            # add_arff_header(all_in_one_file_i, attributes_num=2 * 1 + 1+1, label=file_lst)  # pkts_n_in_this_flow, pkts_mean, flow_duration, intr_time_mean
+            add_arff_header(all_in_one_file_i, attributes_num=features_num,
+                            label=file_lst)  # srcPort, dstport, pkts_n_in_this_flow, pkts_mean, flow_duration, intr_time_mean
         else:
-            add_arff_header(all_in_one_file_i, attributes_num=2 * i + 1, label=file_lst)
+            add_arff_header(all_in_one_file_i, attributes_num=features_num, label=file_lst)
         print('******%d_all_in_one_file : %s' % (i, all_in_one_file_i))
