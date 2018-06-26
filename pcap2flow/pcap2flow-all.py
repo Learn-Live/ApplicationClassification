@@ -166,7 +166,7 @@ def change_to_flows_backup(pkts_records, name, first_n_pkts=5):
         five_tuple = tuple(rec[seq] for seq in five_tuple_seq)  # current packet's five tuple
         curr_tm = rec[st_idx]  # current time
         curr_len = rec[len_idx]  # current packet length
-        intr_tm = 0.0  # Inter Arrival Time, the time between two packets sent single direction
+        intr_tm = 1e-5  # Inter Arrival Time, the time between two packets sent single direction
         # check time out
         remove_flows = []
         for f_tuple, (st_tm, pre_tm, pkts_lst, intr_tm_lst) in open_flows.items():
@@ -354,9 +354,9 @@ if __name__ == '__main__':
     with_mean_flg = False  # if compute mean.
     for i in range(1, first_n_pkts + 1):  # [1,21)
         i_dir = os.path.join(all_in_one_file_dir, 'first_%d_pkts' % i)
-        if os.path.exists(i_dir):
-            cmd = """rm -rf %s""" % (i_dir)
-            check_call(cmd, shell=True)
+        # if os.path.exists(i_dir):
+        #     cmd = """rm -rf %s""" % (i_dir)
+        #     check_call(cmd, shell=True)
         if not os.path.exists(i_dir):
             os.mkdir(i_dir)
 
