@@ -29,11 +29,16 @@ def load_data(input_file, separator=','):
 
 
 def compute_mean(data_lst):
-    sum = 0.0
-    for i in range(len(data_lst)):
-        sum += float(data_lst[i])
+    if len(data_lst) > 0:
+        sum = 0.0
+        for i in range(len(data_lst)):
+            sum += float(data_lst[i])
 
-    return sum / len(data_lst)
+        mean = sum / len(data_lst)
+    else:
+        mean = 1e-6
+
+    return mean
 
 
 def load_data_compute_mean(input_file, separator=','):

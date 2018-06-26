@@ -272,8 +272,9 @@ def append_data_to_file(all_in_one_file, new_file):
                 line_arr = line.split('|')
                 # print(line_arr[-4], ','.join([str(v) for v in line_arr[-4]]))
                 # line_tmp = first_n_pkts_list+flow_duration+interval_time_list+label
-                line_tmp = ','.join([str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3]+',' + ','.join(
-                    [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[-1]   # line_arr[-4]='[1140,1470]', so use eval() to change str to list
+                line_tmp = ','.join([str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3] + ',' + ','.join(
+                    [str(v) for v in eval(line_arr[-2])]) + ',' + line_arr[
+                               -1]  # line_arr[-4]='[1140,1470]', so use eval() to change str to list
                 # print(line_tmp)
                 fid_out.write(line_tmp)
                 line = fid_in.readline()
@@ -299,24 +300,24 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
                 line = fid_in.readline()
 
 
-def add_arff_header(all_in_one_file, attributes_num=2, label=['a','b','c']):
-
-    output_file= os.path.splitext(all_in_one_file)[0]+'.arff'
+def add_arff_header(all_in_one_file, attributes_num=2, label=['a', 'b', 'c']):
+    output_file = os.path.splitext(all_in_one_file)[0] + '.arff'
     print(output_file)
 
-    with open(output_file,'w') as fid_out:
+    with open(output_file, 'w') as fid_out:
         fid_out.write('@Relation test\n')
         for i in range(attributes_num):
-            fid_out.write('@Attribute feature_%s numeric\n'%i)
-        label_tmp=','.join([str(v) for v in label])
-        print('label_tmp:',label_tmp)
-        fid_out.write('@Attribute class {%s}\n'%(label_tmp))
+            fid_out.write('@Attribute feature_%s numeric\n' % i)
+        label_tmp = ','.join([str(v) for v in label])
+        print('label_tmp:', label_tmp)
+        fid_out.write('@Attribute class {%s}\n' % (label_tmp))
         fid_out.write('@data\n')
-        with open(all_in_one_file,'r') as fid_in:
+        with open(all_in_one_file, 'r') as fid_in:
             line = fid_in.readline()
             while line:
                 fid_out.write(line)
-                line=fid_in.readline()
+                line = fid_in.readline()
+
 
 if __name__ == '__main__':
     # pcap_file_name = '../data/WorldOfWarcraft.pcap'
@@ -329,44 +330,55 @@ if __name__ == '__main__':
     root_dir = '../results'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
-    first_n_pkts = 20
+    first_n_pkts = 5
+
     pcap_root_dir = '../data'
     # file_lst = ['AUDIO_tor_spotify2.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
     # file_lst = ['P2P_tor_p2p_multipleSpeed.pcap', 'P2P_tor_p2p_vuze.pcap','VIDEO_Youtube_Flash_Gateway.pcap']
     file_lst = ['FILE-TRANSFER_gate_SFTP_filetransfer.pcap', 'CHAT_facebookchatgateway.pcap',
                 'MAIL_gate_Email_IMAP_filetransfer.pcap', 'VIDEO_Youtube_Flash_Gateway.pcap']
-    all_in_one_file = os.path.join(root_dir, file_lst[0][:5] +'_first_n_pkts_'+ str(first_n_pkts) +'_all_in_one_file.txt')
-    if os.path.exists(all_in_one_file):
-        os.remove(all_in_one_file)
-    print('all_in_one_file:', all_in_one_file)
-    with_mean_flg = True  # if compute mean.
-    for file_tmp in file_lst:
+    file_lst_name = '_'.join([v[:10] for v in file_lst])
+    all_in_one_file_dir = os.path.join(root_dir, file_lst_name)
+    print('results-all_in_one_dir :', file_lst_name)
+    if not os.path.exists(all_in_one_file_dir):
+        os.mkdir(all_in_one_file_dir)
+
+    txt_f_name_lst = []
+    for file_tmp in file_lst:  # pcap to txt by tshark for five tuple
         pcap_file_name = os.path.join(pcap_root_dir, file_tmp)
         print(pcap_file_name)
-        file_name_prefix = os.path.basename(pcap_file_name)
-        res_root_dir = os.path.join(root_dir, file_name_prefix)
-        if not os.path.exists(res_root_dir):
-            os.mkdir(res_root_dir)
-
         txt_f_name = pcap_file_name.split('.pcap')[0] + '_tshark.txt'  # tshark: pcap to five tuple
         export_to_txt(pcap_file_name, txt_f_name)
+        txt_f_name_lst.append(txt_f_name)
 
-        for i in range(first_n_pkts, first_n_pkts+1):  # [1,21)
-            # output_file = './time_out=0.01+flow.txt'
-            # pcap2flow(input_file, output_file, time_out=0.01)  # 0.01s
-            output_file = os.path.join(res_root_dir, file_name_prefix + '_first_n_pkts=%d_flow.txt' % i)
-            res_flows = txt2flow(txt_f_name, output_file, first_n_pkts=i)  # the first n packets of the same flow
-            save_flow(res_flows[:1000], output_file, label=file_name_prefix)
+    with_mean_flg = False  # if compute mean.
+    for i in range(1, first_n_pkts + 1):  # [1,21)
+        i_dir = os.path.join(all_in_one_file_dir, 'first_%d_pkts' % i)
+        if os.path.exists(i_dir):
+            cmd = """rm -rf %s""" % (i_dir)
+            check_call(cmd, shell=True)
+        if not os.path.exists(i_dir):
+            os.mkdir(i_dir)
 
-        # show_figure(res_flows[0])
         if with_mean_flg:
-            append_data_to_file_with_mean(all_in_one_file, output_file)
+            all_in_one_file_i = os.path.join(i_dir, str(i) + '_all_in_one' + '_compute_mean''.txt')
         else:
-            append_data_to_file(all_in_one_file, output_file)
-        # output_file = './low_duration=0.03+flow.txt'
-        # pcap2flow(input_file, output_file, flow_duration=0.03)  # current_time - start_time>0.1
+            all_in_one_file_i = os.path.join(i_dir, str(i) + '_all_in_one.txt')
+        for txt_f, label_name in zip(txt_f_name_lst, file_lst):
+            file_name_prefix = os.path.basename(txt_f)
+            output_file = os.path.join(i_dir, file_name_prefix + '_first_%d_pkts_flow.txt' % i)
+            print('txt2flow-output_file :', output_file)
+            res_flows = txt2flow(txt_f, output_file, first_n_pkts=i)  # the first n packets of the same flow
+            save_flow(res_flows[:1000], output_file, label=label_name)
 
-    if with_mean_flg:
-        add_arff_header(all_in_one_file, attributes_num=2 * 1 + 1, label=file_lst)
-    else:
-        add_arff_header(all_in_one_file, attributes_num=2 * first_n_pkts + 1, label=file_lst)
+            # show_figure(res_flows[0])
+            if with_mean_flg:
+                append_data_to_file_with_mean(all_in_one_file_i, output_file)
+            else:
+                append_data_to_file(all_in_one_file_i, output_file)
+
+        if with_mean_flg:
+            add_arff_header(all_in_one_file_i, attributes_num=2 * 1 + 1, label=file_lst)
+        else:
+            add_arff_header(all_in_one_file_i, attributes_num=2 * i + 1, label=file_lst)
+        print('******%d_all_in_one_file : %s' % (i, all_in_one_file_i))
