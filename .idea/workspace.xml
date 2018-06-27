@@ -11,6 +11,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace_BASE_17230.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace_LOCAL_17230.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace_REMOTE_17230.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pcap2flow/time_out=0.01+flow.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,38 +22,29 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/ApplicationClassification$data_preprocess.coverage" NAME="data_preprocess Coverage Results" MODIFIED="1529963080384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
-    <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow_all.coverage" NAME="pcap2flow-all Coverage Results" MODIFIED="1530036687218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow_all.coverage" NAME="pcap2flow-all Coverage Results" MODIFIED="1530116694491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow.coverage" NAME="pcap2flow Coverage Results" MODIFIED="1529972264972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN_sklearn.coverage" NAME="ANN-sklearn Coverage Results" MODIFIED="1529963200158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pcap2flow.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pcap2flow.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3015">
+            <state relative-caret-position="-1515">
               <caret line="210" column="19" selection-start-line="210" selection-start-column="19" selection-end-line="210" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pcap2flow-all.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pcap2flow-all.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-all.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
+            <state relative-caret-position="1013">
               <caret line="424" selection-start-line="424" selection-end-line="424" />
               <folding>
                 <element signature="e#637#684#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -109,6 +101,11 @@
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
               <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
               <item name="pcap2flow" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
+              <item name="results" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -397,7 +394,14 @@
       <option name="project" value="LOCAL" />
       <updated>1530116416840</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="add comment">
+      <created>1530116480132</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1530116480132</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TodoView">
@@ -417,9 +421,9 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49919224" weight="0.4483146" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.2764045" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919224" weight="0.29325843" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.4224719" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2561366" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49919224" visible="true" weight="0.33370787" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.4224719" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2561366" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -682,7 +686,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/WorldOfWarcraft_time_out_0.01_tshark.txt" />
-    <entry file="file://$PROJECT_DIR$/pcap2flow/time_out=0.01+flow.txt">
+    <entry file="file://$PROJECT_DIR$/results/time_out=0.01+flow.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="224">
           <caret line="27050" column="85" selection-start-line="27050" selection-start-column="85" selection-end-line="27050" selection-end-column="85" />
@@ -789,13 +793,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3015">
-          <caret line="210" column="19" selection-start-line="210" selection-start-column="19" selection-end-line="210" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/results/MAIL_gate__MAIL_gate__MAIL_Gatew/first_1_pkts/1_all_in_one_compute_mean.arff">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -854,11 +851,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-all.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
+        <state relative-caret-position="1013">
           <caret line="424" selection-start-line="424" selection-end-line="424" />
           <folding>
             <element signature="e#637#684#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1515">
+          <caret line="210" column="19" selection-start-line="210" selection-start-column="19" selection-end-line="210" selection-end-column="19" />
         </state>
       </provider>
     </entry>
