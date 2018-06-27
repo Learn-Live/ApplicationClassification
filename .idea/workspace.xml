@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,19 +24,28 @@
         <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
-              <caret line="332" column="26" lean-forward="true" selection-start-line="332" selection-start-column="26" selection-end-line="332" selection-end-column="26" />
+              <caret line="332" column="26" selection-start-line="332" selection-start-column="26" selection-end-line="332" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pcap2flow-all.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pcap2flow-all.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-all.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="308">
-              <caret line="359" column="4" selection-start-line="359" selection-start-column="4" selection-end-line="359" selection-end-column="4" />
+              <caret line="359" selection-start-line="359" selection-end-line="359" />
               <folding>
                 <element signature="e#637#684#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="5" selection-start-column="5" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -53,8 +63,8 @@
         <option value="$PROJECT_DIR$/preprocess/data_preprocess.py" />
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow.py" />
         <option value="$PROJECT_DIR$/.gitigorne" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -95,6 +105,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -105,8 +116,8 @@
       <recent name="$PROJECT_DIR$/results" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/results" />
       <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/results" />
       <recent name="$PROJECT_DIR$/pcap2flow" />
     </key>
   </component>
@@ -393,7 +404,21 @@
       <option name="project" value="LOCAL" />
       <updated>1530116745275</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="add">
+      <created>1530117008799</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1530117008799</updated>
+    </task>
+    <task id="LOCAL-00026" summary="add">
+      <created>1530117060510</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1530117060510</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TodoView">
@@ -402,6 +427,7 @@
     </todo-panel>
     <todo-panel id="all">
       <are-packages-shown value="true" />
+      <flatten-packages value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
@@ -419,6 +445,7 @@
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2561366" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -430,7 +457,6 @@
       <window_info anchor="bottom" id="Messages" order="7" weight="0.32941177" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -503,7 +529,8 @@
     <MESSAGE value="modify 'os.path.join()', 'os.path.exists()'" />
     <MESSAGE value="add results directory" />
     <MESSAGE value="add comment" />
-    <option name="LAST_COMMIT_MESSAGE" value="add comment" />
+    <MESSAGE value="add" />
+    <option name="LAST_COMMIT_MESSAGE" value="add" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -835,27 +862,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="332" column="26" lean-forward="true" selection-start-line="332" selection-start-column="26" selection-end-line="332" selection-end-column="26" />
+          <caret line="332" column="26" selection-start-line="332" selection-start-column="26" selection-end-line="332" selection-end-column="26" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/a1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-all.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
-          <caret line="359" column="4" selection-start-line="359" selection-start-column="4" selection-end-line="359" selection-end-column="4" />
+          <caret line="359" selection-start-line="359" selection-end-line="359" />
           <folding>
             <element signature="e#637#684#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="5" selection-start-column="5" selection-end-column="5" />
         </state>
       </provider>
     </entry>
