@@ -260,7 +260,7 @@ def txt2flow(txt_f_name, flow_file_name, *args, **kwargs):
 
 def show_figure(data_lst):
     data = data_lst.split(',')[-4]
-    plt.plot(len(data), data)
+    plt.plot(range(len(data)), data)
     plt.show()
 
 
