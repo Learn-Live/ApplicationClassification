@@ -99,14 +99,15 @@ def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
 
 
 def change_label(Y, label_dict={'BENIGN': 1, 'Others': 0}):
-    label_cnt = Counter(Y)
-    label_cnt = list(label_cnt.keys())
+    label_stat = Counter(Y)
+    label_cnt = list(label_stat.keys())
     new_Y = []
 
     for i in range(len(Y)):
         for j in range(len(label_cnt)):
             if Y[i] == label_cnt[j]:
                 new_Y.append(j)
+                break
     return new_Y
 
 

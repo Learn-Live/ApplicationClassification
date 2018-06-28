@@ -295,7 +295,7 @@ def append_data_to_file(all_in_one_file, new_file):
                 # print(line_arr[-4], ','.join([str(v) for v in line_arr[-4]]))
                 # line_tmp = first_n_pkts_list+flow_duration+interval_time_list+label
                 # print(IP2Int(line_arr[2]), line_arr[2])
-                ### srcport, dstport, len(pkts), pkts_lst, flow_duration, intr_time_lst, label
+                ### srcIP, dstIP, srcport, dstport, len(pkts), pkts_lst, flow_duration, intr_time_lst, label
                 line_tmp = str(IP2Int(line_arr[2])) + ',' + str(IP2Int(line_arr[3])) + ',' + str(
                     line_arr[-6]) + ',' + str(line_arr[-5]) + ',' + str(len(eval(line_arr[-4]))) + ',' + ','.join(
                     [str(v) for v in eval(line_arr[-4])]) + ',' + line_arr[-3] + ',' + ','.join(
@@ -385,7 +385,7 @@ if __name__ == '__main__':
         export_to_txt(pcap_file_name, txt_f_name)
         txt_f_name_lst.append(txt_f_name)
 
-    with_mean_flg = True  # if compute mean.
+    with_mean_flg = False  # if compute mean.
     for i in range(1, first_n_pkts + 1):  # [1,21)  ,step=4
         i_dir = os.path.join(all_in_one_file_dir, 'first_%d_pkts' % i)
         # if os.path.exists(i_dir):
