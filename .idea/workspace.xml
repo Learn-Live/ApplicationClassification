@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/model/LSTM-Demo2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/LSTM-Demo3.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/train_ALL_LSTM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/ANN.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/ANN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/LSTM-Many2One.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/LSTM-Many2One.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcap2flow/pcap2flow.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcap2flow/pcap2flow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,7 +20,7 @@
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Demo.coverage" NAME="LSTM-Demo Coverage Results" MODIFIED="1530197785025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One.coverage" NAME="LSTM-Many2One Coverage Results" MODIFIED="1530325892553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN_sklearn.coverage" NAME="ANN-sklearn Coverage Results" MODIFIED="1529963200158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
-    <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_progressively.coverage" NAME="LSTM-Many2One-progressively Coverage Results" MODIFIED="1530382641510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_progressively.coverage" NAME="LSTM-Many2One-progressively Coverage Results" MODIFIED="1530383667625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -54,9 +47,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="333">
               <caret line="50" column="26" lean-forward="true" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
-              <folding>
-                <element signature="e#164#195#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -64,8 +54,11 @@
       <file leaf-file-name="LSTM-Many2One-progressively.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="431" column="68" lean-forward="true" selection-start-line="431" selection-start-column="68" selection-end-line="431" selection-end-column="68" />
+            <state relative-caret-position="928">
+              <caret line="363" column="68" lean-forward="true" selection-start-line="363" selection-start-column="68" selection-end-line="363" selection-end-column="68" />
+              <folding>
+                <element signature="e#164#195#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -590,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1530201671804</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="add 'online identification' in LSTM-Many2One-progressively.py">
+      <created>1530382829750</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1530382829751</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TodoView">
@@ -611,9 +611,9 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49919224" weight="0.4483146" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.22808988" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49839914" visible="true" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49839914" visible="true" weight="0.37078652" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.38651684" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20384204" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20384204" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" weight="0.32977587" />
@@ -703,7 +703,8 @@
     <MESSAGE value="add" />
     <MESSAGE value="add results" />
     <MESSAGE value="add LSTM-Many2One&#10;traffic application classificatin" />
-    <option name="LAST_COMMIT_MESSAGE" value="add LSTM-Many2One&#10;traffic application classificatin" />
+    <MESSAGE value="add 'online identification' in LSTM-Many2One-progressively.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="add 'online identification' in LSTM-Many2One-progressively.py" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -772,37 +773,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One.py</url>
-          <line>197</line>
+          <line>198</line>
           <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One.py</url>
-          <line>205</line>
+          <line>206</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One.py</url>
-          <line>223</line>
+          <line>224</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py</url>
-          <line>69</line>
+          <line>68</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One.py</url>
-          <line>241</line>
+          <line>242</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py</url>
-          <line>334</line>
+          <line>335</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py</url>
-          <line>375</line>
+          <line>381</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
       </breakpoints>
@@ -1123,9 +1124,6 @@
     <entry file="file://$PROJECT_DIR$/data/AUDIO_tor_spotify2_tshark.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/AUDIO_spotifygateway_tshark.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/BROWSING_tor_browsing_mam2_tshark.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1150,9 +1148,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="333">
           <caret line="50" column="26" lean-forward="true" selection-start-line="50" selection-start-column="26" selection-end-line="50" selection-end-column="26" />
-          <folding>
-            <element signature="e#164#195#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1170,10 +1165,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/AUDIO_spotifygateway_tshark.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="431" column="68" lean-forward="true" selection-start-line="431" selection-start-column="68" selection-end-line="431" selection-end-column="68" />
+        <state relative-caret-position="928">
+          <caret line="363" column="68" lean-forward="true" selection-start-line="363" selection-start-column="68" selection-end-line="363" selection-end-column="68" />
+          <folding>
+            <element signature="e#164#195#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

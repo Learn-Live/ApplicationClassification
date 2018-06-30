@@ -383,53 +383,6 @@ def online_identify(input_file='', model='', threshold=0.8):
         len(flow_table.keys()), flow_identified_cnt, acc))
 
 
-def online_identify_backup(input_file='', model=''):
-    flow_table = {}  # {'five_tuple':(flg, [pkt1, pkt2,..., pkt10 ])}
-    with open(input_file, 'r') as fid_in:
-        line_pkt = fid_in.readline()
-        while line_pkt:
-            line_arr = line_pkt.split()
-            if len(line_arr) < 9:
-                print('skip: ', line_pkt)
-                line_pkt = fid_in.readline()
-                continue
-            # No,  time,           srcIP     dstIP,    protocol, pkts_size, srcPort, dstPort
-            #  1   0.000000    10.0.2.15 → 198.52.200.39 TLSv1.2 597 36922 443
-            five_tuple = line_arr[2] + ',' + line_arr[4] + ',' + line_arr[-2] + ',' + line_arr[
-                -1]  # do not includes 'protocol'
-            pkt_data = [[float(line_arr[-3]), float(line_arr[-3])]]
-
-            if five_tuple not in flow_table.keys():
-                print('%s does not in flow_table' % five_tuple)
-                flow_table[five_tuple] = (False, -1, pkt_data)  # identified or not, pred_value (softmax), pkts_data_lst
-                line_pkt = fid_in.readline()
-                continue
-
-            (subflow_flg, pred_value, first_n_pkts_data) = flow_table[five_tuple]
-            if not subflow_flg:
-                first_n_pkts_data.append(pkt_data)
-                # if first_n_pkts_identify(torch.cat(torch.Tensor(first_n_pkts_data)), model):
-                flg, pred_value = first_n_pkts_identify(torch.Tensor(first_n_pkts_data), model)
-                if flg:
-                    flow_table[five_tuple] = (True, pred_value, first_n_pkts_data)
-                    print('identify it!')
-                    # line_pkt = fid_in.readline()
-                    # continue
-                else:
-                    if len(first_n_pkts_data) > 10:  # and subflow_flg == False:
-                        print('this flow cannot be identified, so giving up, ', flow_table[five_tuple])
-                    # if X in flow_table and flow_table[X].value['flg'] == False
-                    flow_table[five_tuple] = (subflow_flg, pred_value, first_n_pkts_data)
-                    # line_pkt = fid_in.readline()
-            else:
-                # flow_table[five_tuple] = (True, first_n_pkts_data)
-                print('already identified!')
-                # line_pkt = fid_in.readline()
-                # continue
-
-            line_pkt = fid_in.readline()
-
-
 if __name__ == '__main__':
     torch.manual_seed(1)
 
