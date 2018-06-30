@@ -44,6 +44,7 @@ def extract_packet_payload(f_name, txt_f_name):
     #     f_name, txt_f_name)
     # cmd = """tshark -r BitTorrent.pcap -T fields -e frame.number -e frame.protocols -e frame.time -e ip.addr -e ip.proto -e tcp.port > a.txt"""
     # cmd = """tcpdump -qns 0 -tttt -vvv -x -S -r %s > %s"""%(f_name,txt_f_name)
+    # cmd="""tshark -r udp.pcapng -T fields -e frame.number -e frame.protocols -e frame.time -e ip.addr -e ip.proto -e tcp.port || -e udp.port"""   # ||
     cmd = """tcpdump -qns 0 -tt -x -r %s > %s""" % (f_name, txt_f_name)
     print('--> ', cmd)
     check_call(cmd, shell=True)

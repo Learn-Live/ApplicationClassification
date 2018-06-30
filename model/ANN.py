@@ -16,7 +16,6 @@ from collections import Counter
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
 from torch import optim
-from torch.autograd import Variable
 
 from preprocess.data_preprocess import achieve_train_test_data, load_data, normalize_data, change_label
 
@@ -131,9 +130,10 @@ class ANN(nn.Module):
             for step, (b_x, b_y) in enumerate(
                     train_loader):  # type: (int, (object, object)) # gives batch data, normalize x when iterate train_loader
                 # print('step:',step, ', batchs:',int(len(dataset)/self.batch_size))
-                b_x = Variable(b_x, requires_grad=True)
-                # b_y = Variable(b_y.view(-1, 1))
-                b_y = Variable(b_y.long())
+                # b_x = Variable(b_x, requires_grad=True)
+                # # b_y = Variable(b_y.view(-1, 1))
+                # b_y = Variable(b_y.long())
+                b_y = b_y.long()
                 y_preds = self.forward(b_x)
                 loss = self.criterion(y_preds, b_y)  # net_outs, y_real(targets)
 
@@ -202,7 +202,7 @@ def one_hot_sklearn(label_integer):
 if __name__ == '__main__':
     torch.manual_seed(1)  # reproducible
 
-    input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
+    input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_10_pkts/10_all_in_one.txt'
     X, Y = load_data(input_file)
     X = normalize_data(np.asarray(X, dtype=float), range_value=[-1, 1], eps=1e-5)
     Y = change_label(Y)

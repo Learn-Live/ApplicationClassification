@@ -42,9 +42,10 @@ def load_sequence_data(first_n_pkts_input_file, separator=','):
         line_tmp = []
         for i in range(1, len_tmp + 1):  # len(pkts_list), [1, len_tmp+1)
             if i == 1:
-                line_tmp.append([line_arr[4 + i], line_arr[4 + len_tmp + i]])  # [pkts_lst[0], flow_duration]
+                line_tmp.append([line_arr[0], line_arr[1], line_arr[2], line_arr[3], line_arr[4 + i],
+                                 line_arr[4 + len_tmp + i]])  # srcport, dstport, [pkts_lst[0], flow_duration]
             else:
-                line_tmp.append([line_arr[4 + i], line_arr[
+                line_tmp.append([line_arr[0], line_arr[1], line_arr[2], line_arr[3], line_arr[4 + i], line_arr[
                     4 + len_tmp + (i + 1)]])  # [pkts_lst[0], intr_tm_lst[1]], intr_tm_lst from 1, 2, ...
 
         X.append(line_tmp)
@@ -78,13 +79,12 @@ word_to_ix = {}
 #     for word in sent:
 #         if word not in word_to_ix:
 #             word_to_ix[word] = len(word_to_ix)
-print(word_to_ix)
+print('word_to_ix:', word_to_ix)
 tag_to_ix = {"DET": 0, "NN": 1, "V": 2}
 
 # These will usually be more like 32 or 64 dimensional.
 # We will keep them small, so we can see how the weights change as we train.
-EMBEDDING_DIM = 2
-HIDDEN_DIM = 10
+
 
 ######################################################################
 # Create the model:
@@ -97,10 +97,10 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-
+        self.num_layers = 20
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
-        self.lstm = nn.LSTM(embedding_dim, hidden_dim)
+        self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
 
         # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, len(word_to_ix), len(tag_to_ix))
         # self.loss_function = nn.NLLLoss()
@@ -109,26 +109,38 @@ class LSTMTagger(nn.Module):
         #
 
         # The linear layer that maps from hidden state space to tag space
+        self.tagset_size = tagset_size
         self.hidden2tag = nn.Linear(hidden_dim, tagset_size)
-        self.hidden = self.init_hidden()
+        self.hidden = self.init_hidden(num_layers=self.num_layers, batch_size=1)
 
-    def init_hidden(self):
+    def init_hidden(self, num_layers, batch_size):
         # Before we've done anything, we dont have any hidden state.
         # Refer to the Pytorch documentation to see exactly
         # why they have this dimensionality.
         # The axes semantics are (num_layers, minibatch_size, hidden_dim)
-        return (torch.zeros(1, 1, self.hidden_dim),
-                torch.zeros(1, 1, self.hidden_dim))
+        # return (torch.zeros(1, 1, self.hidden_dim),
+        #         torch.zeros(1, 1, self.hidden_dim))
+
+        return (
+        torch.zeros(1 * num_layers, batch_size, self.hidden_dim),  # the last layer output, which is equal to out[-1]
+        torch.zeros(1 * num_layers, batch_size, self.hidden_dim))  # the last cell hidden state.
 
     def forward(self, sentence):
+        # # Also, we need to clear out the hidden state of the LSTM,
+        # # detaching it from its history on the last instance.
+        self.hidden = self.init_hidden(num_layers=self.num_layers, batch_size=1)
+
         # embeds = self.word_embeddings(sentence)
         embeds = sentence
         # print('embed:',embeds)
         lstm_out, self.hidden = self.lstm(
             embeds.view(len(sentence), 1, -1), self.hidden)
-        tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1))
-        tag_scores = F.log_softmax(tag_space, dim=1)
-        return tag_scores[-1]
+        # tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1))
+        # tag_scores = F.log_softmax(tag_space, dim=1)
+        # return tag_scores[-1]   # when tag_scores.shape > 1, only return the last cell output.
+        tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1)[-1])  # only return the last cell output.
+        tag_scores = F.softmax(tag_space, dim=0)
+        return tag_scores  # when tag_scores.shape > 1, only return the last cell output.
 
     ######################################################################
     # Train the model:
@@ -143,16 +155,14 @@ class LSTMTagger(nn.Module):
         #     inputs = prepare_sequence(training_data[0][0], word_to_ix)
         #     tag_scores = model(inputs)
         #     print(tag_scores)
-        training_data = zip(X_train, y_train)
         for epoch in range(100):  # again, normally you would NOT do 300 epochs, it is toy data
+            # print('epoch:', epoch)
+            t = 0
+            training_data = zip(X_train, y_train)
             for sentence, tags in training_data:
                 # Step 1. Remember that Pytorch accumulates gradients.
                 # We need to clear them out before each instance
                 self.lstm.zero_grad()
-
-                # Also, we need to clear out the hidden state of the LSTM,
-                # detaching it from its history on the last instance.
-                self.hidden = self.init_hidden()
 
                 # Step 2. Get our inputs ready for the network, that is, turn them into
                 # Tensors of word indices.
@@ -165,7 +175,8 @@ class LSTMTagger(nn.Module):
 
                 # Step 3. Run our forward pass.
                 tag_scores = self.forward(sentence_in)
-                # print('tag_scores:', tag_scores)
+                if t % 100 == 0:
+                    print('epoch :', epoch, ', tag_scores :', tag_scores)
 
                 # Step 4. Compute the loss, gradients, and update the parameters by
                 #  calling optimizer.step()
@@ -173,6 +184,8 @@ class LSTMTagger(nn.Module):
                 self.loss_hist.append(loss.tolist())
                 loss.backward()
                 self.optimizer.step()
+
+                t += 1
 
     def predict(self, X_test, y_test):
 
@@ -186,9 +199,12 @@ class LSTMTagger(nn.Module):
                 tag_scores = self.forward(sentence)
                 # targets = torch.Tensor(y_test[i])
                 # tag_pred=(tag_scores==(tag_scores.max())).nonzero().tolist()[0][0]
-                tag_pred = (tag_scores == (tag_scores.max())).tolist()
-                print('i =', i, tag_pred, y_test[i].tolist())
-                if tag_pred == y_test[i].tolist():
+                # tag_pred = (tag_scores == (tag_scores.max())).tolist()
+                tag_pred_value, tag_pred_idx = tag_scores.max(dim=0)
+                if i % 100 == 0:
+                    print('i =', i, tag_scores, y_test[i].tolist())
+                    print('i =', i, tag_pred_idx, y_test[i].tolist())
+                if tag_pred_idx.data == y_test[i].tolist():
                     cnt += 1
 
         print('accuracy = ', cnt / len(X_test))
@@ -209,10 +225,12 @@ def show_figure(data):
     plt.plot(range(len(data)), data)
     plt.show()
 
+
 if __name__ == '__main__':
     torch.manual_seed(1)
     n = 3
     input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_%d_pkts/%d_all_in_one.txt' % (n, n)
+    input_file = '../results/MAIL_gate__MAIL_gate__MAIL_Gatew/first_%d_pkts/%d_all_in_one.txt' % (n, n)
     print('input_file:', input_file)
     X, Y = load_sequence_data(input_file)
     print('Y :', Counter(Y))
@@ -222,6 +240,8 @@ if __name__ == '__main__':
     # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
     print('X_test  : %d, y_test  : %d, label : %s' % (len(X_test), len(y_test), dict(sorted(Counter(y_test).items()))))
     # dict(sorted(d.items()))
+    EMBEDDING_DIM = len(X_train[0][0])
+    HIDDEN_DIM = 100
     model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, 0, len(Counter(Y)))
     y_train = one_hot_sklearn(y_train)
     model.train(X_train, y_train)
