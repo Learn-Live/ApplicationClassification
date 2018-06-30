@@ -63,12 +63,12 @@ def load_sequence_data_by_tshark(first_n_pkts_input_file, separator=','):
             # No,  time,           srcIP     dstIP,    protocol, pkts_size, srcPort, dstPort
             line_arr = line.split()
             if len(line_arr) < 9:
-                print('skip: ', line)
+                print('skip: ', line[:-2])  # reomve '\n'
                 line = fid_in.readline()
                 continue
             # len_tmp = int(line_arr[4])  # length of pkts_list
             # data.append(line_arr[:-1])
-            data.append([line_arr[-3], line_arr[-3]])
+            data.append([line_arr[-3], line_arr[-2]])
             # print([line_arr[-3], line_arr[-3]])
             label.append(line_arr[-1].split('\n')[0])
             line = fid_in.readline()
@@ -355,8 +355,8 @@ def online_identify(input_file='', model='', threshold=0.8):
                 else:
                     if len(first_n_pkts_data) > 10:  # and subflow_flg == False:
                         print(
-                            '+After first %d pkts, %s [pkts_num = %d] still cannot be identified, so giving up, clear the pkts list' % (
-                            10, five_tuple, len(flow_table[five_tuple][-1])))
+                            '+After first %d pkts, %s [pkts_num = %d] still cannot be identified (pred_value=%s), so giving up, clear the pkts list' % (
+                                10, five_tuple, len(flow_table[five_tuple][-1]), pred_value))
                         flow_table[five_tuple] = (subflow_flg, pred_value, [pkt_data])
                     else:
                         flow_table[five_tuple] = (subflow_flg, pred_value, first_n_pkts_data)
@@ -436,5 +436,5 @@ if __name__ == '__main__':
     input_file_training = '../data/BROWSING_gate_SSL_Browsing_tshark.txt'
     model = main_train_RNN(input_file_training, first_n=2)
 
-    input_file_Online_identify = '../data/BROWSING_gate_SSL_Browsing_tshark.txt'
+    input_file_Online_identify = '../data/AUDIO_spotifygateway_tshark.txt'
     online_identify(input_file_Online_identify, model, threshold=0.2)
