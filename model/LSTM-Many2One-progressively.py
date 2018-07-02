@@ -165,8 +165,9 @@ class LSTMTagger(nn.Module):
         #         torch.zeros(1, 1, self.hidden_dim))
 
         return (
-        torch.zeros(1 * num_layers, batch_size, self.hidden_dim),  # the last layer output, which is equal to out[-1]
-        torch.zeros(1 * num_layers, batch_size, self.hidden_dim))  # the last cell hidden state.
+            torch.zeros(1 * num_layers, batch_size, self.hidden_dim),
+            # h_t_1: the last layer output, which is equal to out[-1]
+            torch.zeros(1 * num_layers, batch_size, self.hidden_dim))  # c_t_1: the last cell hidden state.
 
     def forward(self, sentence):
         # # Also, we need to clear out the hidden state of the LSTM,
