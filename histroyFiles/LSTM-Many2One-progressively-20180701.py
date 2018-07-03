@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 r"""
-    purpose: to identify pkts or flow progressively by sequence models (LSTM)
+Sequence Models and Long-Short Term Memory Networks
+===================================================
 
-    Refer to : https://pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html
 """
 
-# standard libraries
-
+# Author: Robert Guthrie
 from collections import Counter
 
-import matplotlib.pyplot as plt
-# third-party libraries
 import numpy as np
 import torch
 import torch.nn as nn
@@ -18,19 +15,46 @@ import torch.nn.functional as F
 import torch.optim as optim
 from sklearn.preprocessing import OneHotEncoder
 
-# local libraries
 from preprocess.data_preprocess import achieve_train_test_data, change_label, normalize_data
 
 
-# Prepare data
+def load_sequence_data_backup(first_n_pkts_input_file, separator=','):
+    # input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
+    data = []
+    label = []
+    with open(first_n_pkts_input_file, 'r') as fid_in:
+        line = fid_in.readline()
+        while line:
+            ### srcIP, dstIP, srcport, dstport, len(pkts), pkts_lst, flow_duration, intr_time_lst, label
+            line_arr = line.split(separator)
+            len_tmp = int(line_arr[4])  # length of pkts_list
+            data.append(line_arr[:-1])
+            label.append(line_arr[-1].split('\n')[0])
+            line = fid_in.readline()
+
+    # X = normalize_data(np.asarray(X, dtype=float), range_value=[0, 1], eps=1e-5)
+    Y = change_label(label)
+    new_data = normalize_data(np.asarray(data, dtype=float), range_value=[0, 1], eps=1e-5)
+    X = []
+    for idx in range(len(new_data)):
+        line_arr = new_data[idx]
+        # len_tmp = int(line_arr[4])  # length of pkts_list
+        line_tmp = []
+        for i in range(1, len_tmp + 1):  # len(pkts_list), [1, len_tmp+1)
+            if i == 1:
+                line_tmp.append([line_arr[0], line_arr[1], line_arr[2], line_arr[3], line_arr[4 + i],
+                                 line_arr[4 + len_tmp + i]])  # srcport, dstport, [pkts_lst[0], flow_duration]
+            else:
+                line_tmp.append([line_arr[0], line_arr[1], line_arr[2], line_arr[3], line_arr[4 + i], line_arr[
+                    4 + len_tmp + (i + 1)]])  # [pkts_lst[0], intr_tm_lst[1]], intr_tm_lst from 1, 2, ...
+
+        X.append(line_tmp)
+
+    return X, Y
+
+
 def load_sequence_data_by_tshark(first_n_pkts_input_file, separator=','):
-    """
-
-    :param first_n_pkts_input_file: E.g. input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
-    :param separator:
-    :return: X=Features, Y=Label
-    """
-
+    # input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
     data = []
     label = []
     with open(first_n_pkts_input_file, 'r') as fid_in:
@@ -42,11 +66,14 @@ def load_sequence_data_by_tshark(first_n_pkts_input_file, separator=','):
                 print('skip: ', line[:-2])  # reomve '\n'
                 line = fid_in.readline()
                 continue
+            # len_tmp = int(line_arr[4])  # length of pkts_list
+            # data.append(line_arr[:-1])
             data.append([line_arr[-3], line_arr[-2]])
             # print([line_arr[-3], line_arr[-3]])
             label.append(line_arr[-1].split('\n')[0])
             line = fid_in.readline()
 
+    # X = normalize_data(np.asarray(X, dtype=float), range_value=[0, 1], eps=1e-5)
     Y = change_label(label)
     new_data = normalize_data(np.asarray(data, dtype=float), range_value=[0, 1], eps=1e-5)
     X = []
@@ -69,12 +96,6 @@ def load_sequence_data_by_tshark(first_n_pkts_input_file, separator=','):
 
 
 def one_hot_sklearn(label_integer):
-    """
-
-    :param label_integer: E.g. [0, 1, 2, 3, ...]
-    :return: one hot value
-    """
-
     label_integer = np.asarray(label_integer, dtype=int)
     onehot_encoder = OneHotEncoder(sparse=False)
     integer_encoded = label_integer.reshape(len(label_integer), 1)
@@ -83,17 +104,38 @@ def one_hot_sklearn(label_integer):
     return np.array(onehot_encoded, dtype=int)
 
 
+#
+# # Prepare data:
+#
+# def prepare_sequence(seq, to_ix):
+#     idxs = [to_ix[w] for w in seq]
+#     return torch.tensor(idxs, dtype=torch.long)
+#
+#
+# training_data = [
+#     ("The dog ate the apple".split(), ["DET", "NN", "V", "DET", "NN"]),
+#     ("Everybody read that book".split(), ["NN", "V", "DET", "NN"])
+# ]
+word_to_ix = {}
+# for sent, tags in training_data:
+#     for word in sent:
+#         if word not in word_to_ix:
+#             word_to_ix[word] = len(word_to_ix)
+print('word_to_ix:', word_to_ix)
+tag_to_ix = {"DET": 0, "NN": 1, "V": 2}
+
+
+# These will usually be more like 32 or 64 dimensional.
+# We will keep them small, so we can see how the weights change as we train.
+
+
+######################################################################
 # Create the model:
+
+
 class LSTMTagger(nn.Module):
 
     def __init__(self, embedding_dim, hidden_dim, vocab_size, tagset_size):
-        """
-
-        :param embedding_dim: input dim of LSTM Cell
-        :param hidden_dim: h_t or c_t
-        :param vocab_size: not be used
-        :param tagset_size: output size of Linear,  nn.Linear(hidden_dim, tagset_size)
-        """
         super(LSTMTagger, self).__init__()
         self.hidden_dim = hidden_dim
 
@@ -115,16 +157,12 @@ class LSTMTagger(nn.Module):
         self.hidden = self.init_hidden(num_layers=self.num_layers, batch_size=1)
 
     def init_hidden(self, num_layers, batch_size):
-        """
-
-        :param num_layers: number of cell in LSTM
-        :param batch_size: not be used yet.
-        :return: h_t_1, c_t_1
-        """
         # Before we've done anything, we dont have any hidden state.
         # Refer to the Pytorch documentation to see exactly
         # why they have this dimensionality.
         # The axes semantics are (num_layers, minibatch_size, hidden_dim)
+        # return (torch.zeros(1, 1, self.hidden_dim),
+        #         torch.zeros(1, 1, self.hidden_dim))
 
         return (
             torch.zeros(1 * num_layers, batch_size, self.hidden_dim),
@@ -132,11 +170,6 @@ class LSTMTagger(nn.Module):
             torch.zeros(1 * num_layers, batch_size, self.hidden_dim))  # c_t_1: the last cell hidden state.
 
     def forward(self, sentence):
-        """
-
-        :param sentence: input value for Cell
-        :return: output of LSTM
-        """
         # # Also, we need to clear out the hidden state of the LSTM,
         # # detaching it from its history on the last instance.
         self.hidden = self.init_hidden(num_layers=self.num_layers, batch_size=1)
@@ -153,15 +186,12 @@ class LSTMTagger(nn.Module):
         tag_scores = F.softmax(tag_space, dim=0)
         return tag_scores  # when tag_scores.shape > 1, only return the last cell output.
 
+    ######################################################################
     # Train the model:
-    def train(self, X_train, y_train):
-        """
 
-        :param X_train: Features
-        :param y_train: Label
-        :return:
-        """
-        self.loss_hist = []  # used for log
+    def train(self, X_train, y_train):
+
+        self.loss_hist = []
         # # See what the scores are before training
         # # Note that element i,j of the output is the score for tag j for word i.
         # # Here we don't need to train, so the code is wrapped in torch.no_grad()
@@ -202,12 +232,6 @@ class LSTMTagger(nn.Module):
                 t += 1
 
     def predict(self, X_test, y_test):
-        """
-
-        :param X_test:
-        :param y_test:
-        :return:
-        """
 
         # See what the scores are after training
         with torch.no_grad():
@@ -229,26 +253,23 @@ class LSTMTagger(nn.Module):
 
         print('accuracy = ', cnt / len(X_test))
 
+        # The sentence is "the dog ate the apple".  i,j corresponds to score for tag j
+        # for word i. The predicted tag is the maximum scoring tag.
+        # Here, we can see the predicted sequence below is 0 1 2 0 1
+        # since 0 is index of the maximum value of row 1,
+        # 1 is the index of maximum value of row 2, etc.
+        # Which is DET NOUN VERB DET NOUN, the correct sequence!
+        # print(tag_scores)
+
 
 def show_figure(data):
-    """
-
-    :param data: []
-    :return:
-    """
+    import matplotlib.pyplot as plt
 
     plt.plot(range(len(data)), data)
     plt.show()
 
 
 def main_train_RNN(input_file, first_n=1):
-    """
-
-    :param input_file:
-    :param first_n: compute from the first 1 pkts  to the first n pkts
-    :return: the trained model
-    """
-
     for i in range(1, first_n + 1):
         n = i
         # input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_%d_pkts/%d_all_in_one.txt' % (n, n)
@@ -263,8 +284,8 @@ def main_train_RNN(input_file, first_n=1):
         # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
         print('X_test  : %d, y_test  : %d, label : %s' % (
             len(X_test), len(y_test), dict(sorted(Counter(y_test).items()))))
-
-        EMBEDDING_DIM = len(X_train[0][0])  # input size of LSTM in cell
+        # dict(sorted(d.items()))
+        EMBEDDING_DIM = len(X_train[0][0])
         HIDDEN_DIM = 20
         model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, 0, len(Counter(Y)))
         y_train = one_hot_sklearn(y_train)
@@ -280,17 +301,10 @@ def main_train_RNN(input_file, first_n=1):
 
 
 def first_n_pkts_identify(X, model, threshold=0.8):
-    """
-
-    :param X: feature
-    :param model: The trained LSTM Model
-    :param threshold: to judge if to continue accumulate pkts again
-    :return:
-    """
     y_pred = model.forward(X)
     value, idx = y_pred.max(dim=0)
     flg = False
-    if value.data.tolist() > threshold:  # value is Tensor.
+    if value.data.tolist() > threshold:
         # print('--predict results : ', y_pred)
         flg = True
 
@@ -298,13 +312,6 @@ def first_n_pkts_identify(X, model, threshold=0.8):
 
 
 def online_identify(input_file='', model='', threshold=0.8):
-    """
-
-    :param input_file: mixed pkts pcaps
-    :param model: the trained model
-    :param threshold:
-    :return:
-    """
     flow_table = {}  # {'five_tuple':(flg, [pkt1, pkt2,..., pkt10 ])}
     identified_cnt = 0
     pkts_cnt = 0
@@ -362,6 +369,7 @@ def online_identify(input_file='', model='', threshold=0.8):
             line_pkt = fid_in.readline()
 
         # print('Total num. of flow is %d, num. of identified flow is %d'%(len(flow_table.keys()),identified_cnt))
+
         print('(flow_cnt = %d) == (len(flow_table.keys()) = %d)' % (flow_cnt, len(flow_table.keys())))
         flow_identified_cnt = 0
         for key in flow_table.keys():
