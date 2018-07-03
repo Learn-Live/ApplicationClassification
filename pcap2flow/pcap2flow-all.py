@@ -30,6 +30,12 @@ from preprocess.data_preprocess import compute_mean
 
 
 def export_to_txt(f_name, txt_f_name):
+    """
+
+    :param f_name:
+    :param txt_f_name:
+    :return:
+    """
     cmd = """tshark -o gui.column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (
         f_name, txt_f_name)
 
@@ -38,6 +44,12 @@ def export_to_txt(f_name, txt_f_name):
 
 
 def extract_packet_payload(f_name, txt_f_name):
+    """
+
+    :param f_name:
+    :param txt_f_name:
+    :return:
+    """
     # cmd = """tshark -r %s -T fields -e data -w %s""" % (
     #     f_name, txt_f_name)
     # cmd = """tshark -o gui.column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD", "Info","%%i"' -x -r %s  > %s""" % (
@@ -50,6 +62,11 @@ def extract_packet_payload(f_name, txt_f_name):
 
 
 def parse_records_tshark(f_name):
+    """
+
+    :param f_name:
+    :return:
+    """
     records = []
     NAME = ['start_time', 'src_ip', 'dst_ip', 'protocol', 'length',
             'src_port', 'dst_port']
@@ -70,6 +87,14 @@ def parse_records_tshark(f_name):
 
 
 def change_to_flows(pkts_records, name, *args, **kwargs):
+    """
+
+    :param pkts_records:
+    :param name:
+    :param args:
+    :param kwargs:
+    :return:
+    """
     # def change_to_flows(pkts_records, name, time_out=0.1, flow_duration=1, first_n_pkts=5):
     """
 
@@ -204,13 +229,29 @@ Remain subFlows: [%i]
 
 
 def save_flow(flows, f_name, label='-1'):
+    """
+
+    :param flows:
+    :param f_name:
+    :param label:
+    :return:
+    """
     with open(f_name, 'w') as fid:
         for f in flows:
             # print(f)
             fid.write('|'.join([str(v) for v in f]) + '|' + label + '\n')
         fid.flush()
 
+
 def pcap2flow(pcap_file_name, flow_file_name, *args, **kwargs):
+    """
+
+    :param pcap_file_name:
+    :param flow_file_name:
+    :param args:
+    :param kwargs:
+    :return:
+    """
     print('start time:', time.asctime())
     start_time = time.time()
     if kwargs.get('time_out') is not None:
@@ -259,12 +300,22 @@ def txt2flow(txt_f_name, flow_file_name, *args, **kwargs):
 
 
 def show_figure(data_lst):
+    """
+
+    :param data_lst:
+    :return:
+    """
     data = data_lst.split(',')[-4]
     plt.plot(len(data), data)
     plt.show()
 
 
 def IP2Int(ip):
+    """
+
+    :param ip:
+    :return:
+    """
     ## o = map(int, ip.split('.'))
     # print(ip)
     tmp_lst = ip.split('.')
@@ -274,6 +325,11 @@ def IP2Int(ip):
 
 
 def Int2IP(ipnum):
+    """
+
+    :param ipnum:
+    :return:
+    """
     o1 = int(ipnum / 16777216) % 256
     o2 = int(ipnum / 65536) % 256
     o3 = int(ipnum / 256) % 256
@@ -287,6 +343,12 @@ def Int2IP(ipnum):
 
 
 def append_data_to_file(all_in_one_file, new_file):
+    """
+
+    :param all_in_one_file:
+    :param new_file:
+    :return:
+    """
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
@@ -307,6 +369,12 @@ def append_data_to_file(all_in_one_file, new_file):
 
 
 def append_data_to_file_with_mean(all_in_one_file, new_file):
+    """
+
+    :param all_in_one_file:
+    :param new_file:
+    :return:
+    """
     with open(all_in_one_file, 'a') as fid_out:
         with open(new_file, 'r') as fid_in:
             line = fid_in.readline()
@@ -329,6 +397,13 @@ def append_data_to_file_with_mean(all_in_one_file, new_file):
 
 
 def add_arff_header(all_in_one_file, attributes_num=2, label=['a', 'b', 'c']):
+    """
+
+    :param all_in_one_file:
+    :param attributes_num:
+    :param label:
+    :return:
+    """
     output_file = os.path.splitext(all_in_one_file)[0] + '.arff'
     print(output_file)
     if os.path.exists(output_file):

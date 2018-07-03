@@ -21,3 +21,17 @@
 >## 'historyFiles' folder
 >>>--- store the tmp files or backup files
 
+
+
+
+
+
+* # Requirements
+>> pytorch > 0.4
+ 
+>>  numpy
+
+>> matplotlib
+
+>> sklearn
+

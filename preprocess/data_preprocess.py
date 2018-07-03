@@ -3,18 +3,24 @@
     data preprocess
 
 """
-from collections import Counter
 
 __author__ = 'Learn-Live'
 
+from collections import Counter
+
 # standard library
 import numpy as np
-
 # third party library
 from sklearn.model_selection import train_test_split
 
 
 def load_data(input_file, separator=','):
+    """
+
+    :param input_file:
+    :param separator:
+    :return:
+    """
     data = []
     label = []
     with open(input_file, 'r') as fid_in:
@@ -29,6 +35,11 @@ def load_data(input_file, separator=','):
 
 
 def compute_mean(data_lst):
+    """
+
+    :param data_lst:
+    :return:
+    """
     if len(data_lst) > 0:
         sum = 0.0
         for i in range(len(data_lst)):
@@ -42,6 +53,12 @@ def compute_mean(data_lst):
 
 
 def load_data_compute_mean(input_file, separator=','):
+    """
+
+    :param input_file:
+    :param separator:
+    :return:
+    """
     data = []
     label = []
     with open(input_file, 'r') as fid_in:
@@ -62,6 +79,13 @@ def load_data_compute_mean(input_file, separator=','):
 
 
 def load_data_2(input_file, first_n_pkts=20, separator=','):
+    """
+
+    :param input_file:
+    :param first_n_pkts:
+    :param separator:
+    :return:
+    """
     first_n_pkts_lst = []
     flow_dur = []
     intr_tm_lst = []
@@ -82,6 +106,13 @@ def load_data_2(input_file, first_n_pkts=20, separator=','):
 
 
 def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
+    """
+
+    :param X:
+    :param range_value:
+    :param eps:
+    :return:
+    """
 
     new_X = np.copy(X)
 
@@ -99,6 +130,12 @@ def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
 
 
 def change_label(Y, label_dict={'BENIGN': 1, 'Others': 0}):
+    """
+
+    :param Y:
+    :param label_dict:
+    :return:
+    """
     label_stat = Counter(Y)
     label_cnt = list(label_stat.keys())
     new_Y = []
@@ -112,6 +149,14 @@ def change_label(Y, label_dict={'BENIGN': 1, 'Others': 0}):
 
 
 def achieve_train_test_data(X, Y, train_size=0.7, shuffle=True):
+    """
+
+    :param X:
+    :param Y:
+    :param train_size:
+    :param shuffle:
+    :return:
+    """
     # X=np.asarray(X, dtype=float)
     # Y=np.asarray(Y)
     # X_train, X_test = train_test_split(Y, Y, train_size, shuffle)  # it's not right, why?
