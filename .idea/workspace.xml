@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/histroyFiles/LSTM-Many2One-progressively-20180701.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,14 +25,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="LSTM-Many2One-progressively.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LSTM-Many2One-progressively.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5122">
+            <state relative-caret-position="-4912">
               <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
               <folding>
-                <element signature="e#185#203#0" expanded="true" />
+                <element signature="e#223#254#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="15">
+                <caret line="1" column="2" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -71,7 +82,6 @@
       <list>
         <option value="$PROJECT_DIR$/.gitigorne" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" />
         <option value="$PROJECT_DIR$/preprocess/data_preprocess.py" />
         <option value="$PROJECT_DIR$/model/LSTM-Demo.py" />
@@ -82,6 +92,7 @@
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow.py" />
         <option value="$PROJECT_DIR$/data/AUDIO_tor_spotify2_tshark.txt" />
         <option value="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -115,26 +126,6 @@
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
               <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="histroyFiles" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="pcap2flow" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="preprocess" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -537,7 +528,14 @@
       <option name="project" value="LOCAL" />
       <updated>1530561811735</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="add comments in LSTM-Many2One-progressively.py">
+      <created>1530576187268</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1530576187268</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TodoView">
@@ -656,7 +654,8 @@
     <MESSAGE value="add 'different test file' in LSTM-Many2One-progressively.py" />
     <MESSAGE value="remove 'online_identified_backup()' in LSTM-Many2One-progressively.py" />
     <MESSAGE value="add &quot;historyFiles&quot; directory to store backup files" />
-    <option name="LAST_COMMIT_MESSAGE" value="add &quot;historyFiles&quot; directory to store backup files" />
+    <MESSAGE value="add comments in LSTM-Many2One-progressively.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="add comments in LSTM-Many2One-progressively.py" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -745,12 +744,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py</url>
-          <line>328</line>
+          <line>329</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py</url>
-          <line>373</line>
+          <line>374</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
       </breakpoints>
@@ -915,13 +914,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="5" lean-forward="true" selection-start-column="5" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
@@ -1117,11 +1109,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5122">
+        <state relative-caret-position="-4912">
           <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
           <folding>
-            <element signature="e#185#203#0" expanded="true" />
+            <element signature="e#223#254#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="15">
+            <caret line="1" column="2" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
