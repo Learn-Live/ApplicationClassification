@@ -1,41 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/data/AUDIO_spotifygateway_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/AUDIO_tor_spotify2_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/AUDIO_tor_spotify_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/BROWSING_gate_SSL_Browsing_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/BROWSING_ssl_browsing_gateway_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/BROWSING_tor_browsing_ara_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/BROWSING_tor_browsing_ger_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/BROWSING_tor_browsing_mam2_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/BROWSING_tor_browsing_mam_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/CHAT_facebookchatgateway_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FILE-TRANSFER_gate_SFTP_filetransfer_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/FILE-TRANSFER_tor_skype_transfer_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/MAIL_Gateway_Thunderbird_Imap_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/MAIL_Gateway_Thunderbird_POP_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/MAIL_gate_Email_IMAP_filetransfer_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/MAIL_gate_POP_filetransfer_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/VIDEO_Vimeo_Gateway_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/VIDEO_Youtube_Flash_Gateway_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/udp.pcapng" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/histroyFiles/data/P2P_tor_p2p_multipleSpeed_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/histroyFiles/data/P2P_tor_p2p_vuze_tshark.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/histroyFiles/data/a.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/histroyFiles/data/a1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/histroyFiles/data/payload.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/histroyFiles/data/udp_tshark.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcap2flow/pcap2flow-flow.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcap2flow/pcap2flow-flow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pcap2flow/pcap2flow.py" beforeDir="false" afterPath="$PROJECT_DIR$/pcap2flow/pcap2flow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocess/data_preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocess/data_preprocess.py" afterDir="false" />
-    </list>
+    <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -104,22 +70,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="6" lean-forward="true" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+            <state relative-caret-position="45">
+              <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="data_preprocess.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="data_preprocess.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/preprocess/data_preprocess.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
               <caret line="152" selection-start-line="152" selection-end-line="152" />
               <folding>
-                <element signature="e#101#119#0" expanded="true" />
+                <element signature="e#81#112#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,11 +122,11 @@
         <option value="$PROJECT_DIR$/model/LSTM-Many2One.py" />
         <option value="$PROJECT_DIR$/model/LSTM-Many2One-progressively.py" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow.py" />
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow-all.py" />
         <option value="$PROJECT_DIR$/pcap2flow/pcap2flow-flow.py" />
         <option value="$PROJECT_DIR$/preprocess/data_preprocess.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -653,7 +619,21 @@
       <option name="project" value="LOCAL" />
       <updated>1530579223613</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="add '*.pcap' in .gitignore">
+      <created>1530580282576</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1530580282576</updated>
+    </task>
+    <task id="LOCAL-00044" summary="add '*.pyc' in .gitignore">
+      <created>1530580472395</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1530580472395</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TodoView">
@@ -668,6 +648,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="1920" height="1021" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32921347" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5010672" side_tool="true" weight="0.6505618" />
@@ -675,7 +656,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49919224" weight="0.4483146" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.20449439" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49839914" weight="0.38202247" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.49893278" visible="true" weight="0.3955056" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.49893278" visible="true" weight="0.43146068" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26467448" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
@@ -750,8 +731,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add model directory" />
-    <MESSAGE value="one-hot" />
     <MESSAGE value="misc.xml" />
     <MESSAGE value="vagrant.xml" />
     <MESSAGE value="Merge branch 'master' of https://github.com/Learn-Live/ApplicationClassification&#10;&#10;# Conflicts:&#10;#&#9;.idea/misc.xml&#10;&#10;&#10;Add 'load_data_compute_mean' in preprocess" />
@@ -775,7 +754,9 @@
     <MESSAGE value="add 'Inline comment' in README" />
     <MESSAGE value="add 'data' folder in 'historyFiles' folder" />
     <MESSAGE value="add 'Requirements' in README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="add 'Requirements' in README.md" />
+    <MESSAGE value="add '*.pcap' in .gitignore" />
+    <MESSAGE value="add '*.pyc' in .gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="add '*.pyc' in .gitignore" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1201,28 +1182,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="420">
-            <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="6" lean-forward="true" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-611">
@@ -1249,8 +1208,30 @@
         <state relative-caret-position="180">
           <caret line="152" selection-start-line="152" selection-end-line="152" />
           <folding>
-            <element signature="e#101#119#0" expanded="true" />
+            <element signature="e#81#112#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="420">
+            <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
         </state>
       </provider>
     </entry>
