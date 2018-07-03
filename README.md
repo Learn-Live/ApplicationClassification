@@ -1,8 +1,10 @@
 # Application Classification Project
 >>--- to identify pkts or flow progressively.
 
+<!--- comment 
 > ## 'data' folder
 >>>--- raw data (pcap)
+--->
 
 >## 'pcap2flow' folder
 >>>--- toolkit to convert pcap files to txt or feature data.
