@@ -2,3 +2,4 @@ historyFiles/
 results/
 *.pcap
 *.pyc
+*.arff
