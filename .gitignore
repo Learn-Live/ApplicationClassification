@@ -1,3 +1,4 @@
 historyFiles/
 results/
 *.pcap
+*.pyc
