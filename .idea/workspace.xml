@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,8 +51,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="15">
+              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
             </state>
           </provider>
         </entry>
@@ -550,7 +548,14 @@
       <option name="project" value="LOCAL" />
       <updated>1530577130384</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="add 'Inline comment' in README">
+      <created>1530577362313</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1530577362313</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TodoView">
@@ -572,9 +577,9 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49919224" weight="0.4483146" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.20449439" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49839914" visible="true" weight="0.24157304" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.35730338" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20384204" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49839914" weight="0.2719101" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.6955056" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20384204" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" weight="0.32977587" />
@@ -671,7 +676,8 @@
     <MESSAGE value="add &quot;historyFiles&quot; directory to store backup files" />
     <MESSAGE value="add comments in LSTM-Many2One-progressively.py" />
     <MESSAGE value="add 'descriptions' in README" />
-    <option name="LAST_COMMIT_MESSAGE" value="add 'descriptions' in README" />
+    <MESSAGE value="add 'Inline comment' in README" />
+    <option name="LAST_COMMIT_MESSAGE" value="add 'Inline comment' in README" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1143,8 +1149,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
