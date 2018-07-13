@@ -103,6 +103,37 @@ def add_arff_header(all_in_one_file, attributes_num=2, label=['a', 'b', 'c']):
                 line = fid_in.readline()
 
 
+def merge_data_labels(features_file, labels_file):
+    data_file = os.path.splitext(features_file)[0] + '_merged.csv'
+    i = 0
+    with open(data_file, 'w') as fid_out:
+        # with open(features_file, 'r') as fid_in:
+        #     with open(labels_file, 'r') as fid_in2:
+        #         line = fid_in.readline() + ',' + str(int(float(fid_in2.readline().strip())))
+        #         while line :
+        #             i +=1
+        #             fid_out.write(line)
+        #             tmp_label=fid_in2.readline().strip()
+        #             print('i=%d, tmp_label=%s'%(i,tmp_label))
+        #             # line = fid_in.readline() + ',' + str(int(float(fid_in2.readline().strip())))
+        #             line = fid_in.readline() +',' + str(int(float(tmp_label)))
+        #             print(line)
+        features_data = []
+        with open(features_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                features_data.append(line.strip())
+                line = fid_in.readline()
+
+        with open(labels_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                lab = int(float(line.strip()))
+                fid_out.write(features_data[i] + ',' + str(lab) + '\n')
+                i += 1
+                line = fid_in.readline()
+    return data_file
+
 def save_to_arff(input_file, output_file, features_num=60, labels=[0, 1, 2, 3]):
     """
 
@@ -112,11 +143,11 @@ def save_to_arff(input_file, output_file, features_num=60, labels=[0, 1, 2, 3]):
     :return:
     """
     with open(output_file, 'w') as fid_out:
-        out_fid.write('@Relation "demo"\n')
+        fid_out.write('@Relation "demo"\n')
         for i in range(features_num):
             fid_out.write('@Attribute feature_%s numeric\n' % i)
-        label_tmp = ','.join([str(v) for v in label])
-        print('label_tmp:', label_tmp)
+        label_tmp = ','.join([str(v) for v in labels])
+        # print('label_tmp:', label_tmp)
         fid_out.write('@Attribute class {%s}\n' % (label_tmp))
         fid_out.write('@data\n')
 
@@ -132,15 +163,29 @@ if __name__ == '__main__':
     root_dir = '../results/arff'
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
-    first_n_pkts = 40
+    first_n_pkts = 10
 
     data_root_dir = '../data/'
     tmp_dir = 'data_split_train_v2_711'
     csv_root_dir = os.path.join(data_root_dir, tmp_dir)
+    if not os.path.exists(csv_root_dir):
+        os.mkdir(csv_root_dir)
     arff_dir = os.path.join(root_dir, tmp_dir)
+    if not os.path.exists(arff_dir):
+        os.mkdir(arff_dir)
 
-    for i in range(1, first_n_pkts + 1):
-        input_file_i = os.path.join(csv_root_dir, 'pkt%d' % i)
-        print('input_file_%d' % (i, input_file_i))
-        output_file_i = os.path.join(arff_dir, 'pkt%d' % i)
-        save_to_arff(input_file_i, output_file_i)
+    # features_file = '../data/data_split_train_v2_711/train_1pkt_images.csv'
+    # labels_file = '../data/data_split_train_v2_711/train_1pkt_labels.csv'
+    # input_file=merge_data_labels(features_file, labels_file)
+    # output_file = os.path.join(arff_dir, 'pkt1_merge.arff')
+    # save_to_arff(input_file, output_file, features_num=60, labels=[0,1,2,3])
+
+    # for i in range(1, first_n_pkts + 1,2):
+    for i in [1, 3, 5, 8, 10]:
+        features_file_i = '../data/data_split_train_v2_711/train_%dpkt_images.csv' % i
+        labels_file_i = '../data/data_split_train_v2_711/train_%dpkt_labels.csv' % i
+        input_file_i = merge_data_labels(features_file_i, labels_file_i)
+        # input_file_i = os.path.join(csv_root_dir, 'pkt%d.csv' % i)
+        print('input_file_%d=%s' % (i, input_file_i))
+        output_file_i = os.path.join(arff_dir, 'pkt%d.arff' % i)
+        save_to_arff(input_file_i, output_file_i, features_num=60 * i + (i - 1), labels=[0, 1, 2, 3])
