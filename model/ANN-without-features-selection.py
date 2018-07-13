@@ -273,7 +273,7 @@ if __name__ == '__main__':
     # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
     print('X_test  : %d, y_test  : %d, label : %s' % (len(X_test), len(y_test), dict(sorted(Counter(y_test).items()))))
 
-    ann = ANN(BATCH_SIZE=256, first_n_pkts=1, epochs=1000, num_class=len(Counter(y_train)))
+    ann = ANN(BATCH_SIZE=128, first_n_pkts=1, epochs=1000, num_class=len(Counter(y_train)))
     # training_set = Data.TensorDataset(torch.Tensor(X_train), torch.Tensor(y_train))  # X, Y
     one_hot_y_train = one_hot_sklearn(y_train)
     training_set = Data.TensorDataset(torch.Tensor(X_train), torch.Tensor(one_hot_y_train))  # X, Y
