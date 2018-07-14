@@ -3,9 +3,11 @@
 
     refer: https://raw.githubusercontent.com/yunjey/pytorch-tutorial/master/tutorials/02-intermediate/convolutional_neural_network/main.py
 """
+from collections import Counter
 
 import torch
 import torch.nn as nn
+from sklearn.metrics import confusion_matrix, accuracy_score
 from torch.autograd import Variable
 
 # Device configuration
@@ -136,7 +138,8 @@ class ConvNet(nn.Module):
             correct = 0.0
             loss = 0.0
             total = 0
-            for b_x, b_y in test_loader:
+            cm = []
+            for step, (b_x, b_y) in enumerate(test_loader):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1])  # (nSamples, nChannels, x_Height, x_Width)
@@ -149,6 +152,14 @@ class ConvNet(nn.Module):
                 total += b_y.size(0)
                 correct += (predicted == b_y).sum().item()
 
+                if step == 0:
+                    cm = confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+                    sk_accuracy = accuracy_score(b_y, predicted) * len(b_y)
+                else:
+                    cm += confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+                    sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
+
+            print(cm, sk_accuracy / total)
             # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
 
         acc = correct / total
@@ -187,16 +198,34 @@ def show_results(data_dict, i=1):
     plt.show()
 
 
+def get_loader_iterators_contents(train_loader):
+    X = []
+    y = []
+    for step, (b_x, b_y) in enumerate(train_loader):
+        X.extend(b_x.data.tolist())
+        y.extend(b_y.data.tolist())
+
+    return X, y
+
 def run_main(i):
     input_file = '../data/data_split_train_v2_711/train_%dpkt_images_merged.csv' % i
     print(input_file)
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
     train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    cntr = Counter(dataset.y)
+    print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
     train_loader = torch.utils.data.DataLoader(dataset, batch_size, num_workers=4, sampler=train_sampler)
+    X, y = get_loader_iterators_contents(train_loader)
+    cntr = Counter(y)
+    print('train_loader: ', len(train_loader.sampler), ' y:', sorted(cntr.items()))
     global test_loader
-    test_loader = torch.utils.data.DataLoader(dataset, batch_size, num_workers=4, sampler=test_sampler)
+    test_loader = torch.utils.data.DataLoader(dataset, batch_size=len(test_sampler), num_workers=4,
+                                              sampler=test_sampler)
+    X, y = get_loader_iterators_contents(test_loader)
+    cntr = Counter(y)
+    print('test_loader: ', len(test_loader.sampler), ' y:', sorted(cntr.items()))
 
     model = ConvNet(num_classes, num_features=i * 60 + i - 1).to(device)
     model.run_train(train_loader)
