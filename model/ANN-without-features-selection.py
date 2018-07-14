@@ -76,6 +76,10 @@ class ANN(nn.Module):
         #                                   nn.Linear(self.h_size, self.out_size, nn.Softmax())
         #                                   )
 
+        # For example, nn.Conv2d will take in a 4D Tensor of nSamples x nChannels x Height x Width.
+        #
+        # If you have a single sample, just use input.unsqueeze(0) to add a fake batch dimension.
+
         # self.conv1 = nn.Conv2d(1, 6, (5, 1), stride=1)
         # self.conv2 = nn.Conv2d(6, 16, (5, 1), stride=1)
         # # an affine operation: y = Wx + b
@@ -273,7 +277,7 @@ if __name__ == '__main__':
     # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
     print('X_test  : %d, y_test  : %d, label : %s' % (len(X_test), len(y_test), dict(sorted(Counter(y_test).items()))))
 
-    ann = ANN(BATCH_SIZE=128, first_n_pkts=1, epochs=1000, num_class=len(Counter(y_train)))
+    ann = ANN(BATCH_SIZE=16, first_n_pkts=1, epochs=1000, num_class=len(Counter(y_train)))
     # training_set = Data.TensorDataset(torch.Tensor(X_train), torch.Tensor(y_train))  # X, Y
     one_hot_y_train = one_hot_sklearn(y_train)
     training_set = Data.TensorDataset(torch.Tensor(X_train), torch.Tensor(one_hot_y_train))  # X, Y
