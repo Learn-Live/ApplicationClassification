@@ -8,10 +8,12 @@ import torch
 from torch.utils.data import Dataset
 from torch.utils.data.sampler import SubsetRandomSampler
 
+from preprocess.data_preprocess import normalize_data
+
 
 class TrafficDataset(Dataset):
 
-    def __init__(self, input_file, transform=None):
+    def __init__(self, input_file, transform=None, normalization_flg=False):
         self.X = []
         self.y = []
         with open(input_file, 'r') as fid_in:
@@ -22,6 +24,10 @@ class TrafficDataset(Dataset):
                 self.X.append(value)
                 self.y.append(float(line_arr[-1].strip()[0]))
                 line = fid_in.readline()
+
+        if normalization_flg:
+            self.X = normalize_data(np.asarray(self.X, dtype=float), range_value=[-1, 1], eps=1e-5)
+
         self.transform = transform
 
     def __getitem__(self, index):

@@ -154,9 +154,9 @@ if __name__ == '__main__':
     learning_rate = 0.001
 
     input_file = '../data/data_split_train_v2_711/train_1pkt_images_merged.csv'
-    dataset = TrafficDataset(input_file, transform=None)
+    dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
-    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.8, shuffle=True)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size=30, shuffle=True, num_workers=4, sampler=train_sampler)
     train_loader = torch.utils.data.DataLoader(dataset, batch_size, num_workers=4, sampler=train_sampler)
     test_loader = torch.utils.data.DataLoader(dataset, batch_size, num_workers=4, sampler=test_sampler)
