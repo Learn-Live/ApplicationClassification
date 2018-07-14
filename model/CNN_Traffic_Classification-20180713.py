@@ -5,12 +5,15 @@
 """
 from collections import Counter
 
+import numpy as np
 import torch
 import torch.nn as nn
 from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.model_selection import KFold
 from torch.autograd import Variable
-
 # Device configuration
+from torch.utils.data.sampler import SubsetRandomSampler
+
 from preprocess.TrafficDataset import TrafficDataset, split_train_test
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -163,7 +166,7 @@ class ConvNet(nn.Module):
             # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
 
         acc = correct / total
-        return acc, loss
+        return acc, loss.data.tolist()
 
 
 def show_results(data_dict, i=1):
@@ -237,15 +240,59 @@ def run_main(i):
     torch.save(model.state_dict(), 'model_%d.ckpt' % i)
 
 
+def run_main_cross_validation(i):
+    input_file = '../data/data_split_train_v2_711/train_%dpkt_images_merged.csv' % i
+    print(input_file)
+    dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
+
+    acc_sum = 0.0
+
+    k_fold = KFold(10)
+    for k, (train_idxs_k, test_idxs_k) in enumerate(k_fold.split(dataset)):
+        print('--------------------- k = %d -------------------' % (k + 1))
+        cntr = Counter(dataset.y)
+        print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
+        train_sampler = SubsetRandomSampler(train_idxs_k)
+        test_sampler = SubsetRandomSampler(test_idxs_k)
+        # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
+        train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=False, num_workers=4,
+                                                   sampler=train_sampler)
+        X, y = get_loader_iterators_contents(train_loader)
+        cntr = Counter(y)
+        print('train_loader: ', len(train_idxs_k), ' y:', sorted(cntr.items()))
+        global test_loader
+        test_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=False, num_workers=4,
+                                                  sampler=test_sampler)
+        X, y = get_loader_iterators_contents(test_loader)
+        cntr = Counter(y)
+        print('test_loader: ', len(test_idxs_k), ' y:', sorted(cntr.items()))
+
+        model = ConvNet(num_classes, num_features=i * 60 + i - 1).to(device)
+        model.run_train(train_loader)
+        show_results(model.results, i)
+
+        # model.run_test(test_loader)
+        acc_sum_tmp = np.sum(model.results['test_acc'])
+        if acc_sum < acc_sum_tmp:
+            print('***acc_sum:', acc_sum, ' < acc_sum_tmp:', acc_sum_tmp)
+            acc_sum = acc_sum_tmp
+            # Save the model checkpoint
+            torch.save(model.state_dict(), 'model_%d.ckpt' % i)
+
 if __name__ == '__main__':
 
     torch.manual_seed(1)
     # Hyper parameters
-    num_epochs = 200
+    num_epochs = 100
     num_classes = 4
     batch_size = 64
     learning_rate = 0.001
 
+    cross_validation_flg = True
+
     # for i in [1, 3, 5, 8, 10]:
     for i in [10, 8, 5, 3, 1]:
-        run_main(i)
+        if cross_validation_flg:
+            run_main_cross_validation(i)
+        else:
+            run_main(i)
