@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/model/CNN-Demo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/preprocess/TrafficDataset.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../July15/July15-IEEEtran/0-July15-bare_jrnl_compsoc.bbl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../July15/July15-IEEEtran/0-July15-bare_jrnl_compsoc.blg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../July15/July15-IEEEtran/0-July15-bare_jrnl_compsoc.fdb_latexmk" afterDir="false" />
@@ -12,8 +9,9 @@
       <change afterPath="$PROJECT_DIR$/../July15/July15-IEEEtran/bibtex/IEEEbib-July15.bib" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../July15/July15-IEEEtran/figures/dataset_distribution.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/ANN-without-features-selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/ANN-without-features-selection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/neural_networks_tutorial_pytorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/neural_networks_tutorial_pytorch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/data_split_train_v2_711/train_2pkt_images_merged.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/data_split_train_v2_711/train_7pkt_images_merged.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,7 +34,7 @@
     <SUITE FILE_PATH="coverage/ApplicationClassification$data_preprocess.coverage" NAME="data_preprocess Coverage Results" MODIFIED="1529963080384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One.coverage" NAME="LSTM-Many2One Coverage Results" MODIFIED="1530325892553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$csv2arff.coverage" NAME="csv2arff Coverage Results" MODIFIED="1531515978567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
-    <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Traffic_Classification_20180713.coverage" NAME="CNN_Traffic_Classification-20180713 Coverage Results" MODIFIED="1531532743536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Traffic_Classification_20180713.coverage" NAME="CNN_Traffic_Classification-20180713 Coverage Results" MODIFIED="1531537555163" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN_sklearn.coverage" NAME="ANN-sklearn Coverage Results" MODIFIED="1529963200158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
   </component>
   <component name="DatabaseView">
@@ -55,11 +53,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CNN-Demo.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/CNN-Demo.py">
+      <file leaf-file-name="CNN_Traffic_Classification-20180713.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="91" selection-start-line="91" selection-end-line="91" />
+            <state relative-caret-position="205">
+              <caret line="187" column="24" selection-start-line="187" selection-start-column="24" selection-end-line="187" selection-end-column="24" />
               <folding>
                 <element signature="e#172#184#0" expanded="true" />
               </folding>
@@ -67,71 +65,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LSTM-Many2One-progressively.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" selection-start-line="12" selection-end-line="12" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pcap2flow-flow.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-flow.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5850">
-              <caret line="399" selection-start-line="399" selection-end-line="399" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CNN_Traffic_Classification-20180713.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
-              <folding>
-                <element signature="e#172#203#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sampler.py" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/lib/python3.6/site-packages/torch/utils/data/sampler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="142" selection-start-line="142" selection-end-line="142" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dataloader.py" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/lib/python3.6/site-packages/torch/utils/data/dataloader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="450" selection-start-line="450" selection-end-line="450" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="TrafficDataset.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="96" column="44" lean-forward="true" selection-start-line="96" selection-start-column="44" selection-end-line="96" selection-end-column="44" />
-              <folding>
-                <element signature="e#56#68#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data_preprocess.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/preprocess/data_preprocess.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" selection-start-line="13" selection-end-line="13" selection-end-column="52" />
+            <state relative-caret-position="1199">
+              <caret line="85" column="19" lean-forward="true" selection-start-line="84" selection-start-column="11" selection-end-line="85" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -212,6 +150,11 @@
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
               <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
@@ -534,13 +477,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1529702863224</updated>
-    </task>
-    <task id="LOCAL-00001" summary="add **kwargs params">
-      <created>1529713298949</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1529713298949</updated>
     </task>
     <task id="LOCAL-00002" summary="add **kwargs params">
       <created>1529716000209</created>
@@ -871,7 +807,21 @@
       <option name="project" value="LOCAL" />
       <updated>1531520583678</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="add 'CNN_Traffic_Classification'&#10;add 'show_figure'">
+      <created>1531532795278</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1531532795278</updated>
+    </task>
+    <task id="LOCAL-00050" summary="add 'normalization'">
+      <created>1531533233824</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1531533233825</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TodoView">
@@ -891,7 +841,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32921347" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5010672" side_tool="true" weight="0.6505618" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49839914" visible="true" weight="0.35441175" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49839914" visible="true" weight="0.36911765" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49919224" weight="0.44705883" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.20441176" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49893278" weight="0.48382354" />
@@ -899,9 +849,9 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" weight="0.32956383" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32794118" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.32956383" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.4361874" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49893278" weight="0.49264705" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49893278" weight="0.46029413" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -969,8 +919,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="delete intr_tm_mean value&#10;cause it is equal to &quot;flow_dur/len&quot;" />
-    <MESSAGE value="add pcap2flow-all, use to merge all results in one file" />
     <MESSAGE value="modify intr_tm = 1e-5 instead of 0.0" />
     <MESSAGE value="add  &quot;if os.path.join(all_in_one_file): &#10;        os.remove(all_in_one_file)&quot; &#10;        &#10;to append_data_to_file_with_mean()&#10;because it with open(all_in_one_file ,'a'), be careful for it." />
     <MESSAGE value="add  &quot;if os.path.join(all_in_one_file): &#10;        os.remove(all_in_one_file)&quot; &#10;        &#10;to main-&gt;for&#10;because it with open(all_in_one_file ,'a'), be careful for it." />
@@ -994,7 +942,9 @@
     <MESSAGE value="add '*.arff' in .gitignore" />
     <MESSAGE value="add 'csv2arff'&#10;add 'csv' data 'dir'" />
     <MESSAGE value="add 'ANN'" />
-    <option name="LAST_COMMIT_MESSAGE" value="add 'ANN'" />
+    <MESSAGE value="add 'CNN_Traffic_Classification'&#10;add 'show_figure'" />
+    <MESSAGE value="add 'normalization'" />
+    <option name="LAST_COMMIT_MESSAGE" value="add 'normalization'" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1118,12 +1068,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/preprocess/TrafficDataset.py</url>
-          <line>118</line>
+          <line>122</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/preprocess/TrafficDataset.py</url>
-          <line>119</line>
+          <line>123</line>
           <option name="timeStamp" value="76" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1143,13 +1093,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
-          <line>169</line>
-          <option name="timeStamp" value="80" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
-          <line>64</line>
-          <option name="timeStamp" value="81" />
+          <line>121</line>
+          <option name="timeStamp" value="83" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1159,11 +1104,16 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="82" />
+      <option name="time" value="84" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>nn.Softmax(outputs)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>len(train_loader)</expression-string>
         <language-id>Python</language-id>
@@ -1204,37 +1154,9 @@
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>int(tmp_label)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/lib/python3/dist-packages/apport_python_hook.py" />
-    <entry file="file://$PROJECT_DIR$/results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_5_pkts/5_all_in_one.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="39" lean-forward="true" selection-start-column="39" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/results/CHAT_facebookchatgateway.pcap/CHAT_facebookchatgateway.pcap_first_n_pkts=20_flow.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="147" lean-forward="true" selection-start-line="1" selection-start-column="58" selection-end-line="1" selection-end-column="147" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_1_pkts/1_all_in_one.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="70" selection-start-line="26" selection-start-column="70" selection-end-line="26" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/numpy-1.14.2-py3.5-linux-x86_64.egg/numpy/core/numeric.py" />
     <entry file="file://$PROJECT_DIR$/histroyFiles/ANN-sklearn.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3180">
@@ -1479,30 +1401,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="96" column="44" lean-forward="true" selection-start-line="96" selection-start-column="44" selection-end-line="96" selection-end-column="44" />
-          <folding>
-            <element signature="e#56#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocess/data_preprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" selection-start-line="13" selection-end-line="13" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-flow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5850">
-          <caret line="399" selection-start-line="399" selection-end-line="399" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/LSTM-Many2One-progressively.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1534,18 +1432,58 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="91" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pcap2flow/pcap2flow-flow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5131">
+          <caret line="399" selection-start-line="399" selection-end-line="399" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocess/data_preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="170" column="81" lean-forward="true" selection-start-line="170" selection-start-column="8" selection-end-line="170" selection-end-column="81" />
           <folding>
-            <element signature="e#172#184#0" expanded="true" />
+            <element signature="e#81#112#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.6/site-packages/torch/nn/modules/loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1302">
+          <caret line="751" column="8" selection-start-line="751" selection-start-column="8" selection-end-line="751" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.6/site-packages/torch/optim/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/data_split_train_v2_711/train_2pkt_images_merged.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/data_split_train_v2_711/train_3pkt_images_merged.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/data_split_train_v2_711/train_7pkt_images_merged.csv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1199">
+          <caret line="85" column="19" lean-forward="true" selection-start-line="84" selection-start-column="11" selection-end-line="85" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+        <state relative-caret-position="205">
+          <caret line="187" column="24" selection-start-line="187" selection-start-column="24" selection-end-line="187" selection-end-column="24" />
           <folding>
-            <element signature="e#172#203#0" expanded="true" />
+            <element signature="e#172#184#0" expanded="true" />
           </folding>
         </state>
       </provider>
