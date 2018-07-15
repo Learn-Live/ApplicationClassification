@@ -6,3 +6,6 @@ results/
 
 # python virtual environment
 ENV/
+
+# pycache
+preprocess/__pycache__/*

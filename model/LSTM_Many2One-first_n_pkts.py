@@ -7,6 +7,7 @@ Sequence Models and Long-Short Term Memory Networks
 
 # Author: Robert Guthrie
 from collections import Counter
+import sys
 
 import numpy as np
 import torch
@@ -156,7 +157,7 @@ class LSTMTagger(nn.Module):
         #     inputs = prepare_sequence(training_data[0][0], word_to_ix)
         #     tag_scores = model(inputs)
         #     print(tag_scores)
-        for epoch in range(1):  # again, normally you would NOT do 300 epochs, it is toy data
+        for epoch in range(300):  # again, normally you would NOT do 300 epochs, it is toy data
             # print('epoch:', epoch)
             t = 0
             training_data = zip(X_train, y_train)
@@ -204,8 +205,8 @@ class LSTMTagger(nn.Module):
                 tag_pred_value, tag_pred_idx = tag_scores.max(dim=0)
                 if i % 100 == 0:
                     print('i =', i, tag_scores, y_test[i].tolist())
-                    print('i =', i, tag_pred_idx, y_test[i].tolist())
-                if tag_pred_idx.data == y_test[i].tolist():
+                    print('i =', i, tag_pred_idx, np.argmax(y_test[i].tolist()))
+                if tag_pred_idx.data == torch.from_numpy(np.array(np.argmax(y_test[i].tolist()))):
                     cnt += 1
 
         print('accuracy = ', cnt / len(X_test))
@@ -227,10 +228,11 @@ def show_figure(data):
 
 
 if __name__ == '__main__':
-    train_images_file = '../data/1pkts-subflow-skype-train-images-idx2-ubyte.gz'
-    train_labels_file = '../data/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'
-    test_images_file = '../data/1pkts-subflow-skype-test-images-idx2-ubyte.gz'
-    test_labels_file = '../data/1pkts-subflow-skype-test-labels-idx1-ubyte.gz'
+    data_path = sys.argv[1]
+    train_images_file = '{}/1pkts-subflow-skype-train-images-idx2-ubyte.gz'.format(data_path)
+    train_labels_file = '{}/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'.format(data_path)
+    test_images_file = '{}/1pkts-subflow-skype-test-images-idx2-ubyte.gz'.format(data_path)
+    test_labels_file = '{}/1pkts-subflow-skype-test-labels-idx1-ubyte.gz'.format(data_path)
     X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(idx_reader.read_images(test_images_file), 1)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
     
