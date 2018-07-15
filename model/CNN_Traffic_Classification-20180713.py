@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from sklearn.metrics import confusion_matrix, accuracy_score
-from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 from torch.autograd import Variable
 # Device configuration
 from torch.utils.data.sampler import SubsetRandomSampler
@@ -247,7 +247,8 @@ def run_main_cross_validation(i):
 
     acc_sum = 0.0
 
-    k_fold = KFold(10)
+    # k_fold = KFold(n_splits=10)
+    k_fold = StratifiedKFold(n_splits=10)
     for k, (train_idxs_k, test_idxs_k) in enumerate(k_fold.split(dataset)):
         print('--------------------- k = %d -------------------' % (k + 1))
         cntr = Counter(dataset.y)
