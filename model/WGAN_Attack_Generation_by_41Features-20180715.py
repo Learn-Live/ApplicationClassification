@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-    using WGAN to classification in two stages.
+    using WGAN to random select n (1, 2, ..., 41) features from 41 features to modify in order to fool discriminator .
 
-    created at 20180714
+    created at 20180715
 """
 
 from collections import Counter
-from random import shuffle
 
 import numpy as np
 import torch
@@ -29,7 +28,7 @@ def print_network(describe_str, net):
     print('Total number of parameters: %d' % num_params)
 
 
-# WGAN neural network (two convolutional layers)
+# WGAN neural network
 class WGAN(nn.Module):
     def __init__(self, num_classes=2, num_features=60, batch_size=30):
         """
@@ -84,7 +83,7 @@ class WGAN(nn.Module):
     # def l2_penalty(self, var):
     #     return torch.sqrt(torch.pow(var, 2).sum())
 
-    def run_train(self, train_loader, mode=True):
+    def run_train(self, train_loader, random_choose_n_features, mode=True, random_flg=False):
         # Train the model
         self.results = {}
         self.results['train_acc'] = []
@@ -116,26 +115,48 @@ class WGAN(nn.Module):
                 # Forward pass
                 # b_y_preds = model(b_x)
 
-                z_ = torch.randn((len(b_y), self.g_in_size))  # random normal 0-1
-                z_ = z_.view([len(b_y), -1])
+                tmp_list = b_y.data.tolist()
+                index_tmp = [step for step, i in enumerate(tmp_list) if i == 0]  # benigin_data
+                index_attack_tmp = [step for step, i in enumerate(tmp_list) if i == 1]  # benigin_data
+
+                index_tmp_len = min(len(index_tmp), len(index_attack_tmp))
+
+                b_x_benign = b_x[index_tmp[:index_tmp_len]]
+                b_x_attack = b_x[index_attack_tmp[:index_tmp_len]]
+
+                if random_flg:
+                    indexs_random = np.random.randint(0, 41, random_choose_n_features)  # select random indexs
+                else:
+                    indexs_random = [r_i for r_i in range(random_choose_n_features)]
+
+                z_ = torch.randn((index_tmp_len, self.g_in_size))  # random normal 0-1
+                # z_ = z_.view([len(index_attack_tmp), -1])
+
                 # update D network
                 self.d_optimizer.zero_grad()
 
-                D_real = self.D(b_x)
+                D_real = self.D(b_x_benign)
                 D_real_loss = torch.mean(D_real, dim=0)
 
                 G_ = self.G(z_)  # detach to avoid training G on these labels
                 # G_=self.G(z_)
+
+                for g_i in range(len(G_)):
+                    for g_step, g_j in enumerate(indexs_random):
+                        b_x_attack[g_i][g_j] = G_[g_i][g_step]
+
+                G_ = b_x_attack
                 D_fake = self.D(G_.detach())
                 D_fake_loss = torch.mean(D_fake, dim=0)
 
                 # gradient penalty
                 if self.gpu_mode:
-                    alpha = torch.rand(b_x.size()).cuda()
+                    alpha = torch.rand(b_x_benign.size()).cuda()
                 else:
-                    alpha = torch.rand(b_x.size())
+                    alpha = torch.rand(b_x_benign.size())
 
-                b_xhat = Variable(alpha * b_x.data + (1 - alpha) * G_.data, requires_grad=True)
+                # b_xhat = Variable(alpha * b_x.data + (1 - alpha) * G_.data, requires_grad=True)
+                b_xhat = Variable(alpha * b_x_benign.data + (1 - alpha) * G_.data, requires_grad=True)
 
                 pred_hat = self.D(b_xhat)
                 if self.gpu_mode:
@@ -169,6 +190,12 @@ class WGAN(nn.Module):
                     self.g_optimizer.zero_grad()
 
                     G_ = self.G(z_)
+
+                    for g_i in range(len(G_)):
+                        for g_step, g_j in enumerate(indexs_random):
+                            b_x_attack[g_i][g_j] = G_[g_i][g_step]
+
+                    G_ = b_x_attack
                     D_fake = self.D(G_)
                     G_loss = -torch.mean(
                         D_fake)  # L = E[D(real)] - E[D(fake)], the previous one (E[D(real)]) has nothing to do with the generator. So when updating generator, we only need to consider the -E[D(fake)].
@@ -399,7 +426,8 @@ def run_main(input_file, num_features):
     cntr = Counter(y)
     print('test_loader: ', len(test_loader.sampler), ' y:', sorted(cntr.items()))
 
-    model = WGAN(num_classes, num_features, batch_size=batch_size).to(device)
+    model = RandomForest()
+    model.fit()
     model.run_train(train_loader)
     # show_results(model.results, i)
 
@@ -452,74 +480,136 @@ def run_main_cross_validation(i):
     #         torch.save(model.state_dict(), 'model_%d.ckpt' % i)
 
 
-def two_stages_online_evaluation(benign_model, attack_model, input_file):
+def modify_random_n_features_by_WGAN(mixed_input_file, num_features, random_choose_n_features=2, random_flg=False):
     """
 
-    :param benign_model:
-    :param attack_model:
-    :param input_file: mix 'benign_data' and 'attack_data'
+    :param mixed_input_file: include benign and attack
+    :param num_features: all the features used to train GAN
+    :param random_choose_n_features: random choose n features to modify
     :return:
     """
-    data = []
-    with open(input_file, 'r') as fid_in:
-        line = fid_in.readline()
-        while line:
-            data.append(line.strip().split(','))
-            line = fid_in.readline()
 
-    shuffle(data)
-    unknow_cnt = 0
-    y_preds = []
-    y_s = []
-    for i in range(len(data)):
-        x = list(map(lambda t: float(t), data[i][:-1]))
-        y = data[i][-1]
-        x = torch.from_numpy(np.asarray(x)).double()
-        x = x.view([1, -1])  # (nSamples, nChannels, x_Height, x_Width)
-        x = Variable(x).float()
-        # b_y = Variable(b_y).type(torch.LongTensor)
-        y_s.append(y)
+    # input_file = '../data/data_split_train_v2_711/train_%dpkt_images_merged.csv' % i
+    # input_file = '../data/attack_normal_data/benign_data.csv'
+    print(mixed_input_file)
+    dataset = TrafficDataset(mixed_input_file, transform=None, normalization_flg=True)
 
-        threshold1 = benign_model.D(x)
-        if (threshold1 > 0.4) and (threshold1 < 0.6):
-            y_pred = '1'
-            # print('benign_data', y, y_pred)   # attack =0, benign = 1
-        else:
-            threshold2 = attack_model.D(x)
-            if (threshold2 > 0.4) and (threshold2 < 0.6):
-                y_pred = '0'
-                # print('attack_data', y, y_pred)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    cntr = Counter(dataset.y)
+    print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
+    # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
+    train_loader = torch.utils.data.DataLoader(dataset, batch_size, num_workers=4, sampler=train_sampler)
+    X, y = get_loader_iterators_contents(train_loader)
+    cntr = Counter(y)
+    print('train_loader: ', len(train_loader.sampler), ' y:', sorted(cntr.items()))
+    # global test_loader
+    # test_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, num_workers=4,
+    #                                           sampler=benign_test_sampler)
+    # X, y = get_loader_iterators_contents(test_loader)
+    # cntr = Counter(y)
+    # print('test_loader: ', len(test_loader.sampler), ' y:', sorted(cntr.items()))
+
+    model = WGAN(num_classes, num_features, batch_size=batch_size).to(device)
+    model.run_train(train_loader, random_choose_n_features, random_flg=random_flg)
+    # show_results(model.results, i)
+
+    return model
+
+
+def generate_attack_data(model, mixed_input_file, random_choose_n_features=2, n=1000, random_flg=False):
+    print(mixed_input_file)
+    dataset = TrafficDataset(mixed_input_file, transform=None, normalization_flg=True)
+
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    cntr = Counter(dataset.y)
+    print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
+    # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
+    train_loader = torch.utils.data.DataLoader(dataset, batch_size, num_workers=4, sampler=train_sampler)
+    X, y = get_loader_iterators_contents(train_loader)
+    cntr = Counter(y)
+    print('train_loader: ', len(train_loader.sampler), ' y:', sorted(cntr.items()))
+    # global test_loader
+    # test_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, num_workers=4,
+    #                                           sampler=benign_test_sampler)
+    # X, y = get_loader_iterators_contents(test_loader)
+    # cntr = Counter(y)
+    # print('test_loader: ', len(test_loader.sampler), ' y:', sorted(cntr.items()))
+
+    cnt = 0
+    generated_data = []
+    while cnt < n:
+        for step, (b_x, b_y) in enumerate(train_loader):
+
+            b_x = b_x.to(device)
+            b_y = b_y.to(device)
+
+            b_x = b_x.view([b_x.shape[0], -1])
+            b_x = Variable(b_x).float()
+            b_y = Variable(b_y).type(torch.LongTensor)
+            # Forward pass
+            # b_y_preds = model(b_x)
+
+            tmp_list = b_y.data.tolist()
+            index_tmp = [step for step, i in enumerate(tmp_list) if i == 0]  # benigin_data
+            index_attack_tmp = [step for step, i in enumerate(tmp_list) if i == 1]  # benigin_data
+
+            index_tmp_len = min(len(index_tmp), len(index_attack_tmp))
+
+            cnt += index_tmp_len
+
+            b_x_benign = b_x[index_tmp[:index_tmp_len]]
+            b_x_attack = b_x[index_attack_tmp[:index_tmp_len]]
+
+            if random_flg:
+                indexs_random = np.random.randint(0, 41, random_choose_n_features)  # select random indexs
             else:
-                y_pred = '-10'
-                # print('unknow_data', y, y_pred)
-                unknow_cnt += 1
-        y_preds.append(y_pred)
+                indexs_random = [r_i for r_i in range(random_choose_n_features)]
+            g_in_size = 4
+            z_ = torch.randn((index_tmp_len, g_in_size))  # random normal 0-1
+            # z_ = z_.view([len(index_attack_tmp), -1])
 
-    cm = confusion_matrix(y_s, y_preds, labels=['0', '1', 'unknow'])
-    sk_accuracy = accuracy_score(y_s, y_preds) * len(data)
-    cntr = Counter(y_s)
-    print('y_s =', sorted(cntr.items()))
-    cntr = Counter(y_preds)
-    print('y_preds =', sorted(cntr.items()))
-    print(cm, ', acc =', sk_accuracy / len(data))
-    print('unknow_cnt', unknow_cnt)
+            G_ = model.G(z_)  # detach to avoid training G on these labels
+            # G_=self.G(z_)
+
+            for i in range(len(G_)):
+                for step, j in enumerate(indexs_random):
+                    b_x_attack[i][j] = G_[i][step]
+
+            G_ = b_x_attack
+            D_fake = model.D(G_.detach())
+            D_real = model.D(b_x_benign)
+            print('D_real', D_real.data.tolist())
+            print('D_fake', D_fake.data.tolist())
+            # D_fake_loss = torch.mean(D_fake, dim=0)
+            generated_data.extend(b_x_attack)
+
+    return generated_data[:n]
+
+
+def save_data(output_file, data):
+    with open(output_file, 'w') as fid_out:
+        for i in data:
+            print('i', i.data.tolist())
+            tmp = list(map(lambda x: str(x), i.data.tolist()))
+            fid_out.write(','.join(tmp) + ',label=0\n')
 
 
 if __name__ == '__main__':
     torch.manual_seed(1)
     # Hyper parameters
-    num_epochs = 2000
+    num_epochs = 1
     num_classes = 1
     global batch_size
     batch_size = 64
     learning_rate = 0.001
-
-    cross_validation_flg = False
-    input_file = '../data/attack_normal_data/benign_data.csv'
-    benign_model, benign_test_loader = run_main(input_file, num_features=41)
-
-    input_file = '../data/attack_normal_data/attack_data.csv'
-    attack_model, attack_test_loader = run_main(input_file, num_features=41)
+    random_choose_n_features = 2
 
     input_file = '../data/attack_normal_data/test_mixed.csv'
-    two_stages_online_evaluation(benign_model, attack_model, input_file)
+    gan_model = modify_random_n_features_by_WGAN(input_file, num_features=41,
+                                                 random_choose_n_features=random_choose_n_features, random_flg=False)
+    # generate 1000 attack data
+    n = 1000
+    generated_data = generate_attack_data(gan_model, input_file, random_choose_n_features, n=n, random_flg=False)
+    # save data
+    output_file = input_file + '_generated_%d_data.csv' % n
+    save_data(output_file, generated_data)
