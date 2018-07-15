@@ -103,7 +103,7 @@ def add_arff_header(all_in_one_file, attributes_num=2, label=['a', 'b', 'c']):
                 line = fid_in.readline()
 
 
-def merge_data_labels(features_file, labels_file):
+def merge_features_labels(features_file, labels_file):
     data_file = os.path.splitext(features_file)[0] + '_merged.csv'
     i = 0
     with open(data_file, 'w') as fid_out:
@@ -176,7 +176,7 @@ if __name__ == '__main__':
 
     # features_file = '../data/data_split_train_v2_711/train_1pkt_images.csv'
     # labels_file = '../data/data_split_train_v2_711/train_1pkt_labels.csv'
-    # input_file=merge_data_labels(features_file, labels_file)
+    # input_file=merge_features_labels(features_file, labels_file)
     # output_file = os.path.join(arff_dir, 'pkt1_merge.arff')
     # save_to_arff(input_file, output_file, features_num=60, labels=[0,1,2,3])
 
@@ -184,7 +184,7 @@ if __name__ == '__main__':
     for i in [1, 3, 5, 8, 10]:
         features_file_i = '../data/data_split_train_v2_711/train_%dpkt_images.csv' % i
         labels_file_i = '../data/data_split_train_v2_711/train_%dpkt_labels.csv' % i
-        input_file_i = merge_data_labels(features_file_i, labels_file_i)
+        input_file_i = merge_features_labels(features_file_i, labels_file_i)
         # input_file_i = os.path.join(csv_root_dir, 'pkt%d.csv' % i)
         print('input_file_%d=%s' % (i, input_file_i))
         output_file_i = os.path.join(arff_dir, 'pkt%d.arff' % i)
