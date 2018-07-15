@@ -16,7 +16,7 @@ import torch.optim as optim
 from sklearn.preprocessing import OneHotEncoder
 
 from preprocess.data_preprocess import achieve_train_test_data, change_label, normalize_data
-
+from preprocess import idx_reader
 
 def load_sequence_data(first_n_pkts_input_file, separator=','):
     # input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
@@ -134,9 +134,8 @@ class LSTMTagger(nn.Module):
 
         # embeds = self.word_embeddings(sentence)
         embeds = sentence
-        # print('embed:',embeds)
         lstm_out, self.hidden = self.lstm(
-            embeds.view(len(sentence), 1, -1), self.hidden)
+            embeds.view(sentence.shape[0], 1, -1), self.hidden)
         # tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1))
         # tag_scores = F.log_softmax(tag_space, dim=1)
         # return tag_scores[-1]   # when tag_scores.shape > 1, only return the last cell output.
@@ -157,7 +156,7 @@ class LSTMTagger(nn.Module):
         #     inputs = prepare_sequence(training_data[0][0], word_to_ix)
         #     tag_scores = model(inputs)
         #     print(tag_scores)
-        for epoch in range(100):  # again, normally you would NOT do 300 epochs, it is toy data
+        for epoch in range(1):  # again, normally you would NOT do 300 epochs, it is toy data
             # print('epoch:', epoch)
             t = 0
             training_data = zip(X_train, y_train)
@@ -228,26 +227,33 @@ def show_figure(data):
 
 
 if __name__ == '__main__':
+    train_images_file = '../data/1pkts-subflow-skype-train-images-idx2-ubyte.gz'
+    train_labels_file = '../data/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'
+    test_images_file = '../data/1pkts-subflow-skype-test-images-idx2-ubyte.gz'
+    test_labels_file = '../data/1pkts-subflow-skype-test-labels-idx1-ubyte.gz'
+    X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(idx_reader.read_images(test_images_file), 1)
+    y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
+    
     torch.manual_seed(1)
     n = 3
-    input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_%d_pkts/%d_all_in_one.txt' % (n, n)
-    input_file = '../results/MAIL_gate__MAIL_gate__MAIL_Gatew/first_%d_pkts/%d_all_in_one.txt' % (n, n)
-    print('input_file:', input_file)
-    X, Y = load_sequence_data(input_file)
-    print('Y :', Counter(Y))
-    X_train, X_test, y_train, y_test = achieve_train_test_data(X, Y, train_size=0.7, shuffle=True)
+    # input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_%d_pkts/%d_all_in_one.txt' % (n, n)
+    # input_file = '../results/MAIL_gate__MAIL_gate__MAIL_Gatew/first_%d_pkts/%d_all_in_one.txt' % (n, n)
+    # print('input_file:', input_file)
+    # X, Y = load_sequence_data(input_file)
+    print('Y :', Counter(np.concatenate([y_train, y_test])))
+    # X_train, X_test, y_train, y_test = achieve_train_test_data(X, Y, train_size=0.7, shuffle=True)
     print(
-        'X_train : %d, y_train : %d, label : %s' % (len(X_train), len(y_train), dict(sorted(Counter(y_train).items()))))
+        'X_train : %d, y_train : %d, label : %s' % (X_train.shape[0], y_train.shape[0], dict(sorted(Counter(y_train).items()))))
     # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
-    print('X_test  : %d, y_test  : %d, label : %s' % (len(X_test), len(y_test), dict(sorted(Counter(y_test).items()))))
+    print('X_test  : %d, y_test  : %d, label : %s' % (X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
     # dict(sorted(d.items()))
-    EMBEDDING_DIM = len(X_train[0][0])
+    EMBEDDING_DIM = X_train.shape[2]
     HIDDEN_DIM = 100
-    model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, 0, len(Counter(Y)))
+    model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, 0, len(Counter(np.concatenate([y_train, y_test]))))
     y_train = one_hot_sklearn(y_train)
     model.train(X_train, y_train)
 
-    show_figure(model.loss_hist)
+    # show_figure(model.loss_hist)
     model.predict(X_train, y_train)
 
     y_test = one_hot_sklearn(y_test)

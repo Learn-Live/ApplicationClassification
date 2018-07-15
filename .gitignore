@@ -3,3 +3,6 @@ results/
 *.pcap
 *.pyc
 *.arff
+
+# python virtual environment
+ENV/
