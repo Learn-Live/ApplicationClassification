@@ -37,7 +37,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 20
+        self.num_layers = 2
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -66,7 +66,7 @@ class LSTMTagger(nn.Module):
             # the last layer output, which is equal to out[-1]
             torch.zeros(num_layers, batch_size, self.hidden_dim))  # the last cell hidden state.
 
-    def achieve_sentence(self, sentences):
+    def achieve_sentence(self, sentences, first_n_pkts=2):
         """
             input size of lstm
         :param sentences:
@@ -80,7 +80,9 @@ class LSTMTagger(nn.Module):
             tmp_lst = []
             while (cnt - 1) * 60 + (cnt - 1) < len(sentence_i):
                 tmp_lst.append(sentence_i[(cnt - 1) * 60 + (cnt - 1): cnt * 60 + (cnt - 1)].data.tolist())
-                t = (cnt - 1) * 60 + (cnt - 1)
+                # t = (cnt - 1) * 60 + (cnt - 1)
+                if cnt == first_n_pkts:
+                    break
                 cnt += 1
             tmp_lst = torch.from_numpy(np.array(tmp_lst))
             new_sentences.append(tmp_lst)
@@ -123,7 +125,7 @@ class LSTMTagger(nn.Module):
         #     inputs = prepare_sequence(training_data[0][0], word_to_ix)
         #     tag_scores = model(inputs)
         #     print(tag_scores)
-        for epoch in range(100):  # again, normally you would NOT do 300 epochs, it is toy data
+        for epoch in range(EPOCHES):  # again, normally you would NOT do 300 epochs, it is toy data
             # print('epoch:', epoch)
             for step, (b_x, b_y) in enumerate(train_loader):
                 # training_data = zip(X_train, y_train)
@@ -132,7 +134,7 @@ class LSTMTagger(nn.Module):
                 # We need to clear them out before each instance
                 self.lstm.zero_grad()
 
-                b_x = self.achieve_sentence(b_x)
+                b_x = self.achieve_sentence(b_x, first_n_pkts)
                 # Step 2. Get our inputs ready for the network, that is, turn them into
                 # Tensors of word indices.
                 # sentence_in = prepare_sequence(sentence, word_to_ix)
@@ -166,7 +168,7 @@ class LSTMTagger(nn.Module):
             total = 0
             correct = 0.0
             for step, (b_x, b_y) in enumerate(test_loader):
-                b_x = self.achieve_sentence(b_x)
+                b_x = self.achieve_sentence(b_x, first_n_pkts)
                 # Step 2. Get our inputs ready for the network, that is, turn them into
                 # Tensors of word indices.
                 # sentence_in = prepare_sequence(sentence, word_to_ix)
@@ -253,8 +255,9 @@ def get_loader_iterators_contents(train_loader):
 
 
 def rum_main(input_file):
-    global batch_size
-    batch_size = 64
+    global batch_size, EPOCHES
+    batch_size = 1
+    EPOCHES = 3000
     num_classes = 4
     num_features = 60
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
@@ -276,25 +279,29 @@ def rum_main(input_file):
 
     EMBEDDING_DIM = num_features
     HIDDEN_DIM = 30
-    model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
-    model.train(train_loader)
 
-    print('***train accuracy: ')
-    model.test(train_loader)
+    for i in range(1, 11):
+        print('first_%d_pkts' % i)
+        global first_n_pkts
+        first_n_pkts = i
+        model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
+        model.train(train_loader)
 
-    print('***test accuracy: ')
-    model.test(test_loader)
+        print('***train accuracy: ')
+        model.test(train_loader)
+
+        print('***test accuracy: ')
+        model.test(test_loader)
 
 
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    n = 1
+    n = 10
     feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
     label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     input_file = merge_features_labels(feature_file, label_file)
     print(input_file)
-
     rum_main(input_file)
 
     # n = 3
