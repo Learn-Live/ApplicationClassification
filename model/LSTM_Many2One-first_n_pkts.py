@@ -330,16 +330,15 @@ def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
     return output_file, len(new_labels)
 
 
-def read_skype_sample(n):
-    name_str = 'non-vpn-app'
+def read_skype_sample(name_str='non-vpn-app', n=1):
     data_path = '../data/Flow-Image-Features/skype-sub/all-%d' % n
     data_path = '../data/Flow-Image-Features/%s-sub/all-%d' % (name_str, n)
     train_images_file = '{}/{}pkts-subflow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
     train_labels_file = '{}/{}pkts-subflow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
     test_images_file = '{}/{}pkts-subflow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
     test_labels_file = '{}/{}pkts-subflow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
-    X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
-        idx_reader.read_images(test_images_file), 1)
+    # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
+    #     idx_reader.read_images(test_images_file), 1)
     X_train, X_test = idx_reader.read_images(train_images_file), idx_reader.read_images(test_images_file)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
@@ -386,7 +385,8 @@ if __name__ == '__main__':
     # feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
     # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     # input_file = merge_features_labels(feature_file, label_file)
-    train_output_file, test_output_file = read_skype_sample(n)
+    name_str = 'non-vpn-app'
+    train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
     remove_labels_lst = [0]
@@ -399,4 +399,3 @@ if __name__ == '__main__':
     num_classes = num_c - len(remove_labels_lst)
     num_features = 60
     rum_main(input_file)
-
