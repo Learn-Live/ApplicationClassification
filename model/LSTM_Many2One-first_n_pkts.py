@@ -36,7 +36,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 3
+        self.num_layers = 1
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -45,7 +45,7 @@ class LSTMTagger(nn.Module):
         # self.loss_function = nn.NLLLoss()
         self.loss_function = nn.CrossEntropyLoss()
         # self.optimizer = optim.SGD(self.lstm.parameters(), lr=0.1)
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-3, weight_decay=1e-4)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-2, weight_decay=1e-4)
         #
 
         # The linear layer that maps from hidden state space to tag space
@@ -158,7 +158,8 @@ class LSTMTagger(nn.Module):
                 self.loss_hist.append(loss.tolist())
                 if epoch % 50 == 0 and step == 0:
                     if epoch == 0 and step == 0:
-                        print('---\'epoch, loss, batch, (softmax, preds, reals)---\'')
+                        print(
+                            '---\'epoch, loss, batch[batch_size, first_n_pkts, input_size], (softmax, preds, reals)---\'')
                     # print('epoch :', epoch, ', loss :', loss, ', targets : ', targets, ', tag_scores :', tag_scores)
                     _, preds = torch.max(tag_scores.data, dim=1)
                     print('epoch :', epoch, ', loss->', loss, ', ', b_x.shape, ', targets->',
@@ -201,10 +202,10 @@ class LSTMTagger(nn.Module):
                 # loss = self.loss_function(tag_scores, targets)
 
                 if step == 0:
-                    cm = confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+                    cm = confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy = accuracy_score(b_y, predicted) * len(b_y)
                 else:
-                    cm += confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+                    cm += confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
 
             print(cm, sk_accuracy / total)
@@ -262,10 +263,10 @@ def get_loader_iterators_contents(train_loader):
     return X, y
 
 
-def rum_main(input_file):
+def run_main(input_file):
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
-    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.9, shuffle=True)
     cntr = Counter(dataset.y)
     print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
@@ -345,7 +346,7 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
     # return X_train, y_train, X_test, y_test
-    train_output_file = '%d_train.csv' % n
+    train_output_file = '%s_%dpkts_train.csv' % (name_str, n)
     with open(train_output_file, 'w') as fid_out:
         (m, n) = X_train.shape
         for row in range(m):
@@ -355,7 +356,7 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
             line += str(int(y_train[row])) + '\n'
             fid_out.write(line)
 
-    test_output_file = '%d_test.csv' % n
+    test_output_file = '%s_%dpkts_test.csv' % (name_str, n)
     with open(test_output_file, 'w') as fid_out:
         (m, n) = X_test.shape
         for row in range(m):
@@ -388,6 +389,8 @@ if __name__ == '__main__':
     # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     # input_file = merge_features_labels(feature_file, label_file)
     name_str = 'non-vpn-app'
+    name_str = 'facebook'
+    name_str = 'hangout'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
@@ -396,8 +399,8 @@ if __name__ == '__main__':
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features
-    batch_size = 5
+    batch_size = 200
     EPOCHES = 50
     num_classes = num_c - len(remove_labels_lst)
     num_features = 60
-    rum_main(input_file)
+    run_main(input_file)

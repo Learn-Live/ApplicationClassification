@@ -14,6 +14,7 @@ from torch.autograd import Variable
 # Device configuration
 from torch.utils.data.sampler import SubsetRandomSampler
 
+from preprocess import idx_reader
 from preprocess.TrafficDataset import TrafficDataset, split_train_test
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -71,7 +72,7 @@ class ConvNet(nn.Module):
         self.results['test_loss'] = []
 
         total_step = len(train_loader)
-        for epoch in range(num_epochs):
+        for epoch in range(EPOCHES):
             for i, (b_x, b_y) in enumerate(train_loader):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
@@ -117,7 +118,7 @@ class ConvNet(nn.Module):
                 self.results['test_loss'].append(tmp_test_loss)
 
                 print('Epoch [{}/{}]; train_acc={}, train_loss={}; test_acc={}, test_loss={}'.format(epoch + 1,
-                                                                                                     num_epochs,
+                                                                                                     EPOCHES,
                                                                                                      tmp_train_acc,
                                                                                                      tmp_train_loss,
                                                                                                      tmp_test_acc,
@@ -156,10 +157,10 @@ class ConvNet(nn.Module):
                 correct += (predicted == b_y).sum().item()
 
                 if step == 0:
-                    cm = confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+                    cm = confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy = accuracy_score(b_y, predicted) * len(b_y)
                 else:
-                    cm += confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+                    cm += confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
 
             print(cm, sk_accuracy / total)
@@ -210,8 +211,9 @@ def get_loader_iterators_contents(train_loader):
 
     return X, y
 
-def run_main(i):
-    input_file = '../data/data_split_train_v2_711/train_%dpkt_images_merged.csv' % i
+
+def run_main(input_file, i):
+    # input_file = '../data/data_split_train_v2_711/train_%dpkt_images_merged.csv' % i
     print(input_file)
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
@@ -280,20 +282,129 @@ def run_main_cross_validation(i):
             # Save the model checkpoint
             torch.save(model.state_dict(), 'model_%d.ckpt' % i)
 
+
+def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
+    output_file = input_file + '_remove_labels.csv'
+    y = []
+    data = []
+    with open(output_file, 'w') as fid_out:
+        with open(input_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                line_arr = line.strip().split(',')
+                tmp_label = int(float(line_arr[-1]))
+                if tmp_label in remove_labels_lst:
+                    line = fid_in.readline()
+                    continue
+                else:
+                    y.append(tmp_label)
+                    # fid_out.write(line)
+                    data.append(line)
+                    line = fid_in.readline()
+
+        # change labels to continues ordered values, such as 0,1,2,.. not 0,2,...
+        new_labels = sorted(Counter(y).keys())
+        # new_labels = [i for i in range(len(new_labels))]
+        for data_i in data:
+            line = data_i.strip().split(',')
+            tmp_label = int(float(line[-1]))
+            if tmp_label in new_labels:
+                line = ','.join(line[:-1]) + ',' + str(new_labels.index(tmp_label)) + '\n'
+                fid_out.write(line)
+            else:
+                print('tmp_label:', tmp_label)
+
+    return output_file, len(new_labels)
+
+
+def read_skype_sample(name_str='non-vpn-app', n=1):
+    data_path = '../data/Flow-Image-Features/skype-sub/all-%d' % n
+    data_path = '../data/Flow-Image-Features/%s-sub/all-%d' % (name_str, n)
+    train_images_file = '{}/{}pkts-subflow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    train_labels_file = '{}/{}pkts-subflow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    test_images_file = '{}/{}pkts-subflow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    test_labels_file = '{}/{}pkts-subflow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
+    #     idx_reader.read_images(test_images_file), 1)
+    X_train, X_test = idx_reader.read_images(train_images_file), idx_reader.read_images(test_images_file)
+    y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
+
+    # return X_train, y_train, X_test, y_test
+    train_output_file = '%s_%dpkts_train.csv' % (name_str, n)
+    with open(train_output_file, 'w') as fid_out:
+        (m, n) = X_train.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_train[row][col]) + ','
+            line += str(int(y_train[row])) + '\n'
+            fid_out.write(line)
+
+    test_output_file = '%s_%dpkts_test.csv' % (name_str, n)
+    with open(test_output_file, 'w') as fid_out:
+        (m, n) = X_test.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_test[row][col]) + ','
+            line += str(int(y_test[row])) + '\n'
+            fid_out.write(line)
+
+    return train_output_file, test_output_file
+
+    # # get data
+    # X_train, y_train, X_test, y_test = read_skype_sample()
+    #
+    # # # stats
+    # # print('Y :', Counter(np.concatenate([y_train, y_test])))
+    # # print(
+    # #     'X_train : %d, y_train : %d, label : %s' % (
+    # #     X_train.shape[0], y_train.shape[0], dict(sorted(Counter(y_train).items()))))
+    # # # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
+    # # print('X_test  : %d, y_test  : %d, label : %s' % (
+    # # X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
+
+
 if __name__ == '__main__':
-
     torch.manual_seed(1)
-    # Hyper parameters
-    num_epochs = 100
-    num_classes = 4
-    batch_size = 64
+
+    n = 1
+    # feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
+    # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
+    # input_file = merge_features_labels(feature_file, label_file)
+    name_str = 'non-vpn-app'
+    # name_str='facebook'
+    # name_str='hangout'
+    train_output_file, test_output_file = read_skype_sample(name_str, n)
+    input_file = train_output_file
+
+    remove_labels_lst = []
+    input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
+    print(input_file)
+
+    global batch_size, EPOCHES, num_classes, num_features
+    batch_size = 200
+    EPOCHES = 50
+    num_classes = num_c - len(remove_labels_lst)
+    num_features = 60
     learning_rate = 0.001
+    run_main(input_file, n)
 
-    cross_validation_flg = True
-
-    # for i in [1, 3, 5, 8, 10]:
-    for i in [10, 8, 5, 3, 1]:
-        if cross_validation_flg:
-            run_main_cross_validation(i)
-        else:
-            run_main(i)
+#
+# if __name__ == '__main__':
+#
+#     torch.manual_seed(1)
+#     # Hyper parameters
+#     num_epochs = 100
+#     num_classes = 4
+#     batch_size = 64
+#     learning_rate = 0.001
+#
+#     cross_validation_flg = True
+#
+#     # for i in [1, 3, 5, 8, 10]:
+#     for i in [10, 8, 5, 3, 1]:
+#         if cross_validation_flg:
+#             run_main_cross_validation(i)
+#         else:
+#             run_main(i)
