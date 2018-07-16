@@ -16,6 +16,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.preprocessing import OneHotEncoder
 from torch.autograd import Variable
 
+from preprocess import idx_reader
 from preprocess.TrafficDataset import TrafficDataset, split_train_test
 from preprocess.csv2arff import merge_features_labels
 
@@ -79,7 +80,8 @@ class LSTMTagger(nn.Module):
             cnt = 1
             tmp_lst = []
             while (cnt - 1) * 60 + (cnt - 1) < len(sentence_i):
-                tmp_lst.append(sentence_i[(cnt - 1) * 60 + (cnt - 1): cnt * 60 + (cnt - 1)].data.tolist())
+                tmp_lst.append(
+                    sentence_i[(cnt - 1) * 60 + (cnt - 1): cnt * 60 + (cnt - 1)].data.tolist()[:num_features])
                 # t = (cnt - 1) * 60 + (cnt - 1)
                 if cnt == first_n_pkts:
                     break
@@ -262,14 +264,9 @@ def get_loader_iterators_contents(train_loader):
 
 
 def rum_main(input_file):
-    global batch_size, EPOCHES
-    batch_size = 20
-    EPOCHES = 300
-    num_classes = 4
-    num_features = 60
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
-    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.9, shuffle=True)
     cntr = Counter(dataset.y)
     print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
@@ -286,6 +283,7 @@ def rum_main(input_file):
 
     EMBEDDING_DIM = num_features  # input_size
     HIDDEN_DIM = 30
+    # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
 
     for i in range(1, 11):
         print('first_%d_pkts' % i)
@@ -303,19 +301,58 @@ def rum_main(input_file):
 
 def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
     output_file = input_file + '_remove_labels.csv'
+    y = []
+    data = []
     with open(output_file, 'w') as fid_out:
         with open(input_file, 'r') as fid_in:
             line = fid_in.readline()
             while line:
                 line_arr = line.strip().split(',')
-                if int(float(line_arr[-1])) in remove_labels_lst:
+                tmp_label = int(float(line_arr[-1]))
+                if tmp_label in remove_labels_lst:
                     line = fid_in.readline()
                     continue
                 else:
-                    fid_out.write(line)
+                    y.append(tmp_label)
+                    # fid_out.write(line)
+                    data.append(line)
                     line = fid_in.readline()
 
+        # change labels to continues ordered values, such as 0,1,2,.. not 0,2,...
+        new_labels = sorted(Counter(y).keys())
+        # new_labels = [i for i in range(len(new_labels))]
+        for data_i in data:
+            line = data_i.strip()
+            tmp_label = int(float(line[-1]))
+            if tmp_label in new_labels:
+                line = line[:-1] + str(new_labels.index(tmp_label)) + '\n'
+                fid_out.write(line)
+
     return output_file
+
+
+def read_skype_sample():
+    data_path = '../data/'
+    train_images_file = '{}/1pkts-subflow-skype-train-images-idx2-ubyte.gz'.format(data_path)
+    train_labels_file = '{}/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'.format(data_path)
+    test_images_file = '{}/1pkts-subflow-skype-test-images-idx2-ubyte.gz'.format(data_path)
+    test_labels_file = '{}/1pkts-subflow-skype-test-labels-idx1-ubyte.gz'.format(data_path)
+    X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
+        idx_reader.read_images(test_images_file), 1)
+    y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
+    return X_train, y_train, X_test, y_test
+
+    # get data
+    X_train, y_train, X_test, y_test = read_skype_sample()
+
+    # # stats
+    # print('Y :', Counter(np.concatenate([y_train, y_test])))
+    # print(
+    #     'X_train : %d, y_train : %d, label : %s' % (
+    #     X_train.shape[0], y_train.shape[0], dict(sorted(Counter(y_train).items()))))
+    # # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
+    # print('X_test  : %d, y_test  : %d, label : %s' % (
+    # X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
 
 
 if __name__ == '__main__':
@@ -325,10 +362,15 @@ if __name__ == '__main__':
     feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
     label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     input_file = merge_features_labels(feature_file, label_file)
-
-    input_file = remove_special_labels(input_file, remove_labels_lst=[2, 3])
-
+    remove_labels_lst = [0]
+    input_file = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
+
+    global batch_size, EPOCHES, num_classes, num_features
+    batch_size = 5
+    EPOCHES = 50
+    num_classes = 4 - len(remove_labels_lst)
+    num_features = 60
     rum_main(input_file)
 
     # n = 3
