@@ -22,7 +22,7 @@ class TrafficDataset(Dataset):
                 line_arr = line.split(',')
                 value = list(map(lambda x: float(x), line_arr[:-1]))
                 self.X.append(value)
-                self.y.append(float(line_arr[-1].strip()[0]))
+                self.y.append(float(line_arr[-1].strip()))
                 line = fid_in.readline()
 
         if normalization_flg:

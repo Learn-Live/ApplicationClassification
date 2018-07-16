@@ -321,11 +321,13 @@ def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
         new_labels = sorted(Counter(y).keys())
         # new_labels = [i for i in range(len(new_labels))]
         for data_i in data:
-            line = data_i.strip()
+            line = data_i.strip().split(',')
             tmp_label = int(float(line[-1]))
             if tmp_label in new_labels:
-                line = line[:-1] + str(new_labels.index(tmp_label)) + '\n'
+                line = ','.join(line[:-1]) + ',' + str(new_labels.index(tmp_label)) + '\n'
                 fid_out.write(line)
+            else:
+                print('tmp_label:', tmp_label)
 
     return output_file, len(new_labels)
 
@@ -394,7 +396,7 @@ if __name__ == '__main__':
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features
-    batch_size = 50
+    batch_size = 5
     EPOCHES = 50
     num_classes = num_c - len(remove_labels_lst)
     num_features = 60
