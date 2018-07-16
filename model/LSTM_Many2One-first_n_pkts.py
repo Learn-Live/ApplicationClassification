@@ -18,7 +18,6 @@ from torch.autograd import Variable
 
 from preprocess import idx_reader
 from preprocess.TrafficDataset import TrafficDataset, split_train_test
-from preprocess.csv2arff import merge_features_labels
 
 
 def one_hot_sklearn(label_integer):
@@ -266,7 +265,7 @@ def get_loader_iterators_contents(train_loader):
 def rum_main(input_file):
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
-    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.9, shuffle=True)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
     cntr = Counter(dataset.y)
     print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
@@ -328,71 +327,76 @@ def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
                 line = line[:-1] + str(new_labels.index(tmp_label)) + '\n'
                 fid_out.write(line)
 
-    return output_file
+    return output_file, len(new_labels)
 
 
-def read_skype_sample():
-    data_path = '../data/'
-    train_images_file = '{}/1pkts-subflow-skype-train-images-idx2-ubyte.gz'.format(data_path)
-    train_labels_file = '{}/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'.format(data_path)
-    test_images_file = '{}/1pkts-subflow-skype-test-images-idx2-ubyte.gz'.format(data_path)
-    test_labels_file = '{}/1pkts-subflow-skype-test-labels-idx1-ubyte.gz'.format(data_path)
+def read_skype_sample(n):
+    name_str = 'non-vpn-app'
+    data_path = '../data/Flow-Image-Features/skype-sub/all-%d' % n
+    data_path = '../data/Flow-Image-Features/%s-sub/all-%d' % (name_str, n)
+    train_images_file = '{}/{}pkts-subflow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    train_labels_file = '{}/{}pkts-subflow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    test_images_file = '{}/{}pkts-subflow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    test_labels_file = '{}/{}pkts-subflow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
     X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
         idx_reader.read_images(test_images_file), 1)
+    X_train, X_test = idx_reader.read_images(train_images_file), idx_reader.read_images(test_images_file)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
-    return X_train, y_train, X_test, y_test
 
-    # get data
-    X_train, y_train, X_test, y_test = read_skype_sample()
+    # return X_train, y_train, X_test, y_test
+    train_output_file = '%d_train.csv' % n
+    with open(train_output_file, 'w') as fid_out:
+        (m, n) = X_train.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_train[row][col]) + ','
+            line += str(int(y_train[row])) + '\n'
+            fid_out.write(line)
 
-    # # stats
-    # print('Y :', Counter(np.concatenate([y_train, y_test])))
-    # print(
-    #     'X_train : %d, y_train : %d, label : %s' % (
-    #     X_train.shape[0], y_train.shape[0], dict(sorted(Counter(y_train).items()))))
-    # # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
-    # print('X_test  : %d, y_test  : %d, label : %s' % (
-    # X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
+    test_output_file = '%d_test.csv' % n
+    with open(test_output_file, 'w') as fid_out:
+        (m, n) = X_test.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_test[row][col]) + ','
+            line += str(int(y_test[row])) + '\n'
+            fid_out.write(line)
+
+    return train_output_file, test_output_file
+
+    # # get data
+    # X_train, y_train, X_test, y_test = read_skype_sample()
+    #
+    # # # stats
+    # # print('Y :', Counter(np.concatenate([y_train, y_test])))
+    # # print(
+    # #     'X_train : %d, y_train : %d, label : %s' % (
+    # #     X_train.shape[0], y_train.shape[0], dict(sorted(Counter(y_train).items()))))
+    # # # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
+    # # print('X_test  : %d, y_test  : %d, label : %s' % (
+    # # X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
 
 
 if __name__ == '__main__':
     torch.manual_seed(1)
 
     n = 10
-    feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
-    label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
-    input_file = merge_features_labels(feature_file, label_file)
+    # feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
+    # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
+    # input_file = merge_features_labels(feature_file, label_file)
+    train_output_file, test_output_file = read_skype_sample(n)
+    input_file = train_output_file
+
     remove_labels_lst = [0]
-    input_file = remove_special_labels(input_file, remove_labels_lst)
+    input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 5
     EPOCHES = 50
-    num_classes = 4 - len(remove_labels_lst)
+    num_classes = num_c - len(remove_labels_lst)
     num_features = 60
     rum_main(input_file)
 
-    # n = 3
-    # input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_%d_pkts/%d_all_in_one.txt' % (n, n)
-    # input_file = '../results/MAIL_gate__MAIL_gate__MAIL_Gatew/first_%d_pkts/%d_all_in_one.txt' % (n, n)
-    # print('input_file:', input_file)
-    # X, Y = load_sequence_data(input_file)
-    # print('Y :', Counter(Y))
-    # X_train, X_test, y_train, y_test = achieve_train_test_data(X, Y, train_size=0.7, shuffle=True)
-    # print(
-    #     'X_train : %d, y_train : %d, label : %s' % (len(X_train), len(y_train), dict(sorted(Counter(y_train).items()))))
-    # # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
-    # print('X_test  : %d, y_test  : %d, label : %s' % (len(X_test), len(y_test), dict(sorted(Counter(y_test).items()))))
-    # # dict(sorted(d.items()))
-    # EMBEDDING_DIM = len(X_train[0][0])
-    # HIDDEN_DIM = 100
-    # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, 0, len(Counter(Y)))
-    # y_train = one_hot_sklearn(y_train)
-    # model.train(X_train, y_train)
-    #
-    # show_figure(model.loss_hist)
-    # model.predict(X_train, y_train)
-    #
-    # y_test = one_hot_sklearn(y_test)
-    # model.predict(X_test, y_test)
