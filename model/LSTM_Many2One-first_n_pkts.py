@@ -194,7 +194,7 @@ def show_figure(data):
     plt.savefig('loss.pdf', format='pdf')
 
 def read_skype_sample():
-    data_path = sys.argv[1]
+    data_path = sys.argv[1] if len(sys.argv) >= 2 else '../data'
     train_images_file = '{}/1pkts-subflow-skype-train-images-idx2-ubyte.gz'.format(data_path)
     train_labels_file = '{}/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'.format(data_path)
     test_images_file = '{}/1pkts-subflow-skype-test-images-idx2-ubyte.gz'.format(data_path)
