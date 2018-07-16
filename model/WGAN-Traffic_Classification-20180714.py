@@ -481,12 +481,12 @@ def two_stages_online_evaluation(benign_model, attack_model, input_file):
         y_s.append(y)
 
         threshold1 = benign_model.D(x)
-        if (threshold1 > 0.4) and (threshold1 < 0.6):
+        if (threshold1 > 0.3) and (threshold1 < 0.7):
             y_pred = '1'
             # print('benign_data', y, y_pred)   # attack =0, benign = 1
         else:
             threshold2 = attack_model.D(x)
-            if (threshold2 > 0.4) and (threshold2 < 0.6):
+            if (threshold2 > 0.3) and (threshold2 < 0.7):
                 y_pred = '0'
                 # print('attack_data', y, y_pred)
             else:
@@ -508,7 +508,7 @@ def two_stages_online_evaluation(benign_model, attack_model, input_file):
 if __name__ == '__main__':
     torch.manual_seed(1)
     # Hyper parameters
-    num_epochs = 2000
+    num_epochs = 5000
     num_classes = 1
     global batch_size
     batch_size = 64
