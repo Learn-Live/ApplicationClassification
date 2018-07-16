@@ -156,7 +156,12 @@ class LSTMTagger(nn.Module):
                 loss = self.loss_function(tag_scores, targets)
                 self.loss_hist.append(loss.tolist())
                 if epoch % 20 == 0 and step == 0:
-                    print('epoch :', epoch, ', loss :', loss, ', targets : ', targets, ', tag_scores :', tag_scores)
+                    if epoch == 0 and step == 0:
+                        print('---\'epoch, loss, batch, (softmax, preds, reals)---\'')
+                    # print('epoch :', epoch, ', loss :', loss, ', targets : ', targets, ', tag_scores :', tag_scores)
+                    _, preds = torch.max(tag_scores.data, dim=1)
+                    print('epoch :', epoch, ', loss->', loss, ', ', b_x.shape, ', targets->',
+                          list(zip(tag_scores.data.tolist(), preds, targets)))  # softmax, preds, reals
 
                 loss.backward()
                 self.optimizer.step()
@@ -258,8 +263,8 @@ def get_loader_iterators_contents(train_loader):
 
 def rum_main(input_file):
     global batch_size, EPOCHES
-    batch_size = 2
-    EPOCHES = 3
+    batch_size = 20
+    EPOCHES = 300
     num_classes = 4
     num_features = 60
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
