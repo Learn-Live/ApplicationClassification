@@ -37,7 +37,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 2
+        self.num_layers = 3
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -69,7 +69,7 @@ class LSTMTagger(nn.Module):
     def achieve_sentence(self, sentences, first_n_pkts=2):
         """
             input size of lstm
-        :param sentences:
+        :param sentences: [batch_size, len(sentence_i), input_size]
         :return:
         """
         # new_sentences=torch.Tensor()
@@ -100,7 +100,9 @@ class LSTMTagger(nn.Module):
         # embeds = self.achieve_sentence(sentences).float()   # change double to float
         embeds = sentences
         # print('embed:',embeds)
-        ## embeds.view(len(sentence), batch_size, embeded_size)
+        # # embeds.view(len(sentence), batch_size, input_size)
+        # # Input needs to be a 3d tensor with dimensions (seq_len, batch_size, input_size), so: length of your
+        # # input sequence, batch size, and number of features (if you only have the time series there is only 1 feature).
         lstm_out, self.hidden = self.lstm(
             embeds.view(len(embeds[0]), sentences.shape[0], embeds.shape[-1]), self.hidden)
         # tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1))
@@ -153,7 +155,7 @@ class LSTMTagger(nn.Module):
                 #  calling optimizer.step()
                 loss = self.loss_function(tag_scores, targets)
                 self.loss_hist.append(loss.tolist())
-                if epoch % 20 == 0 and step % 10 == 0:
+                if epoch % 20 == 0 and step == 0:
                     print('epoch :', epoch, ', loss :', loss, ', targets : ', targets, ', tag_scores :', tag_scores)
 
                 loss.backward()
@@ -184,7 +186,7 @@ class LSTMTagger(nn.Module):
                 # Step 3. Run our forward pass.
                 b_y_preds = self.forward(sentence_in)
                 # print('b_y_preds', b_y_preds.data.tolist())
-                _, predicted = torch.max(b_y_preds.data, 1)
+                _, predicted = torch.max(b_y_preds.data, dim=1)
                 total += b_y.size(0)
                 correct += (predicted == b_y).sum().item()
 
@@ -256,8 +258,8 @@ def get_loader_iterators_contents(train_loader):
 
 def rum_main(input_file):
     global batch_size, EPOCHES
-    batch_size = 1
-    EPOCHES = 3000
+    batch_size = 2
+    EPOCHES = 3
     num_classes = 4
     num_features = 60
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
@@ -277,7 +279,7 @@ def rum_main(input_file):
     cntr = Counter(y)
     print('test_loader: ', len(test_loader.sampler), ' y:', sorted(cntr.items()))
 
-    EMBEDDING_DIM = num_features
+    EMBEDDING_DIM = num_features  # input_size
     HIDDEN_DIM = 30
 
     for i in range(1, 11):
