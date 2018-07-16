@@ -19,41 +19,6 @@ from sklearn.preprocessing import OneHotEncoder
 from preprocess.data_preprocess import achieve_train_test_data, change_label, normalize_data
 from preprocess import idx_reader
 
-def load_sequence_data(first_n_pkts_input_file, separator=','):
-    # input_file = '../results/AUDIO_first_n_pkts_10_all_in_one_file.txt'
-    data = []
-    label = []
-    with open(first_n_pkts_input_file, 'r') as fid_in:
-        line = fid_in.readline()
-        while line:
-            ### srcIP, dstIP, srcport, dstport, len(pkts), pkts_lst, flow_duration, intr_time_lst, label
-            line_arr = line.split(separator)
-            len_tmp = int(line_arr[4])  # length of pkts_list
-            data.append(line_arr[:-1])
-            label.append(line_arr[-1].split('\n')[0])
-            line = fid_in.readline()
-
-    # X = normalize_data(np.asarray(X, dtype=float), range_value=[0, 1], eps=1e-5)
-    Y = change_label(label)
-    new_data = normalize_data(np.asarray(data, dtype=float), range_value=[0, 1], eps=1e-5)
-    X = []
-    for idx in range(len(new_data)):
-        line_arr = new_data[idx]
-        # len_tmp = int(line_arr[4])  # length of pkts_list
-        line_tmp = []
-        for i in range(1, len_tmp + 1):  # len(pkts_list), [1, len_tmp+1)
-            if i == 1:
-                line_tmp.append([line_arr[0], line_arr[1], line_arr[2], line_arr[3], line_arr[4 + i],
-                                 line_arr[4 + len_tmp + i]])  # srcport, dstport, [pkts_lst[0], flow_duration]
-            else:
-                line_tmp.append([line_arr[0], line_arr[1], line_arr[2], line_arr[3], line_arr[4 + i], line_arr[
-                    4 + len_tmp + (i + 1)]])  # [pkts_lst[0], intr_tm_lst[1]], intr_tm_lst from 1, 2, ...
-
-        X.append(line_tmp)
-
-    return X, Y
-
-
 def one_hot_sklearn(label_integer):
     label_integer = np.asarray(label_integer, dtype=int)
     onehot_encoder = OneHotEncoder(sparse=False)
@@ -157,7 +122,7 @@ class LSTMTagger(nn.Module):
         #     inputs = prepare_sequence(training_data[0][0], word_to_ix)
         #     tag_scores = model(inputs)
         #     print(tag_scores)
-        for epoch in range(300):  # again, normally you would NOT do 300 epochs, it is toy data
+        for epoch in range(50):  # again, normally you would NOT do 300 epochs, it is toy data
             # print('epoch:', epoch)
             t = 0
             training_data = zip(X_train, y_train)
@@ -221,13 +186,14 @@ class LSTMTagger(nn.Module):
 
 
 def show_figure(data):
+    import matplotlib
+    matplotlib.use('Agg')
     import matplotlib.pyplot as plt
 
     plt.plot(range(len(data)), data)
-    plt.show()
+    plt.savefig('loss.pdf', format='pdf')
 
-
-if __name__ == '__main__':
+def read_skype_sample():
     data_path = sys.argv[1]
     train_images_file = '{}/1pkts-subflow-skype-train-images-idx2-ubyte.gz'.format(data_path)
     train_labels_file = '{}/1pkts-subflow-skype-train-labels-idx1-ubyte.gz'.format(data_path)
@@ -235,28 +201,53 @@ if __name__ == '__main__':
     test_labels_file = '{}/1pkts-subflow-skype-test-labels-idx1-ubyte.gz'.format(data_path)
     X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(idx_reader.read_images(test_images_file), 1)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
-    
+    return X_train, y_train, X_test, y_test
+
+def _main():
+
+    # init parameters
     torch.manual_seed(1)
-    n = 3
-    # input_file = '../results/FILE-TRANS_CHAT_faceb_MAIL_gate__VIDEO_Yout/first_%d_pkts/%d_all_in_one.txt' % (n, n)
-    # input_file = '../results/MAIL_gate__MAIL_gate__MAIL_Gatew/first_%d_pkts/%d_all_in_one.txt' % (n, n)
-    # print('input_file:', input_file)
-    # X, Y = load_sequence_data(input_file)
+    n = 1
+
+    # get data
+    X_train, y_train, X_test, y_test = read_skype_sample()
+
+    # stats
     print('Y :', Counter(np.concatenate([y_train, y_test])))
-    # X_train, X_test, y_train, y_test = achieve_train_test_data(X, Y, train_size=0.7, shuffle=True)
     print(
         'X_train : %d, y_train : %d, label : %s' % (X_train.shape[0], y_train.shape[0], dict(sorted(Counter(y_train).items()))))
     # print('y_train : %s\ny_test  : %s'%(Counter(y_train), Counter(y_test)))
     print('X_test  : %d, y_test  : %d, label : %s' % (X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
-    # dict(sorted(d.items()))
+
+    # set hyper parameters
+    # shape of X_train, X_test: (num_samples, 1, features)
     EMBEDDING_DIM = X_train.shape[2]
-    HIDDEN_DIM = 100
+    HIDDEN_DIM = 30
+
+    # create model
     model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, 0, len(Counter(np.concatenate([y_train, y_test]))))
+
+    # one-hot encode y_train
     y_train = one_hot_sklearn(y_train)
+
+    # train
     model.train(X_train, y_train)
 
-    # show_figure(model.loss_hist)
+    # loss histogram
+    show_figure(model.loss_hist)
+
+    # train predict
+    print('Training')
     model.predict(X_train, y_train)
 
+
+    # one-hot encode y_test
     y_test = one_hot_sklearn(y_test)
+
+    # test predict
+    print('Test')
     model.predict(X_test, y_test)
+    
+
+if __name__ == '__main__':
+    _main()
