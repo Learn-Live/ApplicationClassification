@@ -12,7 +12,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.preprocessing import OneHotEncoder
 from torch.autograd import Variable
@@ -45,7 +44,8 @@ class LSTMTagger(nn.Module):
         # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, len(word_to_ix), len(tag_to_ix))
         # self.loss_function = nn.NLLLoss()
         self.loss_function = nn.CrossEntropyLoss()
-        self.optimizer = optim.SGD(self.lstm.parameters(), lr=0.1)
+        # self.optimizer = optim.SGD(self.lstm.parameters(), lr=0.1)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-3, weight_decay=1e-4)
         #
 
         # The linear layer that maps from hidden state space to tag space
@@ -263,7 +263,7 @@ def get_loader_iterators_contents(train_loader):
 
 def rum_main(input_file):
     global batch_size, EPOCHES
-    batch_size = 2
+    batch_size = 20
     EPOCHES = 300
     num_classes = 4
     num_features = 60
@@ -301,6 +301,23 @@ def rum_main(input_file):
         model.test(test_loader)
 
 
+def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
+    output_file = input_file + '_remove_labels.csv'
+    with open(output_file, 'w') as fid_out:
+        with open(input_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                line_arr = line.strip().split(',')
+                if int(float(line_arr[-1])) in remove_labels_lst:
+                    line = fid_in.readline()
+                    continue
+                else:
+                    fid_out.write(line)
+                    line = fid_in.readline()
+
+    return output_file
+
+
 if __name__ == '__main__':
     torch.manual_seed(1)
 
@@ -308,6 +325,9 @@ if __name__ == '__main__':
     feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
     label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     input_file = merge_features_labels(feature_file, label_file)
+
+    input_file = remove_special_labels(input_file, remove_labels_lst=[2, 3])
+
     print(input_file)
     rum_main(input_file)
 
