@@ -389,12 +389,12 @@ if __name__ == '__main__':
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [0]
+    remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features
-    batch_size = 5
+    batch_size = 50
     EPOCHES = 50
     num_classes = num_c - len(remove_labels_lst)
     num_features = 60
