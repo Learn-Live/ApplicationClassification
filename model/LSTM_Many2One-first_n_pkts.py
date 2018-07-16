@@ -155,7 +155,7 @@ class LSTMTagger(nn.Module):
                 #  calling optimizer.step()
                 loss = self.loss_function(tag_scores, targets)
                 self.loss_hist.append(loss.tolist())
-                if epoch % 20 == 0 and step == 0:
+                if epoch % 50 == 0 and step == 0:
                     if epoch == 0 and step == 0:
                         print('---\'epoch, loss, batch, (softmax, preds, reals)---\'')
                     # print('epoch :', epoch, ', loss :', loss, ', targets : ', targets, ', tag_scores :', tag_scores)
@@ -263,7 +263,7 @@ def get_loader_iterators_contents(train_loader):
 
 def rum_main(input_file):
     global batch_size, EPOCHES
-    batch_size = 20
+    batch_size = 2
     EPOCHES = 300
     num_classes = 4
     num_features = 60
