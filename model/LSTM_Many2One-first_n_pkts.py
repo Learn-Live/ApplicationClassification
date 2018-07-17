@@ -389,8 +389,8 @@ if __name__ == '__main__':
     # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     # input_file = merge_features_labels(feature_file, label_file)
     name_str = 'non-vpn-app'
-    name_str = 'facebook'
-    name_str = 'hangout'
+    # name_str = 'facebook'
+    # name_str = 'hangout'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
@@ -400,7 +400,7 @@ if __name__ == '__main__':
 
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 200
-    EPOCHES = 50
+    EPOCHES = 5000
     num_classes = num_c - len(remove_labels_lst)
     num_features = 60
     run_main(input_file)

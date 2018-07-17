@@ -95,7 +95,7 @@ class ConvNet(nn.Module):
                     # l2_reg +=  torch.pow(W, 2).sum()
 
                 #
-                loss = self.criterion(b_y_preds, b_y) + 1e-3 * l2_reg
+                loss = self.criterion(b_y_preds, b_y) + 0 * l2_reg
 
                 # Backward and optimize
                 self.optimizer.zero_grad()
@@ -163,8 +163,8 @@ class ConvNet(nn.Module):
                     cm += confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
 
-            print(cm, sk_accuracy / total)
-            # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
+            # print(cm, sk_accuracy / total)
+            # # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
 
         acc = correct / total
         return acc, loss.data.tolist()
@@ -368,7 +368,7 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    n = 1
+    n = 5
     # feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
     # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
     # input_file = merge_features_labels(feature_file, label_file)
@@ -384,10 +384,10 @@ if __name__ == '__main__':
 
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 200
-    EPOCHES = 50
+    EPOCHES = 500
     num_classes = num_c - len(remove_labels_lst)
     num_features = 60
-    learning_rate = 0.001
+    learning_rate = 0.01
     run_main(input_file, n)
 
 #

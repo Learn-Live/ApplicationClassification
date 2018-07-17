@@ -3,8 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/preprocess/TrafficDataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocess/TrafficDataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_10.ckpt" beforeDir="false" afterPath="$PROJECT_DIR$/model/model_10.ckpt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_3.ckpt" beforeDir="false" afterPath="$PROJECT_DIR$/model/model_3.ckpt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_5.ckpt" beforeDir="false" afterPath="$PROJECT_DIR$/model/model_5.ckpt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,18 +18,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Traffic_Classification_20180713.coverage" NAME="CNN_Traffic_Classification-20180713 Coverage Results" MODIFIED="1531605504270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Traffic_Classification_20180713.coverage" NAME="CNN_Traffic_Classification-20180713 Coverage Results" MODIFIED="1531781113030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow_all.coverage" NAME="pcap2flow-all Coverage Results" MODIFIED="1530192997185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Demo.coverage" NAME="CNN-Demo Coverage Results" MODIFIED="1531530359619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$WGAN_Attack_Generation_by_41Features_20180715.coverage" NAME="WGAN_Attack_Generation_by_41Features-20180715 Coverage Results" MODIFIED="1531672927603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow.coverage" NAME="pcap2flow Coverage Results" MODIFIED="1529972264972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$TrafficDataset.coverage" NAME="TrafficDataset Coverage Results" MODIFIED="1531526231611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
-    <SUITE FILE_PATH="coverage/ApplicationClassification$WGAN_Traffic_Classification_20180714.coverage" NAME="WGAN-Traffic_Classification-20180714 Coverage Results" MODIFIED="1531758834699" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$WGAN_Traffic_Classification_20180714.coverage" NAME="WGAN-Traffic_Classification-20180714 Coverage Results" MODIFIED="1531841318908" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_progressively.coverage" NAME="LSTM-Many2One-progressively Coverage Results" MODIFIED="1530575021769" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN_sklearn.coverage" NAME="ANN-sklearn Coverage Results" MODIFIED="1529963200158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$data_preprocess.coverage" NAME="data_preprocess Coverage Results" MODIFIED="1529963080384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN.coverage" NAME="ANN Coverage Results" MODIFIED="1530312041453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
-    <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_first_n_pkts.coverage" NAME="LSTM_Many2One-first_n_pkts Coverage Results" MODIFIED="1531768803439" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_first_n_pkts.coverage" NAME="LSTM_Many2One-first_n_pkts Coverage Results" MODIFIED="1531789453820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Demo3.coverage" NAME="LSTM-Demo3 Coverage Results" MODIFIED="1530316206204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$csv2arff.coverage" NAME="csv2arff Coverage Results" MODIFIED="1531515978567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Demo.coverage" NAME="LSTM-Demo Coverage Results" MODIFIED="1531689319773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/histroyFiles" />
@@ -52,8 +56,20 @@
       <file leaf-file-name="CNN_Traffic_Classification-20180713.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6">
-              <caret line="23" column="54" selection-start-line="23" selection-start-column="54" selection-end-line="23" selection-end-column="54" />
+            <state relative-caret-position="10">
+              <caret line="97" column="57" selection-start-line="97" selection-start-column="57" selection-end-line="97" selection-end-column="57" />
+              <folding>
+                <element signature="e#171#202#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TrafficDataset.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
             </state>
           </provider>
         </entry>
@@ -61,29 +77,17 @@
       <file leaf-file-name="LSTM_Many2One-first_n_pkts.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="320" selection-start-line="320" selection-end-line="320" />
-              <folding>
-                <element signature="e#207#238#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="359">
+              <caret line="402" column="18" selection-start-line="402" selection-start-column="18" selection-end-line="402" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TrafficDataset.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="24" column="56" selection-start-line="24" selection-start-column="56" selection-end-line="24" selection-end-column="56" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WGAN-Traffic_Classification-20180714.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="WGAN-Traffic_Classification-20180714.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="510" column="18" selection-start-line="510" selection-start-column="18" selection-end-line="510" selection-end-column="18" />
+            <state relative-caret-position="-1033">
+              <caret line="116" column="30" lean-forward="true" selection-start-line="116" selection-start-column="30" selection-end-line="116" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -138,13 +142,13 @@
         <option value="$PROJECT_DIR$/model/ANN-without-features-selection.py" />
         <option value="$PROJECT_DIR$/model/neural_networks_tutorial_pytorch.py" />
         <option value="$PROJECT_DIR$/model/CNN-Demo.py" />
-        <option value="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" />
         <option value="$PROJECT_DIR$/data/attack_normal_data/test_mixed.csv" />
         <option value="$PROJECT_DIR$/model/WGAN_Attack_Generation_by_41Features-20180715.py" />
         <option value="$PROJECT_DIR$/preprocess/csv2arff.py" />
-        <option value="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" />
-        <option value="$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py" />
         <option value="$PROJECT_DIR$/preprocess/TrafficDataset.py" />
+        <option value="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" />
+        <option value="$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py" />
+        <option value="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" />
       </list>
     </option>
   </component>
@@ -176,55 +180,6 @@
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
               <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="Flow-Image-Features" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="Flow-Image-Features" type="462c0819:PsiDirectoryNode" />
-              <item name="non-vpn-app-sub" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="Flow-Image-Features" type="462c0819:PsiDirectoryNode" />
-              <item name="non-vpn-app-sub" type="462c0819:PsiDirectoryNode" />
-              <item name="all-10" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="Flow-Image-Features" type="462c0819:PsiDirectoryNode" />
-              <item name="skype-sub" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="Flow-Image-Features" type="462c0819:PsiDirectoryNode" />
-              <item name="skype-sub" type="462c0819:PsiDirectoryNode" />
-              <item name="all-1" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="Flow-Image-Features" type="462c0819:PsiDirectoryNode" />
-              <item name="skype-sub" type="462c0819:PsiDirectoryNode" />
-              <item name="all-10" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
@@ -278,7 +233,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.LSTM_Many2One-first_n_pkts">
+  <component name="RunManager" selected="Python.WGAN-Traffic_Classification-20180714">
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
       <module name="July15" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -525,11 +480,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.LSTM_Many2One-first_n_pkts" />
         <item itemvalue="Python.WGAN-Traffic_Classification-20180714" />
+        <item itemvalue="Python.LSTM_Many2One-first_n_pkts" />
+        <item itemvalue="Python.CNN_Traffic_Classification-20180713" />
         <item itemvalue="Python.LSTM-Demo" />
         <item itemvalue="Python.WGAN_Attack_Generation_by_41Features-20180715" />
-        <item itemvalue="Python.CNN_Traffic_Classification-20180713" />
       </list>
     </recent_temporary>
   </component>
@@ -543,20 +498,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1529702863224</updated>
-    </task>
-    <task id="LOCAL-00015" summary="modify 'os.path.join()', 'os.path.exists()'">
-      <created>1530021947518</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1530021947518</updated>
-    </task>
-    <task id="LOCAL-00016" summary="add results directory">
-      <created>1530037202716</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1530037202716</updated>
     </task>
     <task id="LOCAL-00017" summary="add results directory">
       <created>1530050285383</created>
@@ -887,7 +828,21 @@
       <option name="project" value="LOCAL" />
       <updated>1531767143855</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="self.y.append(float(line_arr[-1].strip()[0]))-&gt;&#10;self.y.append(float(line_arr[-1].strip()))">
+      <created>1531768873889</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1531768873889</updated>
+    </task>
+    <task id="LOCAL-00065" summary="modify CNN Traffic_Classification">
+      <created>1531774058704</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1531774058704</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -908,13 +863,13 @@
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49919224" weight="0.44606742" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.21235955" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49757674" visible="true" weight="0.39213485" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49757674" visible="true" weight="0.29101124" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49893278" weight="0.19438203" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27214515" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="3" weight="0.22198506" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.19477054" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.26966292" />
-      <window_info anchor="right" id="SciView" order="4" weight="0.4530416" />
+      <window_info anchor="right" id="SciView" order="4" weight="0.4103522" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983845" weight="0.43370786" />
@@ -984,8 +939,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add 'online identification' in LSTM-Many2One-progressively.py" />
-    <MESSAGE value="add 'different test file' in LSTM-Many2One-progressively.py" />
     <MESSAGE value="remove 'online_identified_backup()' in LSTM-Many2One-progressively.py" />
     <MESSAGE value="add &quot;historyFiles&quot; directory to store backup files" />
     <MESSAGE value="add comments in LSTM-Many2One-progressively.py" />
@@ -1009,7 +962,9 @@
     <MESSAGE value="add 'print comments'" />
     <MESSAGE value="add 'reomve_special_labels'" />
     <MESSAGE value="add 'idx process'" />
-    <option name="LAST_COMMIT_MESSAGE" value="add 'idx process'" />
+    <MESSAGE value="self.y.append(float(line_arr[-1].strip()[0]))-&gt;&#10;self.y.append(float(line_arr[-1].strip()))" />
+    <MESSAGE value="modify CNN Traffic_Classification" />
+    <option name="LAST_COMMIT_MESSAGE" value="modify CNN Traffic_Classification" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1158,27 +1113,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
-          <line>84</line>
+          <line>85</line>
           <option name="timeStamp" value="85" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
-          <line>224</line>
-          <option name="timeStamp" value="86" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
-          <line>222</line>
-          <option name="timeStamp" value="88" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
-          <line>275</line>
+          <line>277</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py</url>
-          <line>497</line>
+          <line>499</line>
           <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1193,12 +1138,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py</url>
-          <line>161</line>
+          <line>162</line>
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py</url>
-          <line>291</line>
+          <line>292</line>
           <option name="timeStamp" value="124" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1208,23 +1153,33 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py</url>
-          <line>347</line>
+          <line>348</line>
           <option name="timeStamp" value="133" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py</url>
-          <line>320</line>
+          <line>321</line>
           <option name="timeStamp" value="134" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py</url>
-          <line>267</line>
+          <line>268</line>
           <option name="timeStamp" value="135" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/preprocess/TrafficDataset.py</url>
-          <line>27</line>
-          <option name="timeStamp" value="137" />
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
+          <line>51</line>
+          <option name="timeStamp" value="139" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
+          <line>50</line>
+          <option name="timeStamp" value="140" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1234,7 +1189,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="138" />
+      <option name="time" value="141" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
@@ -1287,16 +1242,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/model/WGAN_Attack_Generation_by_41Features-20180715.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8880">
-          <caret line="592" column="24" selection-start-line="592" selection-start-column="24" selection-end-line="592" selection-end-column="24" />
-          <folding>
-            <element signature="e#177#208#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1500">
@@ -1519,20 +1464,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6">
-          <caret line="23" column="54" selection-start-line="23" selection-start-column="54" selection-end-line="23" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="510" column="18" selection-start-line="510" selection-start-column="18" selection-end-line="510" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/data/sampler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="434">
@@ -1543,20 +1474,41 @@
     <entry file="file://$PROJECT_DIR$/preprocess/idx_reader.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="490" selection-start-line="490" selection-end-line="490" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10">
+          <caret line="97" column="57" selection-start-line="97" selection-start-column="57" selection-end-line="97" selection-end-column="57" />
+          <folding>
+            <element signature="e#171#202#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="320" selection-start-line="320" selection-end-line="320" />
-          <folding>
-            <element signature="e#207#238#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="359">
+          <caret line="402" column="18" selection-start-line="402" selection-start-column="18" selection-end-line="402" selection-end-column="18" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="24" column="56" selection-start-line="24" selection-start-column="56" selection-end-line="24" selection-end-column="56" />
+        <state relative-caret-position="15">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1033">
+          <caret line="116" column="30" lean-forward="true" selection-start-line="116" selection-start-column="30" selection-end-line="116" selection-end-column="30" />
         </state>
       </provider>
     </entry>
