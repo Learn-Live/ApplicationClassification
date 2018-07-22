@@ -109,7 +109,7 @@ def _extract_session_info(byte_data):
     }
 
 
-def read_images(idx_filename, feature_type='above-ip', only_images=True):
+def read_images(idx_filename, feature_type='ip-above', only_images=True):
     """
     Extract information image from idx file
 
@@ -117,17 +117,17 @@ def read_images(idx_filename, feature_type='above-ip', only_images=True):
     ----------
     idx_filename: str
     feature_type: str
-        could be 'above-ip' or 'payload-len' for different type of image feature file
+        could be 'ip-above' or 'payload-len' for different type of image feature file
     only_images: bool
         only return images or
-        with session information, actual packet count if feature_type is 'above-ip'
+        with session information, actual packet count if feature_type is 'ip-above'
         with session information, actual packet count, actual byte count if feature_type is 'payload-len'
 
     Returns
     -------
     `numpy.ndarray`
         1. images if only_images is True
-        2.1 (session information, actual packet count, images) if feature_type is 'above-ip'
+        2.1 (session information, actual packet count, images) if feature_type is 'ip-above'
         2.2 (session information, actual packet count, actual byte count, images) if feature_type is 'payload-len'
     """
     with gzip.open(idx_filename, 'rb') as f:
@@ -149,14 +149,14 @@ def read_images(idx_filename, feature_type='above-ip', only_images=True):
             each_data_point = _read(dimensions, f)
             session_info = _extract_session_info(each_data_point[:SESSION_BYTE_LEN])
             if feature_type == 'payload-len':
-                actual_pkt_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN:SESSION_BYTE_LEN+2], byteorder='big')
-                actual_byte_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN + 2:SESSION_BYTE_LEN + 4], byteorder='big')
-                other_data = each_data_point[SESSION_BYTE_LEN + 4:]
-            elif feature_type == 'above-ip':
+                actual_pkt_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN:SESSION_BYTE_LEN+4], byteorder='big')
+                actual_byte_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN + 4:SESSION_BYTE_LEN + 6], byteorder='big')
+                other_data = each_data_point[SESSION_BYTE_LEN + 6:]
+            elif feature_type == 'ip-above':
                 actual_pkt_count = each_data_point[SESSION_BYTE_LEN]
                 other_data = each_data_point[SESSION_BYTE_LEN + 1:]
             else:
-                raise AssertionError('feature_type could only be "payload-len" or "above-ip"')
+                raise AssertionError('feature_type could only be "payload-len" or "ip-above"')
             if only_images is True:
                 data_list.append(other_data)
             elif only_images is False:
@@ -165,7 +165,7 @@ def read_images(idx_filename, feature_type='above-ip', only_images=True):
                 elif feature_type == 'payload-len':
                     data_list.append((session_info, actual_pkt_count, actual_byte_count, other_data))
                 else:
-                    raise AssertionError('feature_type could only be "payload-len" or "above-ip"')
+                    raise AssertionError('feature_type could only be "payload-len" or "ip-above"')
             else:
                 raise AssertionError('only_images could only be True or False')
 
