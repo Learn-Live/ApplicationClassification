@@ -510,15 +510,15 @@ def two_stages_online_evaluation(benign_model, attack_model, input_file):
 if __name__ == '__main__':
     torch.manual_seed(1)
     # Hyper parameters
-    num_epochs = 1000
+    num_epochs = 10000
     num_classes = 1
     global batch_size
     batch_size = 64
     learning_rate = 0.001
 
     cross_validation_flg = False
-    # input_file = '../data/attack_normal_data/benign_data.csv'
-    # benign_model, benign_test_loader = run_main(input_file, num_features=41)
+    input_file = '../data/attack_normal_data/benign_data.csv'
+    benign_model, benign_test_loader = run_main(input_file, num_features=41)
 
     input_file = '../data/attack_normal_data/attack_data.csv'
     attack_model, attack_test_loader = run_main(input_file, num_features=41)
