@@ -78,9 +78,10 @@ class LSTMTagger(nn.Module):
             t = 0
             cnt = 1
             tmp_lst = []
-            while (cnt - 1) * 60 + (cnt - 1) < len(sentence_i):
+            while (cnt - 1) * num_features + (cnt - 1) < len(sentence_i):
                 tmp_lst.append(
-                    sentence_i[(cnt - 1) * 60 + (cnt - 1): cnt * 60 + (cnt - 1)].data.tolist()[:num_features])
+                    sentence_i[(cnt - 1) * num_features + (cnt - 1): cnt * num_features + (cnt - 1)].data.tolist()[
+                    :num_features])
                 # t = (cnt - 1) * 60 + (cnt - 1)
                 if cnt == first_n_pkts:
                     break
@@ -345,7 +346,7 @@ def read_skype_sample(name_str='facebook', n=784):
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
     # return X_train, y_train, X_test, y_test
-    train_output_file = '%s_%dpkts_train.csv' % (name_str, n)
+    train_output_file = '%s_%dBytes_train.csv' % (name_str, n)
     with open(train_output_file, 'w') as fid_out:
         (m, n) = X_train.shape
         for row in range(m):
@@ -355,7 +356,7 @@ def read_skype_sample(name_str='facebook', n=784):
             line += str(int(y_train[row])) + '\n'
             fid_out.write(line)
 
-    test_output_file = '%s_%dpkts_test.csv' % (name_str, n)
+    test_output_file = '%s_%dBytes_test.csv' % (name_str, n)
     with open(test_output_file, 'w') as fid_out:
         (m, n) = X_test.shape
         for row in range(m):
@@ -396,7 +397,7 @@ if __name__ == '__main__':
 
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 200
-    EPOCHES = 500
+    EPOCHES = 50
     num_classes = num_c - len(remove_labels_lst)
-    num_features = 20
+    num_features = 200
     run_main(input_file)
