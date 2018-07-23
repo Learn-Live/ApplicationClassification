@@ -3,3 +3,5 @@ results/
 *.pcap
 *.pyc
 *.arff
+
+ENV/
