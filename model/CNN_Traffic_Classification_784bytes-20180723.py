@@ -47,6 +47,35 @@ class ConvNet(nn.Module):
         # self.criterion=nn.NLLLoss()
         self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, weight_decay=1e-4)
 
+    def achieve_sentence(self, sentences, first_n_pkts=2):
+        """
+            input size of lstm
+        :param sentences: [batch_size, len(sentence_i), input_size]
+        :return:
+        """
+        # new_sentences=torch.Tensor()
+        new_sentences = []
+        for sentence_i in sentences:
+            t = 0
+            cnt = 1
+            tmp_lst = []
+            # while (cnt - 1) * num_features + (cnt - 1) < len(sentence_i):
+            #     tmp_lst.append(
+            #         sentence_i[(cnt - 1) * num_features + (cnt - 1): cnt * num_features + (cnt - 1)].data.tolist()[
+            #         :num_features])
+            #     # t = (cnt - 1) * 60 + (cnt - 1)
+            #     if cnt == first_n_pkts:
+            #         break
+            #     cnt += 1
+            # tmp_lst=sentence_i.data.tolist()[:first_n_pkts*num_features]
+            # tmp_lst = torch.from_numpy(np.array(tmp_lst))
+            tmp_lst = sentence_i[:first_n_pkts * num_features]
+            new_sentences.append(tmp_lst)
+
+        new_sentences = torch.stack(new_sentences)
+
+        return new_sentences
+
     def forward(self, x):
         layer1_out = self.layer1(x)
         layer2_out = self.layer2(layer1_out)
@@ -76,6 +105,8 @@ class ConvNet(nn.Module):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
 
+                # b_x=self.achieve_sentence(b_x,first_n_pkts)
+                b_x = b_x[:, :first_n_pkts * num_features]
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1])
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
@@ -145,6 +176,8 @@ class ConvNet(nn.Module):
             for step, (b_x, b_y) in enumerate(test_loader):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
+
+                b_x = b_x[:, :first_n_pkts * num_features]
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1])  # (nSamples, nChannels, x_Height, x_Width)
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
@@ -377,13 +410,14 @@ if __name__ == '__main__':
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
-    global batch_size, EPOCHES, num_classes, num_features
+    global batch_size, EPOCHES, num_classes, num_features, first_n_pkts
+    first_n_pkts = 1
     batch_size = 50
-    EPOCHES = 10000
+    EPOCHES = 100
     num_classes = num_c - len(remove_labels_lst)
-    num_features = 787
+    num_features = 60
     learning_rate = 0.001
-    run_main(input_file, num_features)
+    run_main(input_file, num_features * first_n_pkts)
 
 #
 # if __name__ == '__main__':
