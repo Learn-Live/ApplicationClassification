@@ -398,6 +398,6 @@ if __name__ == '__main__':
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 200
     EPOCHES = 100
-    num_classes = num_c - len(remove_labels_lst)
+    num_classes = num_c
     num_features = 200
     run_main(input_file)
