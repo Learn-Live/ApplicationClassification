@@ -143,7 +143,7 @@ class LSTMTagger(nn.Module):
                 # Tensors of word indices.
                 # sentence_in = prepare_sequence(sentence, word_to_ix)
                 # b_x = b_x.view([b_x.shape[0], -1])  # (nSamples, nChannels, x_Height, x_Width)
-                b_x = Variable(b_x).float()
+                b_x = Variable(b_x, requires_grad=True).float()
                 b_y = Variable(b_y).type(torch.FloatTensor)
                 sentence_in = torch.Tensor(b_x)
                 # print('sentence_in:', sentence_in)
@@ -386,8 +386,8 @@ if __name__ == '__main__':
 
     n = 784
     name_str = 'facebook'
-    name_str = 'hangout'
-    name_str = 'skype'
+    # name_str = 'hangout'
+    # name_str = 'skype'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
@@ -397,7 +397,7 @@ if __name__ == '__main__':
 
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 200
-    EPOCHES = 50
+    EPOCHES = 100
     num_classes = num_c - len(remove_labels_lst)
     num_features = 200
     run_main(input_file)

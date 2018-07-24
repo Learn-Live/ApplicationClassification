@@ -2,37 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1c748f80-e38e-4cfb-8d13-4e249b90cf89" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/facebook-sub/784-byte-payload-per-flow-facebook-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/facebook-sub/784-byte-payload-per-flow-facebook-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/facebook-sub/784-byte-payload-per-flow-facebook-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/facebook-sub/784-byte-payload-per-flow-facebook-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/hangout-sub/784-byte-payload-per-flow-hangout-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/hangout-sub/784-byte-payload-per-flow-hangout-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/hangout-sub/784-byte-payload-per-flow-hangout-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/hangout-sub/784-byte-payload-per-flow-hangout-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/non-vpn-app-classification/784-byte-payload-per-flow-non-vpn-app-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/non-vpn-app-classification/784-byte-payload-per-flow-non-vpn-app-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/non-vpn-app-classification/784-byte-payload-per-flow-non-vpn-app-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/non-vpn-app-classification/784-byte-payload-per-flow-non-vpn-app-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/skype-sub/784-byte-payload-per-flow-skype-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/skype-sub/784-byte-payload-per-flow-skype-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/skype-sub/784-byte-payload-per-flow-skype-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/no-session/skype-sub/784-byte-payload-per-flow-skype-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/facebook/784-byte-payload-per-flow-facebook-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/facebook/784-byte-payload-per-flow-facebook-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/facebook/784-byte-payload-per-flow-facebook-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/facebook/784-byte-payload-per-flow-facebook-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/hangout/784-byte-payload-per-flow-hangout-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/hangout/784-byte-payload-per-flow-hangout-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/hangout/784-byte-payload-per-flow-hangout-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/hangout/784-byte-payload-per-flow-hangout-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/skype/784-byte-payload-per-flow-skype-test-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/skype/784-byte-payload-per-flow-skype-test-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/skype/784-byte-payload-per-flow-skype-train-images-idx2-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/fixed-length-transport-layer-payload/session/skype/784-byte-payload-per-flow-skype-train-labels-idx1-ubyte.gz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/histroyFiles/pytorch_learning.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/AUDIO_spotifygateway_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/AUDIO_spotifygateway_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/AUDIO_tor_spotify2_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/AUDIO_tor_spotify2_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/AUDIO_tor_spotify_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/AUDIO_tor_spotify_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BROWSING_gate_SSL_Browsing_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/BROWSING_gate_SSL_Browsing_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BROWSING_ssl_browsing_gateway_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/BROWSING_ssl_browsing_gateway_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BROWSING_tor_browsing_ara_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/BROWSING_tor_browsing_ara_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BROWSING_tor_browsing_ger_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/BROWSING_tor_browsing_ger_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BROWSING_tor_browsing_mam2_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/BROWSING_tor_browsing_mam2_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BROWSING_tor_browsing_mam_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/BROWSING_tor_browsing_mam_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/CHAT_facebookchatgateway_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/CHAT_facebookchatgateway_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/FILE-TRANSFER_gate_SFTP_filetransfer_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/FILE-TRANSFER_gate_SFTP_filetransfer_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/FILE-TRANSFER_tor_skype_transfer_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/FILE-TRANSFER_tor_skype_transfer_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/MAIL_Gateway_Thunderbird_Imap_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/MAIL_Gateway_Thunderbird_Imap_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/MAIL_Gateway_Thunderbird_POP_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/MAIL_Gateway_Thunderbird_POP_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/MAIL_gate_Email_IMAP_filetransfer_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/MAIL_gate_Email_IMAP_filetransfer_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/MAIL_gate_POP_filetransfer_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/MAIL_gate_POP_filetransfer_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/VIDEO_Vimeo_Gateway_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/VIDEO_Vimeo_Gateway_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/VIDEO_Youtube_Flash_Gateway_tshark.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/VIDEO_Youtube_Flash_Gateway_tshark.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/udp.pcapng" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_data/udp.pcapng" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model.ckpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_1.ckpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_10.ckpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_3.ckpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_5.ckpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_8.ckpt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,6 +42,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Traffic_Classification_20180713.coverage" NAME="CNN_Traffic_Classification-20180713 Coverage Results" MODIFIED="1531781113030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow_all.coverage" NAME="pcap2flow-all Coverage Results" MODIFIED="1530192997185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Traffic_Classification_784bytes_20180723.coverage" NAME="CNN_Traffic_Classification_784bytes-20180723 Coverage Results" MODIFIED="1532393246941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$CNN_Demo.coverage" NAME="CNN-Demo Coverage Results" MODIFIED="1531530359619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$WGAN_Attack_Generation_by_41Features_20180715.coverage" NAME="WGAN_Attack_Generation_by_41Features-20180715 Coverage Results" MODIFIED="1531672927603" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$pcap2flow.coverage" NAME="pcap2flow Coverage Results" MODIFIED="1529972264972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pcap2flow" />
@@ -51,11 +50,12 @@
     <SUITE FILE_PATH="coverage/ApplicationClassification$WGAN_Traffic_Classification_20180714.coverage" NAME="WGAN-Traffic_Classification-20180714 Coverage Results" MODIFIED="1531932326510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_progressively.coverage" NAME="LSTM-Many2One-progressively Coverage Results" MODIFIED="1530575021769" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN_sklearn.coverage" NAME="ANN-sklearn Coverage Results" MODIFIED="1529963200158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$pytorch_learning.coverage" NAME="pytorch_learning Coverage Results" MODIFIED="1532387339899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/histroyFiles" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$data_preprocess.coverage" NAME="data_preprocess Coverage Results" MODIFIED="1529963080384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$ANN.coverage" NAME="ANN Coverage Results" MODIFIED="1530312041453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_first_n_pkts.coverage" NAME="LSTM_Many2One-first_n_pkts Coverage Results" MODIFIED="1531789453820" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Demo3.coverage" NAME="LSTM-Demo3 Coverage Results" MODIFIED="1530316206204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
-    <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_first_784Bytes.coverage" NAME="LSTM_Many2One-first_784Bytes Coverage Results" MODIFIED="1532372877921" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
+    <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One_first_784Bytes.coverage" NAME="LSTM_Many2One-first_784Bytes Coverage Results" MODIFIED="1532386243342" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$csv2arff.coverage" NAME="csv2arff Coverage Results" MODIFIED="1531515978567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/preprocess" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Demo.coverage" NAME="LSTM-Demo Coverage Results" MODIFIED="1531689319773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/histroyFiles" />
     <SUITE FILE_PATH="coverage/ApplicationClassification$LSTM_Many2One.coverage" NAME="LSTM-Many2One Coverage Results" MODIFIED="1530325892553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/model" />
@@ -78,31 +78,91 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="LSTM_Many2One-first_n_pkts.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py">
+      <file leaf-file-name="TrafficDataset.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="733">
-              <caret line="402" column="18" selection-start-line="402" selection-start-column="18" selection-end-line="402" selection-end-column="18" />
+            <state relative-caret-position="-375">
+              <caret line="19" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LSTM_Many2One-first_784Bytes.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CNN_Traffic_Classification_784bytes-20180723.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="260">
+              <caret line="379" selection-start-line="379" selection-end-line="379" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sampler.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/data/sampler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="434">
+              <caret line="142" selection-start-line="142" selection-end-line="142" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataloader.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/data/dataloader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="335">
+              <caret line="450" selection-start-line="450" selection-end-line="450" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="idx_reader.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/preprocess/idx_reader.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-606">
+              <caret line="111" column="4" selection-start-line="111" selection-start-column="4" selection-end-line="111" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pytorch_learning.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/histroyFiles/pytorch_learning.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="23" lean-forward="true" selection-start-column="23" selection-end-column="23" />
+              <folding>
+                <element signature="e#55#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="apport_python_hook.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/lib/python3/dist-packages/apport_python_hook.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="111">
+              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="variable.py" pinned="false" current-in-tab="false">
+        <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/variable.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LSTM_Many2One-first_784Bytes.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="388" column="19" selection-start-line="388" selection-start-column="19" selection-end-line="388" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WGAN-Traffic_Classification-20180714.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2734">
-              <caret line="196" selection-start-line="196" selection-end-line="196" />
+            <state relative-caret-position="357">
+              <caret line="368" column="46" selection-start-line="337" selection-start-column="3" selection-end-line="368" selection-end-column="46" />
               <folding>
-                <element signature="e#106#137#0" expanded="true" />
+                <element signature="e#207#238#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -166,6 +226,8 @@
         <option value="$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py" />
         <option value="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" />
         <option value="$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py" />
+        <option value="$PROJECT_DIR$/histroyFiles/pytorch_learning.py" />
+        <option value="$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py" />
       </list>
     </option>
   </component>
@@ -192,6 +254,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -207,23 +270,7 @@
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
               <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="fixed-length-transport-layer-payload" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="fixed-length-transport-layer-payload" type="462c0819:PsiDirectoryNode" />
-              <item name="session" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="fixed-length-transport-layer-payload" type="462c0819:PsiDirectoryNode" />
-              <item name="session" type="462c0819:PsiDirectoryNode" />
-              <item name="facebook" type="462c0819:PsiDirectoryNode" />
+              <item name="histroyFiles" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
@@ -240,11 +287,14 @@
               <item name="ApplicationClassification" type="462c0819:PsiDirectoryNode" />
               <item name="preprocess" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="ApplicationClassification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -252,22 +302,22 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="Console" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/data" />
-      <recent name="$PROJECT_DIR$/data/data_split_train_v2_711" />
-      <recent name="$PROJECT_DIR$/model" />
-      <recent name="$PROJECT_DIR$/../July15/OfficialVersion-Raw" />
-      <recent name="$PROJECT_DIR$/../July15" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/model" />
       <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$/preprocess" />
       <recent name="$PROJECT_DIR$/data/attack_normal_data" />
       <recent name="$PROJECT_DIR$/data/data_split_train_v2_711" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data/history_data" />
+      <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/data/data_split_train_v2_711" />
+      <recent name="$PROJECT_DIR$/model" />
+      <recent name="$PROJECT_DIR$/../July15/OfficialVersion-Raw" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -282,7 +332,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.LSTM_Many2One-first_784Bytes">
+  <component name="RunManager" selected="Python.CNN_Traffic_Classification_784bytes-20180723">
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
       <module name="July15" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -326,7 +376,7 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="ADDITIONAL_ARGS" value="" />
     </configuration>
-    <configuration name="CNN_Traffic_Classification-20180713" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="CNN_Traffic_Classification_784bytes-20180723" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="ApplicationClassification" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -339,26 +389,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
-    <configuration name="LSTM-Demo" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="ApplicationClassification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/histroyFiles" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/histroyFiles/LSTM-Demo.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -416,6 +447,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="pytorch_learning" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="ApplicationClassification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/histroyFiles" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/histroyFiles/pytorch_learning.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -521,19 +571,19 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
     </configuration>
     <list>
-      <item itemvalue="Python.CNN_Traffic_Classification-20180713" />
       <item itemvalue="Python.LSTM_Many2One-first_n_pkts" />
       <item itemvalue="Python.WGAN-Traffic_Classification-20180714" />
-      <item itemvalue="Python.LSTM-Demo" />
       <item itemvalue="Python.LSTM_Many2One-first_784Bytes" />
+      <item itemvalue="Python.pytorch_learning" />
+      <item itemvalue="Python.CNN_Traffic_Classification_784bytes-20180723" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CNN_Traffic_Classification_784bytes-20180723" />
+        <item itemvalue="Python.pytorch_learning" />
         <item itemvalue="Python.LSTM_Many2One-first_784Bytes" />
         <item itemvalue="Python.WGAN-Traffic_Classification-20180714" />
         <item itemvalue="Python.LSTM_Many2One-first_n_pkts" />
-        <item itemvalue="Python.CNN_Traffic_Classification-20180713" />
-        <item itemvalue="Python.LSTM-Demo" />
       </list>
     </recent_temporary>
   </component>
@@ -547,13 +597,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1529702863224</updated>
-    </task>
-    <task id="LOCAL-00018" summary="add comment">
-      <created>1530115133291</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1530115133291</updated>
     </task>
     <task id="LOCAL-00019" summary="add comment">
       <created>1530116018870</created>
@@ -891,7 +934,14 @@
       <option name="project" value="LOCAL" />
       <updated>1531841379468</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="modify LSTM 784Bytes Traffic_Classification">
+      <created>1532374735281</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1532374735281</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TodoView" selected-index="3">
@@ -908,20 +958,20 @@
     <frame x="0" y="-4" width="1920" height="1021" extended-state="6" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3269663" />
-      <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.5016155" side_tool="true" weight="0.50441176" />
+      <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.5026681" side_tool="true" weight="0.49550563" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49919224" weight="0.44606742" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.21235955" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49757674" visible="true" weight="0.5662921" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.17977528" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49733192" visible="true" weight="0.43033707" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49893278" weight="0.19438203" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24012807" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19210246" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.19477054" />
+      <window_info anchor="right" id="Database" order="3" weight="0.19477054" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.26966292" />
       <window_info anchor="right" id="SciView" order="4" weight="0.38900748" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983845" weight="0.43370786" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983845" weight="0.3966292" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -934,25 +984,25 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24717286" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32794118" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49919224" weight="0.44705883" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49757674" visible="true" weight="0.28088236" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.22205882" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.27058825" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983845" weight="0.42647058" />
       <window_info anchor="right" id="Database" order="3" weight="0.32956383" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49893278" weight="0.3882353" />
       <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.5016155" side_tool="true" weight="0.50441176" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49919224" weight="0.44705883" />
       <window_info anchor="right" id="SciView" order="4" weight="0.45315024" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.27058825" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32941177" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.22205882" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -988,7 +1038,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="remove 'online_identified_backup()' in LSTM-Many2One-progressively.py" />
     <MESSAGE value="add &quot;historyFiles&quot; directory to store backup files" />
     <MESSAGE value="add comments in LSTM-Many2One-progressively.py" />
     <MESSAGE value="add 'descriptions' in README" />
@@ -1013,7 +1062,8 @@
     <MESSAGE value="add 'idx process'" />
     <MESSAGE value="self.y.append(float(line_arr[-1].strip()[0]))-&gt;&#10;self.y.append(float(line_arr[-1].strip()))" />
     <MESSAGE value="modify CNN Traffic_Classification" />
-    <option name="LAST_COMMIT_MESSAGE" value="modify CNN Traffic_Classification" />
+    <MESSAGE value="modify LSTM 784Bytes Traffic_Classification" />
+    <option name="LAST_COMMIT_MESSAGE" value="modify LSTM 784Bytes Traffic_Classification" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1230,6 +1280,46 @@
           <line>50</line>
           <option name="timeStamp" value="140" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/histroyFiles/pytorch_learning.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py</url>
+          <line>50</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py</url>
+          <line>221</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py</url>
+          <line>234</line>
+          <option name="timeStamp" value="146" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py</url>
+          <line>219</line>
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py</url>
+          <line>217</line>
+          <option name="timeStamp" value="148" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py</url>
+          <line>377</line>
+          <option name="timeStamp" value="150" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py</url>
+          <line>373</line>
+          <option name="timeStamp" value="151" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1238,11 +1328,21 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="141" />
+      <option name="time" value="152" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>b.backward()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>a</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>np.asarray(self.y)</expression-string>
         <language-id>Python</language-id>
@@ -1278,43 +1378,9 @@
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>np.asarray(y)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>str(new_labels.index(tmp_label))</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/text" />
-    <entry file="file://$PROJECT_DIR$/../July15/July15-IEEEtran/bare_jrnl_compsoc.tex">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="70" column="45" selection-start-line="70" selection-start-column="45" selection-end-line="70" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/data_split_train_v2_711/train_1pkt_images.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51044">
-          <caret line="3499" column="9" selection-start-line="3499" selection-start-column="9" selection-end-line="3499" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/results/arff/data_split_train_v2_711/pkt1.arff" />
-    <entry file="file://$PROJECT_DIR$/results/arff/data_split_train_v2_711/pkt3.arff" />
     <entry file="file://$PROJECT_DIR$/histroyFiles/ANN-demo.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-506" />
@@ -1496,13 +1562,82 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/first_n_pkts/pkt_train/train_10pkt_labels.csv">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/data/dataloader.py">
+    <entry file="file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="450" selection-start-line="450" selection-end-line="450" />
+        <state relative-caret-position="2940">
+          <caret line="196" selection-start-line="196" selection-end-line="196" />
+          <folding>
+            <element signature="e#106#137#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5865">
+          <caret line="402" column="18" selection-start-line="402" selection-start-column="18" selection-end-line="402" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/serialization/read_lua_file.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4275" />
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2205">
+          <folding>
+            <element signature="e#309#321#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3/dist-packages/apport_python_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/variable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-487">
+          <caret line="897" column="8" selection-start-line="897" selection-start-column="8" selection-end-line="897" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/optim/optimizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2175">
+          <caret line="149" column="8" selection-start-line="149" selection-start-column="8" selection-end-line="149" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="368" column="46" selection-start-line="337" selection-start-column="3" selection-end-line="368" selection-end-column="46" />
+          <folding>
+            <element signature="e#207#238#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocess/idx_reader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-606">
+          <caret line="111" column="4" selection-start-line="111" selection-start-column="4" selection-end-line="111" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -1513,51 +1648,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/preprocess/idx_reader.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/data/dataloader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="490" selection-start-line="490" selection-end-line="490" />
+        <state relative-caret-position="335">
+          <caret line="450" selection-start-line="450" selection-end-line="450" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification-20180713.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10">
+        <state relative-caret-position="-4061">
           <caret line="97" column="57" selection-start-line="97" selection-start-column="57" selection-end-line="97" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocess/TrafficDataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1034">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        <state relative-caret-position="-375">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/WGAN-Traffic_Classification-20180714.py">
+    <entry file="file://$PROJECT_DIR$/model/CNN_Traffic_Classification_784bytes-20180723.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2734">
-          <caret line="196" selection-start-line="196" selection-end-line="196" />
+        <state relative-caret-position="260">
+          <caret line="379" selection-start-line="379" selection-end-line="379" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/histroyFiles/pytorch_learning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="23" lean-forward="true" selection-start-column="23" selection-end-column="23" />
           <folding>
-            <element signature="e#106#137#0" expanded="true" />
+            <element signature="e#55#67#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_n_pkts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="733">
-          <caret line="402" column="18" selection-start-line="402" selection-start-column="18" selection-end-line="402" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/LSTM_Many2One-first_784Bytes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="388" column="19" selection-start-line="388" selection-start-column="19" selection-end-line="388" selection-end-column="19" />
         </state>
       </provider>
     </entry>
