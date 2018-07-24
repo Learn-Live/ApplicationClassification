@@ -29,6 +29,7 @@ class ConvNet(nn.Module):
         # 1 input image channel, 6 output channels, 5x1 square convolution
         self.layer1 = nn.Sequential(
             nn.Conv2d(1, 3, kernel_size=(2, 1), stride=1),
+            # nn.Conv2d will take in a 4D Tensor of nSamples x nChannels x Height x Width
             # nn.BatchNorm2d(3),
             nn.ReLU(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
@@ -303,6 +304,7 @@ def run_main_cross_validation(i):
         print('test_loader: ', len(test_idxs_k), ' y:', sorted(cntr.items()))
 
         model = ConvNet(num_classes, num_features=i * 60 + i - 1).to(device)
+        print(model)
         model.run_train(train_loader)
         show_results(model.results, i)
 
@@ -400,13 +402,13 @@ if __name__ == '__main__':
     torch.manual_seed(1)
 
     n = 784
-    name_str = 'skype'
-    # name_str='facebook'
-    # name_str='hangout'
+    # name_str = 'skype'
+    name_str = 'facebook'
+    name_str = 'hangout'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [0, 3]
+    remove_labels_lst = [2]
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
