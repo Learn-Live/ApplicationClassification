@@ -312,7 +312,7 @@ def run_main_cross_validation(i):
             print('***acc_sum:', acc_sum, ' < acc_sum_tmp:', acc_sum_tmp)
             acc_sum = acc_sum_tmp
             # Save the model checkpoint
-            torch.save(model.state_dict(), 'model_%d.ckpt' % i)
+            torch.save(model.state_dict(), '../results/model_%d.ckpt' % i)
 
 
 def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
@@ -361,7 +361,7 @@ def read_skype_sample(name_str='facebook', n=784):
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
     # return X_train, y_train, X_test, y_test
-    train_output_file = '%s_%dBytes_train.csv' % (name_str, n)
+    train_output_file = '../results/%s_%dBytes_train.csv' % (name_str, n)
     with open(train_output_file, 'w') as fid_out:
         (m, n) = X_train.shape
         for row in range(m):
@@ -371,7 +371,7 @@ def read_skype_sample(name_str='facebook', n=784):
             line += str(int(y_train[row])) + '\n'
             fid_out.write(line)
 
-    test_output_file = '%s_%dBytes_test.csv' % (name_str, n)
+    test_output_file = '../results/%s_%dBytes_test.csv' % (name_str, n)
     with open(test_output_file, 'w') as fid_out:
         (m, n) = X_test.shape
         for row in range(m):
@@ -406,7 +406,7 @@ if __name__ == '__main__':
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [1]
+    remove_labels_lst = [0, 3]
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
@@ -416,7 +416,7 @@ if __name__ == '__main__':
     EPOCHES = 100
     num_classes = num_c
     num_features = 5
-    learning_rate = 0.001
+    learning_rate = 0.01
     run_main(input_file, num_features * first_n_pkts)
 
 #

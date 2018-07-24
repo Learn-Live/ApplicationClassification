@@ -391,7 +391,7 @@ if __name__ == '__main__':
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = []
+    remove_labels_lst = [1, 3]
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
