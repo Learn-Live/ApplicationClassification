@@ -28,7 +28,7 @@ class ConvNet(nn.Module):
         super(ConvNet, self).__init__()
         # 1 input image channel, 6 output channels, 5x1 square convolution
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 3, kernel_size=(20, 1), stride=1),
+            nn.Conv2d(1, 3, kernel_size=(2, 1), stride=1),
             # nn.BatchNorm2d(3),
             nn.ReLU(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
@@ -39,7 +39,7 @@ class ConvNet(nn.Module):
             nn.ReLU(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
-        self.fc = nn.Linear(2 * (num_features - (20 - 1) - (3 - 1)) * 1,
+        self.fc = nn.Linear(2 * (num_features - (2 - 1) - (3 - 1)) * 1,
                             num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
 
         # Loss and optimizer
@@ -411,7 +411,7 @@ if __name__ == '__main__':
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features, first_n_pkts
-    first_n_pkts = 1
+    first_n_pkts = 9
     batch_size = 50
     EPOCHES = 100
     num_classes = num_c - len(remove_labels_lst)
