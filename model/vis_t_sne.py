@@ -147,8 +147,10 @@ if __name__ == '__main__':
     else:
         input_file = '../results/skype_784Bytes_train.csv'
         input_file = '../results/facebook_784Bytes_train.csv'
-        # input_file = '../results/hangout_784Bytes_train.csv'
-        remove_labels_lst = []
+        input_file = '../results/hangout_784Bytes_train.csv'
+        # input_file =merge_features_labels('../data/3combined/train_images.csv','../data/3combined/train_labels.csv')
+
+        remove_labels_lst = [1]
         input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
         print(input_file)
         X, y = load_data(input_file)

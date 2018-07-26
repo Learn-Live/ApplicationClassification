@@ -399,5 +399,5 @@ if __name__ == '__main__':
     batch_size = 200
     EPOCHES = 100
     num_classes = num_c
-    num_features = 10
+    num_features = 5
     run_main(input_file)

@@ -17,7 +17,7 @@ print('b:', b)
 
 for i in range(3):
     # b.backwward()
-    a.zero_grad()
+    # a.zero_grad()
 
     z = b.sum()
     z.backward()  # d(z)/da
@@ -29,3 +29,4 @@ c = Variable(a)
 c.requires_grad = True
 
 c.backward()
+z.backward(b)

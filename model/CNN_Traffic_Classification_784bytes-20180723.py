@@ -22,31 +22,65 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 # Convolutional neural network (two convolutional layers)
 class ConvNet(nn.Module):
+    # def __init__(self, num_classes=10, num_features=60):
+    #
+    #     # self.train_loader= train_loader
+    #     super(ConvNet, self).__init__()
+    #     # 1 input image channel, 6 output channels, 5x1 square convolution
+    #     self.layer1 = nn.Sequential(
+    #         nn.Conv2d(1, 256, kernel_size=(10, 1), stride=1,padding=(2,0)),
+    #         # nn.Conv2d will take in a 4D Tensor of nSamples x nChannels x Height x Width
+    #         # nn.BatchNorm2d(3),
+    #         nn.Tanh(),
+    #         # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+    #     )
+    #     self.layer2 = nn.Sequential(
+    #         nn.Conv2d(256, 128, kernel_size=(5, 1), stride=3, padding=(2,0)),
+    #         # nn.BatchNorm2d(2),
+    #         nn.ReLU(),
+    #         # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+    #     )
+    #     self.fc1 = nn.Linear(128 * ((((num_features - 10+2*2)//1 +1) - 5+2*2)//3 +1) ,           # ouput = (input-filter+2*padding)/stride +1
+    #                         num_classes*20)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
+    #
+    #     self.fc = nn.Linear(num_classes*20,
+    #                         num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
+    #
+    #     # Loss and optimizer
+    #     self.criterion = nn.CrossEntropyLoss()
+    #     # self.criterion=nn.NLLLoss()
+    #     self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, betas=(0.9,0.999))
+    #     # self.optimizer = torch.optim.Adadelta(self.parameters(), lr=learning_rate)
     def __init__(self, num_classes=10, num_features=60):
 
         # self.train_loader= train_loader
         super(ConvNet, self).__init__()
         # 1 input image channel, 6 output channels, 5x1 square convolution
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 3, kernel_size=(2, 1), stride=1),
+            nn.Conv2d(1, 256, kernel_size=(1, 1), stride=1, padding=(2, 0)),
             # nn.Conv2d will take in a 4D Tensor of nSamples x nChannels x Height x Width
             # nn.BatchNorm2d(3),
-            nn.ReLU(),
+            nn.Tanh(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
         self.layer2 = nn.Sequential(
-            nn.Conv2d(3, 2, kernel_size=(3, 1), stride=1, padding=0),
+            nn.Conv2d(256, 128, kernel_size=(1, 1), stride=1, padding=(2, 0)),
             # nn.BatchNorm2d(2),
             nn.ReLU(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
-        self.fc = nn.Linear(2 * (num_features - (2 - 1) - (3 - 1)) * 1,
+        self.fc1 = nn.Linear(128 * ((((num_features - 1 + 2 * 2) // 1 + 1) - 1 + 2 * 2) // 1 + 1),
+                             # ouput = (input-filter+2*padding)/stride +1
+                             num_classes * 20)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
+
+        self.fc = nn.Linear(num_classes * 20,
                             num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
 
         # Loss and optimizer
         self.criterion = nn.CrossEntropyLoss()
         # self.criterion=nn.NLLLoss()
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, weight_decay=1e-4)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, betas=(0.9, 0.999))
+        # self.optimizer = torch.optim.Adadelta(self.parameters(), lr=learning_rate)
 
     def achieve_sentence(self, sentences, first_n_pkts=2):
         """
@@ -81,6 +115,7 @@ class ConvNet(nn.Module):
         layer1_out = self.layer1(x)
         layer2_out = self.layer2(layer1_out)
         out = layer2_out.reshape(layer2_out.size(0), -1)
+        out = self.fc1(out)
         out = self.fc(out)
         # out= nn.Softmax(out)
         return out, layer2_out, layer1_out
@@ -124,7 +159,7 @@ class ConvNet(nn.Module):
                     # l2_reg = l2_reg+ W.norm(1)
                     l2_reg = l2_reg + W.norm(2) ** 2
                     # l2_reg +=  torch.pow(W, 2).sum()
-
+                    # print(W.data.tolist())
                 #
                 loss = self.criterion(b_y_preds, b_y) + 0 * l2_reg
 
@@ -196,7 +231,7 @@ class ConvNet(nn.Module):
                     cm += confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
 
-            print(cm, sk_accuracy / total)
+            # print(cm, sk_accuracy / total)
             # # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
 
         acc = correct / total
@@ -250,7 +285,7 @@ def run_main(input_file, n=784):
     print(input_file)
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
-    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.9, shuffle=True)
     cntr = Counter(dataset.y)
     print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
@@ -402,23 +437,24 @@ if __name__ == '__main__':
     torch.manual_seed(1)
 
     n = 784
+    # input_file = merge_features_labels('../data/3combined/train_images.csv', '../data/3combined/train_labels.csv')
     # name_str = 'skype'
     name_str = 'facebook'
     name_str = 'hangout'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [2]
+    remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features, first_n_pkts
     first_n_pkts = 1
-    batch_size = 50
-    EPOCHES = 100
+    batch_size = 100
+    EPOCHES = 1000
     num_classes = num_c
-    num_features = 5
-    learning_rate = 0.01
+    num_features = 50
+    learning_rate = 0.001
     run_main(input_file, num_features * first_n_pkts)
 
 #
