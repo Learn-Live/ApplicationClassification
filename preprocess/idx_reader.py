@@ -175,6 +175,44 @@ def read_images(idx_filename, feature_type='ip-above', only_images=True):
     return data_list
 
 
+def read_skype_sample(name_str='facebook', n=1000):
+    data_path = '../data/fixed-length-transport-layer-payload/session/{}'.format(name_str)
+    train_images_file = '{}/{}-byte-payload-per-flow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    train_labels_file = '{}/{}-byte-payload-per-flow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    test_images_file = '{}/{}-byte-payload-per-flow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    test_labels_file = '{}/{}-byte-payload-per-flow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
+    #     idx_reader.read_images(test_images_file), 1)
+    X_train, X_test = idx_reader.read_images(train_images_file, feature_type='payload-len',
+                                             only_images=True), idx_reader.read_images(test_images_file,
+                                                                                       feature_type='payload-len',
+                                                                                       only_images=True)
+    y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
+
+    # return X_train, y_train, X_test, y_test
+    train_output_file = '../results/%s_%dBytes_train.csv' % (name_str, n)
+    with open(train_output_file, 'w') as fid_out:
+        (m, n) = X_train.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_train[row][col]) + ','
+            line += str(int(y_train[row])) + '\n'
+            fid_out.write(line)
+
+    test_output_file = '../results/%s_%dBytes_test.csv' % (name_str, n)
+    with open(test_output_file, 'w') as fid_out:
+        (m, n) = X_test.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_test[row][col]) + ','
+            line += str(int(y_test[row])) + '\n'
+            fid_out.write(line)
+
+    return train_output_file, test_output_file
+
+
 def read_labels(idx_filename):
     """
     Extract labels from idx file
