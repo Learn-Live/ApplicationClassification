@@ -22,65 +22,30 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 # Convolutional neural network (two convolutional layers)
 class ConvNet(nn.Module):
-    # def __init__(self, num_classes=10, num_features=60):
-    #
-    #     # self.train_loader= train_loader
-    #     super(ConvNet, self).__init__()
-    #     # 1 input image channel, 6 output channels, 5x1 square convolution
-    #     self.layer1 = nn.Sequential(
-    #         nn.Conv2d(1, 256, kernel_size=(10, 1), stride=1,padding=(2,0)),
-    #         # nn.Conv2d will take in a 4D Tensor of nSamples x nChannels x Height x Width
-    #         # nn.BatchNorm2d(3),
-    #         nn.Tanh(),
-    #         # nn.MaxPool2d(kernel_size=(2,1), stride=2)
-    #     )
-    #     self.layer2 = nn.Sequential(
-    #         nn.Conv2d(256, 128, kernel_size=(5, 1), stride=3, padding=(2,0)),
-    #         # nn.BatchNorm2d(2),
-    #         nn.ReLU(),
-    #         # nn.MaxPool2d(kernel_size=(2,1), stride=2)
-    #     )
-    #     self.fc1 = nn.Linear(128 * ((((num_features - 10+2*2)//1 +1) - 5+2*2)//3 +1) ,           # ouput = (input-filter+2*padding)/stride +1
-    #                         num_classes*20)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
-    #
-    #     self.fc = nn.Linear(num_classes*20,
-    #                         num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
-    #
-    #     # Loss and optimizer
-    #     self.criterion = nn.CrossEntropyLoss()
-    #     # self.criterion=nn.NLLLoss()
-    #     self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, betas=(0.9,0.999))
-    #     # self.optimizer = torch.optim.Adadelta(self.parameters(), lr=learning_rate)
     def __init__(self, num_classes=10, num_features=60):
 
         # self.train_loader= train_loader
         super(ConvNet, self).__init__()
         # 1 input image channel, 6 output channels, 5x1 square convolution
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 64, kernel_size=(1, 1), stride=1, padding=(2, 0)),
-            # nn.Conv2d will take in a 4D Tensor of nSamples x nChannels x Height x Width
-            # nn.BatchNorm2d(3),
+            nn.Linear(num_features, 200),
             nn.Tanh(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
         self.layer2 = nn.Sequential(
-            nn.Conv2d(64, 32, kernel_size=(1, 1), stride=1, padding=(2, 0)),
-            # nn.BatchNorm2d(2),
-            nn.ReLU(),
+            nn.Linear(200, 100),
+            nn.Tanh(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
-        self.fc1 = nn.Linear(32 * ((((num_features - 1 + 2 * 2) // 1 + 1) - 1 + 2 * 2) // 1 + 1),
-                             # ouput = (input-filter+2*padding)/stride +1
-                             num_classes * 20)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
 
-        self.fc = nn.Linear(num_classes * 20,
+        self.fc = nn.Linear(100,
                             num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
 
         # Loss and optimizer
         self.criterion = nn.CrossEntropyLoss()
         # self.criterion=nn.NLLLoss()
         self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, betas=(0.9, 0.999))
-        # self.optimizer = torch.optim.Adadelta(self.parameters(), lr=learning_rate)
+        # self.optimizer = torch.optim.RMSprop(self.parameters(), lr=learning_rate)
 
     def achieve_sentence(self, sentences, first_n_pkts=2):
         """
@@ -115,7 +80,6 @@ class ConvNet(nn.Module):
         layer1_out = self.layer1(x)
         layer2_out = self.layer2(layer1_out)
         out = layer2_out.reshape(layer2_out.size(0), -1)
-        out = self.fc1(out)
         out = self.fc(out)
         # out= nn.Softmax(out)
         return out, layer2_out, layer1_out
@@ -143,7 +107,7 @@ class ConvNet(nn.Module):
 
                 # b_x=self.achieve_sentence(b_x,first_n_pkts)
                 b_x = b_x[:, :first_n_pkts * num_features]
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1])
+                # b_x = b_x.view([b_x.shape[0], 1, -1, 1])
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
                 # Forward pass
@@ -214,7 +178,7 @@ class ConvNet(nn.Module):
                 b_y = b_y.to(device)
 
                 b_x = b_x[:, :first_n_pkts * num_features]
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1])  # (nSamples, nChannels, x_Height, x_Width)
+                # b_x = b_x.view([b_x.shape[0], 1, -1, 1])  # (nSamples, nChannels, x_Height, x_Width)
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
                 # b_y_preds = model(b_x)
@@ -394,7 +358,7 @@ def read_skype_sample(name_str='facebook', n=784):
     test_labels_file = '{}/{}-byte-payload-per-flow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
     # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
     #     idx_reader.read_images(test_images_file), 1)
-    X_train, X_test = idx_reader.read_images(train_images_file,feature_type='payload-len',only_images=True), idx_reader.read_images(test_images_file,feature_type='payload-len',only_images=True)
+    X_train, X_test = idx_reader.read_images(train_images_file), idx_reader.read_images(test_images_file)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
     # return X_train, y_train, X_test, y_test
@@ -432,68 +396,26 @@ def read_skype_sample(name_str='facebook', n=784):
     # # print('X_test  : %d, y_test  : %d, label : %s' % (
     # # X_test.shape[0], y_test.shape[0], dict(sorted(Counter(y_test).items()))))
 
-def merge_files(train_output_file1,train_output_file2,train_output_file3):
-    import os
-    output_file = os.path.splitext(train_output_file1)[0] + '_merged_files.csv'
-    with open(output_file, 'w') as fid_out:
-        with open(train_output_file1, 'r') as fid_in1:
-            line = fid_in1.readline().strip()
-            while line:
-                line_arr = line.split(',')
-                if line_arr[-1] =='2':
-                    line_tmp = ','.join(line_arr[:-1]) + ',0\n'
-                    fid_out.write(line_tmp)
-                line = fid_in1.readline().strip()
-
-        with open(train_output_file2, 'r') as fid_in2:
-            line = fid_in2.readline().strip()
-            while line:
-                line_arr = line.split(',')
-                if line_arr[-1] == '2':
-                    line_tmp = ','.join(line_arr[:-1]) + ',1\n'
-                    fid_out.write(line_tmp)
-                line = fid_in2.readline().strip()
-
-        with open(train_output_file3, 'r') as fid_in3:
-            line = fid_in3.readline().strip()
-            while line:
-                line_arr = line.split(',')
-                if line_arr[-1] == '2':
-                    line_tmp = ','.join(line_arr[:-1]) + ',2\n'
-                    fid_out.write(line_tmp)
-                line = fid_in3.readline().strip()
-
-    return output_file
-
 
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    n = 1000
+    n = 784
     # input_file = merge_features_labels('../data/3combined/train_images.csv', '../data/3combined/train_labels.csv')
     # name_str = 'skype'
-    # train_output_file1, test_output_file1 = read_skype_sample(name_str, n)
-    # name_str = 'facebook'
-    # train_output_file2, test_output_file2 = read_skype_sample(name_str, n)
-    # name_str = 'hangout'
-    # train_output_file3, test_output_file3 = read_skype_sample(name_str, n)
-    #
-    # train_output_file = merge_files(train_output_file1,train_output_file2,train_output_file3)
-
-    name_str ='vpn-app'
-    name_str ='hangout'
-    name_str='skype'
+    name_str = 'facebook'
+    name_str = 'hangout'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [1]
+    remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
     global batch_size, EPOCHES, num_classes, num_features, first_n_pkts
     first_n_pkts = 1
-    batch_size = 100
-    EPOCHES = 100
+    batch_size = 300
+    EPOCHES = 5000
     num_classes = num_c
     num_features = 50
     learning_rate = 0.001

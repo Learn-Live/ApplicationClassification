@@ -146,15 +146,19 @@ if __name__ == '__main__':
         demo_t_sne()
     else:
         input_file = '../results/skype_784Bytes_train.csv'
-        input_file = '../results/facebook_784Bytes_train.csv'
-        input_file = '../results/hangout_784Bytes_train.csv'
+        input_file = '../results/facebook_1000Bytes_train.csv'
+        input_file = '../results/hangout_1000Bytes_train.csv'
+        # input_file = '../results/skype_1000Bytes_train.csv'
+        # input_file='../results/skype_1000Bytes_train_merged_files.csv'
+        # input_file = '../results/vpn-app_1000Bytes_train.csv'
+        # input_file = '../results/non-vpn-app_1000Bytes_train.csv'
         # input_file =merge_features_labels('../data/3combined/train_images.csv','../data/3combined/train_labels.csv')
 
-        remove_labels_lst = [1]
+        remove_labels_lst = []
         input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
         print(input_file)
         X, y = load_data(input_file)
-        X = list(map(lambda t: t[:60], X))
+        X = list(map(lambda t: t[:1000], X))
         y = list(map(lambda t: int(float(t)), y))
         # change_labels(y)
         cntr = Counter(y)
