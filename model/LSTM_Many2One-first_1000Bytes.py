@@ -46,7 +46,8 @@ class LSTMBytes(nn.Module):
         tmp_sequences = self.achieve_sentence(sequences, first_n_pkts).float()
         # Input needs to be a 3d tensor with dimensions (seq_len, batch_size, input_size)
         lstm_out, hidden_state = self.lstm_bytes(
-            tmp_sequences.view(tmp_sequences.shape[1], tmp_batch_size, self.input_dim), hidden_state)
+            tmp_sequences.view(tmp_sequences.shape[1], tmp_batch_size, self.input_dim),
+            hidden_state)  # output, (hidden, cell) = lstm(input, (hidden, cell))
         fc_output = self.hidden2output(lstm_out[-1])  # only return the last cell output.
         # output = F.softmax(fc_output, dim=1)
         return fc_output

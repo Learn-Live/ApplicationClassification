@@ -36,7 +36,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 1
+        self.num_layers = 2
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -286,7 +286,7 @@ def run_main(input_file):
     HIDDEN_DIM = 30
     # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
 
-    for i in range(1, 11):
+    for i in range(5, 11):
         print('first_%d_pkts' % i)
         global first_n_pkts
         first_n_pkts = i
@@ -384,14 +384,14 @@ def read_skype_sample(name_str='facebook', n=784):
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    n = 784
+    n = 1000
     name_str = 'facebook'
     # name_str = 'hangout'
     # name_str = 'skype'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [1]
+    remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 

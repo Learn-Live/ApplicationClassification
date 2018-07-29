@@ -231,7 +231,7 @@ class ConvNet(nn.Module):
                     cm += confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
 
-            # print(cm, sk_accuracy / total)
+            print(cm, sk_accuracy / total)
             # # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
 
         acc = correct / total
@@ -483,10 +483,11 @@ if __name__ == '__main__':
     name_str ='vpn-app'
     name_str ='hangout'
     name_str='skype'
+    name_str = 'non-vpn-app'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [1]
+    remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
@@ -495,7 +496,7 @@ if __name__ == '__main__':
     batch_size = 100
     EPOCHES = 100
     num_classes = num_c
-    num_features = 50
+    num_features = 500
     learning_rate = 0.001
     run_main(input_file, num_features * first_n_pkts)
 
