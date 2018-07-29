@@ -109,18 +109,26 @@ def _extract_session_info(byte_data):
     }
 
 
-def read_images(idx_filename):
+def read_images(idx_filename, feature_type='ip-above', only_images=True):
     """
     Extract information image from idx file
 
     Parameters
     ----------
     idx_filename: str
+    feature_type: str
+        could be 'ip-above' or 'payload-len' for different type of image feature file
+    only_images: bool
+        only return images or
+        with session information, actual packet count if feature_type is 'ip-above'
+        with session information, actual packet count, actual byte count if feature_type is 'payload-len'
 
     Returns
     -------
     `numpy.ndarray`
-        stores the images
+        1. images if only_images is True
+        2.1 (session information, actual packet count, images) if feature_type is 'ip-above'
+        2.2 (session information, actual packet count, actual byte count, images) if feature_type is 'payload-len'
     """
     with gzip.open(idx_filename, 'rb') as f:
         magic_numbers = f.read(4)
@@ -140,15 +148,69 @@ def read_images(idx_filename):
         for _ in range(num_examples):
             each_data_point = _read(dimensions, f)
             session_info = _extract_session_info(each_data_point[:SESSION_BYTE_LEN])
-            actual_pkt_count = each_data_point[SESSION_BYTE_LEN]
-            other_data = each_data_point[SESSION_BYTE_LEN + 1:]
-            # data_list.append((session_info, actual_pkt_count, other_data))
-            data_list.append(other_data)
+            if feature_type == 'payload-len':
+                actual_pkt_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN:SESSION_BYTE_LEN+4], byteorder='big')
+                actual_byte_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN + 4:SESSION_BYTE_LEN + 6], byteorder='big')
+                other_data = each_data_point[SESSION_BYTE_LEN + 6:]
+            elif feature_type == 'ip-above':
+                actual_pkt_count = each_data_point[SESSION_BYTE_LEN]
+                other_data = each_data_point[SESSION_BYTE_LEN + 1:]
+            else:
+                raise AssertionError('feature_type could only be "payload-len" or "ip-above"')
+            if only_images is True:
+                data_list.append(other_data)
+            elif only_images is False:
+                if feature_type == 'ip-above':
+                    data_list.append((session_info, actual_pkt_count, other_data))
+                elif feature_type == 'payload-len':
+                    data_list.append((session_info, actual_pkt_count, actual_byte_count, other_data))
+                else:
+                    raise AssertionError('feature_type could only be "payload-len" or "ip-above"')
+            else:
+                raise AssertionError('only_images could only be True or False')
 
         assert f.read() == b''
 
     data_list = np.array(data_list)
     return data_list
+
+
+def read_skype_sample(name_str='facebook', n=1000):
+    data_path = '../data/fixed-length-transport-layer-payload/session/{}'.format(name_str)
+    train_images_file = '{}/{}-byte-payload-per-flow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    train_labels_file = '{}/{}-byte-payload-per-flow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    test_images_file = '{}/{}-byte-payload-per-flow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    test_labels_file = '{}/{}-byte-payload-per-flow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
+    #     idx_reader.read_images(test_images_file), 1)
+    X_train, X_test = idx_reader.read_images(train_images_file, feature_type='payload-len',
+                                             only_images=True), idx_reader.read_images(test_images_file,
+                                                                                       feature_type='payload-len',
+                                                                                       only_images=True)
+    y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
+
+    # return X_train, y_train, X_test, y_test
+    train_output_file = '../results/%s_%dBytes_train.csv' % (name_str, n)
+    with open(train_output_file, 'w') as fid_out:
+        (m, n) = X_train.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_train[row][col]) + ','
+            line += str(int(y_train[row])) + '\n'
+            fid_out.write(line)
+
+    test_output_file = '../results/%s_%dBytes_test.csv' % (name_str, n)
+    with open(test_output_file, 'w') as fid_out:
+        (m, n) = X_test.shape
+        for row in range(m):
+            line = ''
+            for col in range(n):
+                line += str(X_test[row][col]) + ','
+            line += str(int(y_test[row])) + '\n'
+            fid_out.write(line)
+
+    return train_output_file, test_output_file
 
 
 def read_labels(idx_filename):

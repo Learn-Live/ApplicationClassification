@@ -1,0 +1,4 @@
+Skype-> 0: chat, 1: audio, 2: video, 3: file
+Facebook/Hangout-> 0: chat, 1: audio, 2: video
+Non VPN application-> 0: aim, 1: email, 2: spotify, 3: icq, 4: sftp, 5: scp, 6: torrent, 7: facebook, 8: gmail, 9: hangout, 10: netflix, 11: ftps, 12: skype, 13: vimeo, 14: tor, 15: voipbuster, 16: youtube
+VPN application-> 0: aim, 1: bittorrent, 2: email, 3: facebook, 4: ftps, 5: hangout, 6: icq, 7: netflix, 8: sftp, 9: skype, 10: spotify, 11: vimeo, 12: voipbuster, 13: youtube

@@ -28,24 +28,53 @@ class ConvNet(nn.Module):
         super(ConvNet, self).__init__()
         # 1 input image channel, 6 output channels, 5x1 square convolution
         self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 3, kernel_size=(10, 1), stride=1),
-            nn.BatchNorm2d(3),
+            nn.Linear(num_features, 200),
             nn.Tanh(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
         self.layer2 = nn.Sequential(
-            nn.Conv2d(3, 2, kernel_size=(3, 1), stride=1, padding=0),
-            nn.BatchNorm2d(2),
+            nn.Linear(200, 100),
             nn.Tanh(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
-        self.fc = nn.Linear(2 * (num_features - (10 - 1) - (3 - 1)) * 1,
+
+        self.fc = nn.Linear(100,
                             num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
 
         # Loss and optimizer
         self.criterion = nn.CrossEntropyLoss()
         # self.criterion=nn.NLLLoss()
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, weight_decay=1e-4)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, betas=(0.9, 0.999))
+        # self.optimizer = torch.optim.RMSprop(self.parameters(), lr=learning_rate)
+
+    def achieve_sentence(self, sentences, first_n_pkts=2):
+        """
+            input size of lstm
+        :param sentences: [batch_size, len(sentence_i), input_size]
+        :return:
+        """
+        # new_sentences=torch.Tensor()
+        new_sentences = []
+        for sentence_i in sentences:
+            t = 0
+            cnt = 1
+            tmp_lst = []
+            # while (cnt - 1) * num_features + (cnt - 1) < len(sentence_i):
+            #     tmp_lst.append(
+            #         sentence_i[(cnt - 1) * num_features + (cnt - 1): cnt * num_features + (cnt - 1)].data.tolist()[
+            #         :num_features])
+            #     # t = (cnt - 1) * 60 + (cnt - 1)
+            #     if cnt == first_n_pkts:
+            #         break
+            #     cnt += 1
+            # tmp_lst=sentence_i.data.tolist()[:first_n_pkts*num_features]
+            # tmp_lst = torch.from_numpy(np.array(tmp_lst))
+            tmp_lst = sentence_i[:first_n_pkts * num_features]
+            new_sentences.append(tmp_lst)
+
+        new_sentences = torch.stack(new_sentences)
+
+        return new_sentences
 
     def forward(self, x):
         layer1_out = self.layer1(x)
@@ -60,7 +89,6 @@ class ConvNet(nn.Module):
 
     def l2_penalty(self, var):
         return torch.sqrt(torch.pow(var, 2).sum())
-
 
     def run_train(self, train_loader, mode=True):
         # Train the model
@@ -77,7 +105,9 @@ class ConvNet(nn.Module):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
 
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1])
+                # b_x=self.achieve_sentence(b_x,first_n_pkts)
+                b_x = b_x[:, :first_n_pkts * num_features]
+                # b_x = b_x.view([b_x.shape[0], 1, -1, 1])
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
                 # Forward pass
@@ -93,7 +123,7 @@ class ConvNet(nn.Module):
                     # l2_reg = l2_reg+ W.norm(1)
                     l2_reg = l2_reg + W.norm(2) ** 2
                     # l2_reg +=  torch.pow(W, 2).sum()
-
+                    # print(W.data.tolist())
                 #
                 loss = self.criterion(b_y_preds, b_y) + 0 * l2_reg
 
@@ -146,7 +176,9 @@ class ConvNet(nn.Module):
             for step, (b_x, b_y) in enumerate(test_loader):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1])  # (nSamples, nChannels, x_Height, x_Width)
+
+                b_x = b_x[:, :first_n_pkts * num_features]
+                # b_x = b_x.view([b_x.shape[0], 1, -1, 1])  # (nSamples, nChannels, x_Height, x_Width)
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
                 # b_y_preds = model(b_x)
@@ -212,12 +244,12 @@ def get_loader_iterators_contents(train_loader):
     return X, y
 
 
-def run_main(input_file, i):
+def run_main(input_file, n=784):
     # input_file = '../data/data_split_train_v2_711/train_%dpkt_images_merged.csv' % i
     print(input_file)
     dataset = TrafficDataset(input_file, transform=None, normalization_flg=True)
 
-    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.7, shuffle=True)
+    train_sampler, test_sampler = split_train_test(dataset, split_percent=0.9, shuffle=True)
     cntr = Counter(dataset.y)
     print('dataset: ', len(dataset), ' y:', sorted(cntr.items()))
     # train_loader = torch.utils.data.DataLoader(dataset, batch_size, shuffle=True, num_workers=4)  # use all dataset
@@ -232,14 +264,14 @@ def run_main(input_file, i):
     cntr = Counter(y)
     print('test_loader: ', len(test_loader.sampler), ' y:', sorted(cntr.items()))
 
-    model = ConvNet(num_classes, num_features=i * 60 + i - 1).to(device)
+    model = ConvNet(num_classes, num_features=n).to(device)
     model.run_train(train_loader)
-    show_results(model.results, i)
+    show_results(model.results, n)
 
     # model.run_test(test_loader)
 
     # Save the model checkpoint
-    torch.save(model.state_dict(), 'model_%d.ckpt' % i)
+    torch.save(model.state_dict(), 'model_%d.ckpt' % n)
 
 
 def run_main_cross_validation(i):
@@ -271,6 +303,7 @@ def run_main_cross_validation(i):
         print('test_loader: ', len(test_idxs_k), ' y:', sorted(cntr.items()))
 
         model = ConvNet(num_classes, num_features=i * 60 + i - 1).to(device)
+        print(model)
         model.run_train(train_loader)
         show_results(model.results, i)
 
@@ -280,7 +313,7 @@ def run_main_cross_validation(i):
             print('***acc_sum:', acc_sum, ' < acc_sum_tmp:', acc_sum_tmp)
             acc_sum = acc_sum_tmp
             # Save the model checkpoint
-            torch.save(model.state_dict(), 'model_%d.ckpt' % i)
+            torch.save(model.state_dict(), '../results/model_%d.ckpt' % i)
 
 
 def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
@@ -317,20 +350,19 @@ def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
     return output_file, len(new_labels)
 
 
-def read_skype_sample(name_str='non-vpn-app', n=1):
-    data_path = '../data/Flow-Image-Features/skype-sub/all-%d' % n
-    data_path = '../data/Flow-Image-Features/%s-sub/all-%d' % (name_str, n)
-    train_images_file = '{}/{}pkts-subflow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
-    train_labels_file = '{}/{}pkts-subflow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
-    test_images_file = '{}/{}pkts-subflow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
-    test_labels_file = '{}/{}pkts-subflow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+def read_skype_sample(name_str='facebook', n=784):
+    data_path = '../data/fixed-length-transport-layer-payload/session/{}'.format(name_str)
+    train_images_file = '{}/{}-byte-payload-per-flow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    train_labels_file = '{}/{}-byte-payload-per-flow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    test_images_file = '{}/{}-byte-payload-per-flow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    test_labels_file = '{}/{}-byte-payload-per-flow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
     # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
     #     idx_reader.read_images(test_images_file), 1)
     X_train, X_test = idx_reader.read_images(train_images_file), idx_reader.read_images(test_images_file)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
     # return X_train, y_train, X_test, y_test
-    train_output_file = '%s_%dpkts_train.csv' % (name_str, n)
+    train_output_file = '../results/%s_%dBytes_train.csv' % (name_str, n)
     with open(train_output_file, 'w') as fid_out:
         (m, n) = X_train.shape
         for row in range(m):
@@ -340,7 +372,7 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
             line += str(int(y_train[row])) + '\n'
             fid_out.write(line)
 
-    test_output_file = '%s_%dpkts_test.csv' % (name_str, n)
+    test_output_file = '../results/%s_%dBytes_test.csv' % (name_str, n)
     with open(test_output_file, 'w') as fid_out:
         (m, n) = X_test.shape
         for row in range(m):
@@ -368,13 +400,11 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    n = 5
-    # feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
-    # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
-    # input_file = merge_features_labels(feature_file, label_file)
-    name_str = 'non-vpn-app'
-    # name_str='facebook'
-    # name_str='hangout'
+    n = 784
+    # input_file = merge_features_labels('../data/3combined/train_images.csv', '../data/3combined/train_labels.csv')
+    # name_str = 'skype'
+    name_str = 'facebook'
+    name_str = 'hangout'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
@@ -382,13 +412,14 @@ if __name__ == '__main__':
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
-    global batch_size, EPOCHES, num_classes, num_features
-    batch_size = 200
-    EPOCHES = 500
-    num_classes = num_c - len(remove_labels_lst)
-    num_features = 60
-    learning_rate = 0.01
-    run_main(input_file, n)
+    global batch_size, EPOCHES, num_classes, num_features, first_n_pkts
+    first_n_pkts = 1
+    batch_size = 300
+    EPOCHES = 5000
+    num_classes = num_c
+    num_features = 50
+    learning_rate = 0.001
+    run_main(input_file, num_features * first_n_pkts)
 
 #
 # if __name__ == '__main__':

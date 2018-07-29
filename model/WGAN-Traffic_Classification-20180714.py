@@ -102,10 +102,11 @@ class WGAN(nn.Module):
 
         self.gpu_mode = False
         self.lambda_ = 8.0
-        self.n_critic = 1
+        self.n_critic = 5
 
         total_step = len(train_loader)
         for epoch in range(num_epochs):
+            G_loss = torch.Tensor([0.0])
             for i, (b_x, b_y) in enumerate(train_loader):
                 b_x = b_x.to(device)
                 b_y = b_y.to(device)
@@ -164,6 +165,7 @@ class WGAN(nn.Module):
                 D_loss.backward()
                 self.d_optimizer.step()
 
+
                 if ((i + 1) % self.n_critic) == 0:
                     # update G network
                     self.g_optimizer.zero_grad()
@@ -197,12 +199,12 @@ class WGAN(nn.Module):
                 #             accumulated_value) / 10 < self.difference_value and epoch > 1000:  # last 10 results's mean < 0.01, then break.
                 #         print('training finish, it takes epochs =', epoch)
                 #         break
-                if ((epoch) % self.batch_size) == 0 and (i % 20 == 0):
+                if ((epoch) % self.batch_size) == 0 and ((i + 1) % 20 == 0) and ((i + 1) % self.n_critic == 0):
                     print("Epoch: [%2d] [%4d/%4d] wgan_distance: %.8f real:%.8f/fake:%.8f, -G_loss: %.8f" %
                           ((epoch + 1), (i + 1),
                            len(train_loader.sampler) // self.batch_size,
                            wgan_distance.data, D_real_loss.data, D_fake_loss.data, -G_loss.data))
-                    if i % 20 == 0:
+                    if (i + 1) % 20 == 0:
                         print('D_fake', D_fake.data.tolist())
                         print('D_real', D_real.data.tolist())
 
@@ -266,53 +268,53 @@ class WGAN(nn.Module):
         acc = correct / total
         return acc, loss.data.tolist()
 
-    def run_test(self, test_loader):
-        # Test the model
-
-        self.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
-        r"""model.eval(): Sets the module in evaluation mode.
-
-               This has any effect only on certain modules. See documentations of
-               particular modules for details of their behaviors in training/evaluation
-               mode, if they are affected, e.g. :class:`Dropout`, :class:`BatchNorm`,
-               etc.
-               """
-
-        with torch.no_grad():
-            correct = 0.0
-            loss = 0.0
-            total = 0
-            cm = []
-            for step, (b_x, b_y) in enumerate(test_loader):
-                b_x = b_x.to(device)
-                b_y = b_y.to(device)
-                b_x = b_x.view([b_x.shape[0], -1])  # (nSamples, nChannels, x_Height, x_Width)
-                b_x = Variable(b_x).float()
-                b_y = Variable(b_y).type(torch.LongTensor)
-                # b_y_preds = model(b_x)
-                b_y_preds = self.D(b_x)
-                print('b_y_preds_real', b_y_preds.data.tolist())
-                _, predicted = torch.max(b_y_preds.data, 1)
-                total += b_y.size(0)
-                correct += (predicted == b_y).sum().item()
-
-                z_ = torch.randn((len(b_y), self.in_size))  # random normal 0-1
-                z_ = z_.view([len(b_y), -1])
-                b_y_preds = self.D(z_)
-                print('b_y_preds_fake', b_y_preds.data.tolist())
-
-                # if step == 0:
-                #     cm = confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
-                #     sk_accuracy = accuracy_score(b_y, predicted) * len(b_y)
-                # else:
-                #     cm += confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
-                #     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
-
-            # print(cm, sk_accuracy / total)
-            # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
-
-        acc = correct / total
-        # return acc, loss.data.tolist()
+    # def run_test(self, test_loader):
+    #     # Test the model
+    #
+    #     self.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+    #     r"""model.eval(): Sets the module in evaluation mode.
+    #
+    #            This has any effect only on certain modules. See documentations of
+    #            particular modules for details of their behaviors in training/evaluation
+    #            mode, if they are affected, e.g. :class:`Dropout`, :class:`BatchNorm`,
+    #            etc.
+    #            """
+    #
+    #     with torch.no_grad():
+    #         correct = 0.0
+    #         loss = 0.0
+    #         total = 0
+    #         cm = []
+    #         for step, (b_x, b_y) in enumerate(test_loader):
+    #             b_x = b_x.to(device)
+    #             b_y = b_y.to(device)
+    #             b_x = b_x.view([b_x.shape[0], -1])  # (nSamples, nChannels, x_Height, x_Width)
+    #             b_x = Variable(b_x).float()
+    #             b_y = Variable(b_y).type(torch.LongTensor)
+    #             # b_y_preds = model(b_x)
+    #             b_y_preds = self.D(b_x)
+    #             print('b_y_preds_real', b_y_preds.data.tolist())
+    #             _, predicted = torch.max(b_y_preds.data, 1)
+    #             total += b_y.size(0)
+    #             correct += (predicted == b_y).sum().item()
+    #
+    #             z_ = torch.randn((len(b_y), self.in_size))  # random normal 0-1
+    #             z_ = z_.view([len(b_y), -1])
+    #             b_y_preds = self.D(z_)
+    #             print('b_y_preds_fake', b_y_preds.data.tolist())
+    #
+    #             # if step == 0:
+    #             #     cm = confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+    #             #     sk_accuracy = accuracy_score(b_y, predicted) * len(b_y)
+    #             # else:
+    #             #     cm += confusion_matrix(b_y, predicted, labels=[0, 1, 2, 3])
+    #             #     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
+    #
+    #         # print(cm, sk_accuracy / total)
+    #         # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
+    #
+    #     acc = correct / total
+    #     # return acc, loss.data.tolist()
 
 
 def show_results(data_dict, i=1):
@@ -483,15 +485,15 @@ def two_stages_online_evaluation(benign_model, attack_model, input_file):
         threshold1 = benign_model.D(x)
         if (threshold1 > 0.3) and (threshold1 < 0.7):
             y_pred = '1'
-            # print('benign_data', y, y_pred)   # attack =0, benign = 1
+            print('benign_data', y, y_pred, threshold1.data.tolist())  # attack =0, benign = 1
         else:
             threshold2 = attack_model.D(x)
             if (threshold2 > 0.3) and (threshold2 < 0.7):
                 y_pred = '0'
-                # print('attack_data', y, y_pred)
+                print('attack_data', y, y_pred, threshold2.data.tolist())
             else:
                 y_pred = '-10'
-                # print('unknow_data', y, y_pred)
+                print('unknow_data', y, y_pred, threshold1.data.tolist(), threshold2.data.tolist())
                 unknow_cnt += 1
         y_preds.append(y_pred)
 
@@ -508,7 +510,7 @@ def two_stages_online_evaluation(benign_model, attack_model, input_file):
 if __name__ == '__main__':
     torch.manual_seed(1)
     # Hyper parameters
-    num_epochs = 5000
+    num_epochs = 10000
     num_classes = 1
     global batch_size
     batch_size = 64

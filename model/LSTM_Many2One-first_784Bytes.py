@@ -36,7 +36,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 1
+        self.num_layers = 2
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -78,9 +78,10 @@ class LSTMTagger(nn.Module):
             t = 0
             cnt = 1
             tmp_lst = []
-            while (cnt - 1) * 60 + (cnt - 1) < len(sentence_i):
+            while (cnt - 1) * num_features + (cnt - 1) < len(sentence_i):
                 tmp_lst.append(
-                    sentence_i[(cnt - 1) * 60 + (cnt - 1): cnt * 60 + (cnt - 1)].data.tolist()[:num_features])
+                    sentence_i[(cnt - 1) * num_features + (cnt - 1): cnt * num_features + (cnt - 1)].data.tolist()[
+                    :num_features])
                 # t = (cnt - 1) * 60 + (cnt - 1)
                 if cnt == first_n_pkts:
                     break
@@ -142,7 +143,7 @@ class LSTMTagger(nn.Module):
                 # Tensors of word indices.
                 # sentence_in = prepare_sequence(sentence, word_to_ix)
                 # b_x = b_x.view([b_x.shape[0], -1])  # (nSamples, nChannels, x_Height, x_Width)
-                b_x = Variable(b_x).float()
+                b_x = Variable(b_x, requires_grad=True).float()
                 b_y = Variable(b_y).type(torch.FloatTensor)
                 sentence_in = torch.Tensor(b_x)
                 # print('sentence_in:', sentence_in)
@@ -285,7 +286,7 @@ def run_main(input_file):
     HIDDEN_DIM = 30
     # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
 
-    for i in range(4, 11):
+    for i in range(5, 11):
         print('first_%d_pkts' % i)
         global first_n_pkts
         first_n_pkts = i
@@ -333,20 +334,19 @@ def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
     return output_file, len(new_labels)
 
 
-def read_skype_sample(name_str='non-vpn-app', n=1):
-    data_path = '../data/Flow-Image-Features/skype-sub/all-%d' % n
-    data_path = '../data/Flow-Image-Features/%s-sub/all-%d' % (name_str, n)
-    train_images_file = '{}/{}pkts-subflow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
-    train_labels_file = '{}/{}pkts-subflow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
-    test_images_file = '{}/{}pkts-subflow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
-    test_labels_file = '{}/{}pkts-subflow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+def read_skype_sample(name_str='facebook', n=784):
+    data_path = '../data/fixed-length-transport-layer-payload/session/{}'.format(name_str)
+    train_images_file = '{}/{}-byte-payload-per-flow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    train_labels_file = '{}/{}-byte-payload-per-flow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
+    test_images_file = '{}/{}-byte-payload-per-flow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
+    test_labels_file = '{}/{}-byte-payload-per-flow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
     # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
     #     idx_reader.read_images(test_images_file), 1)
     X_train, X_test = idx_reader.read_images(train_images_file), idx_reader.read_images(test_images_file)
     y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
 
     # return X_train, y_train, X_test, y_test
-    train_output_file = '%s_%dpkts_train.csv' % (name_str, n)
+    train_output_file = '%s_%dBytes_train.csv' % (name_str, n)
     with open(train_output_file, 'w') as fid_out:
         (m, n) = X_train.shape
         for row in range(m):
@@ -356,7 +356,7 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
             line += str(int(y_train[row])) + '\n'
             fid_out.write(line)
 
-    test_output_file = '%s_%dpkts_test.csv' % (name_str, n)
+    test_output_file = '%s_%dBytes_test.csv' % (name_str, n)
     with open(test_output_file, 'w') as fid_out:
         (m, n) = X_test.shape
         for row in range(m):
@@ -384,13 +384,10 @@ def read_skype_sample(name_str='non-vpn-app', n=1):
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    n = 10
-    # feature_file = '../data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
-    # label_file = '../data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
-    # input_file = merge_features_labels(feature_file, label_file)
-    name_str = 'non-vpn-app'
-    # name_str = 'facebook'
+    n = 1000
+    name_str = 'facebook'
     # name_str = 'hangout'
+    # name_str = 'skype'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
@@ -400,7 +397,7 @@ if __name__ == '__main__':
 
     global batch_size, EPOCHES, num_classes, num_features
     batch_size = 200
-    EPOCHES = 5000
-    num_classes = num_c - len(remove_labels_lst)
-    num_features = 60
+    EPOCHES = 100
+    num_classes = num_c
+    num_features = 5
     run_main(input_file)

@@ -148,6 +148,40 @@ def change_label(Y, label_dict={'BENIGN': 1, 'Others': 0}):
     return new_Y
 
 
+def remove_special_labels(input_file, remove_labels_lst=[2, 3]):
+    output_file = input_file + '_remove_labels.csv'
+    y = []
+    data = []
+    with open(output_file, 'w') as fid_out:
+        with open(input_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                line_arr = line.strip().split(',')
+                tmp_label = int(float(line_arr[-1]))
+                if tmp_label in remove_labels_lst:
+                    line = fid_in.readline()
+                    continue
+                else:
+                    y.append(tmp_label)
+                    # fid_out.write(line)
+                    data.append(line)
+                    line = fid_in.readline()
+
+        # change labels to continues ordered values, such as 0,1,2,.. not 0,2,...
+        new_labels = sorted(Counter(y).keys())
+        # new_labels = [i for i in range(len(new_labels))]
+        for data_i in data:
+            line = data_i.strip().split(',')
+            tmp_label = int(float(line[-1]))
+            if tmp_label in new_labels:
+                line = ','.join(line[:-1]) + ',' + str(new_labels.index(tmp_label)) + '\n'
+                fid_out.write(line)
+            else:
+                print('tmp_label:', tmp_label)
+
+    return output_file, len(new_labels)
+
+
 def achieve_train_test_data(X, Y, train_size=0.7, shuffle=True):
     """
 
