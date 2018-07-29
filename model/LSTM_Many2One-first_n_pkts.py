@@ -284,7 +284,7 @@ def rum_main(input_file):
     HIDDEN_DIM = 30
     # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
 
-    for i in range(1, 11):
+    for i in range(4, 11):
         print('first_%d_pkts' % i)
         global first_n_pkts
         first_n_pkts = i
