@@ -1,15 +1,13 @@
 import gzip
-import os
 from ipaddress import IPv4Address
+import os
 
 import numpy as np
 
-SESSION_BYTE_LEN = 13
-
+SESSION_BYTE_LEN=13
 
 class DataLoader:
     """ Load data """
-
     def _load(self, file_path, **kwargs):
         """ Should be overriden by sub-classes """
         raise NotImplementedError()
@@ -18,7 +16,6 @@ class DataLoader:
         if not os.path.exists(file_path):
             raise AssertionError('File {} not exists'.format(file_path))
         return self._load(file_path, **kwargs)
-
 
 class IdxFileLoader(DataLoader):
     """ Load idx format data """
@@ -37,14 +34,14 @@ class IdxFileLoader(DataLoader):
         # according to the value of gzip_compressed, utilize different stream
         with gzip.open(file_path) if gzip_compressed is True else open(file_path, 'rb') as f:
             # read magic number and do assertion
-            magic_numbers = f.read(4)
+            magic_numbers=f.read(4)
             assert magic_numbers[0] == 0 and magic_numbers[1] == 0
-            data_type = magic_numbers[2]
+            data_type=magic_numbers[2]
             if data_type != 8:
                 raise AssertionError('Only support for unsigned char now')
 
             # extract shape
-            shape = magic_numbers[3]
+            shape=magic_numbers[3]
 
             # extract number of samples
             num_samples = self._read_bytes(f, 4)
@@ -53,7 +50,7 @@ class IdxFileLoader(DataLoader):
             dimensions = np.array([], dtype=np.int32)
             for _ in range(shape - 1):
                 dimensions = np.append(dimensions, self._read_bytes(f, 4))
-
+            
             # read data
             buf = f.read(num_samples * np.prod(dimensions, dtype=np.int32))
 
@@ -79,7 +76,6 @@ def _big_endian_bytes2int(byte_data):
         power *= 256
     return res
 
-
 def _read(dimensions, stream):
     if len(dimensions) == 0:
         return ord(stream.read(1))
@@ -90,7 +86,6 @@ def _read(dimensions, stream):
         for _ in range(dimensions[0]):
             res.append(_read(dimensions[1:], stream))
         return res
-
 
 def _extract_session_info(byte_data):
     assert len(byte_data) == SESSION_BYTE_LEN
@@ -108,110 +103,46 @@ def _extract_session_info(byte_data):
         'port1': port1,
     }
 
-
-def read_images(idx_filename, feature_type='ip-above', only_images=True):
+def read_images(idx_filename):
     """
     Extract information image from idx file
 
     Parameters
     ----------
     idx_filename: str
-    feature_type: str
-        could be 'ip-above' or 'payload-len' for different type of image feature file
-    only_images: bool
-        only return images or
-        with session information, actual packet count if feature_type is 'ip-above'
-        with session information, actual packet count, actual byte count if feature_type is 'payload-len'
 
     Returns
     -------
     `numpy.ndarray`
-        1. images if only_images is True
-        2.1 (session information, actual packet count, images) if feature_type is 'ip-above'
-        2.2 (session information, actual packet count, actual byte count, images) if feature_type is 'payload-len'
+        stores the images
     """
     with gzip.open(idx_filename, 'rb') as f:
-        magic_numbers = f.read(4)
+        magic_numbers=f.read(4)
         # print('magic_number', magic_numbers)
         assert magic_numbers[0] == 0 and magic_numbers[1] == 0
         if magic_numbers[2] != 8:
             raise AssertionError('Only support for unsigned char')
-        shape = magic_numbers[3]
+        shape=magic_numbers[3]
         # print('shape', shape)
-        num_examples = int.from_bytes(f.read(4), byteorder='big')
+        num_examples=int.from_bytes(f.read(4), byteorder='big')
         # print('number of examples',num_examples)
-        dimensions = []
-        for _ in range(shape - 1):
+        dimensions=[]
+        for _ in range(shape-1):
             dimensions.append(int.from_bytes(f.read(4), byteorder='big'))
         # print('dimensions', dimensions)
-        data_list = []
+        data_list=[]
         for _ in range(num_examples):
-            each_data_point = _read(dimensions, f)
-            session_info = _extract_session_info(each_data_point[:SESSION_BYTE_LEN])
-            if feature_type == 'payload-len':
-                actual_pkt_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN:SESSION_BYTE_LEN+4], byteorder='big')
-                actual_byte_count = int.from_bytes(each_data_point[SESSION_BYTE_LEN + 4:SESSION_BYTE_LEN + 6], byteorder='big')
-                other_data = each_data_point[SESSION_BYTE_LEN + 6:]
-            elif feature_type == 'ip-above':
-                actual_pkt_count = each_data_point[SESSION_BYTE_LEN]
-                other_data = each_data_point[SESSION_BYTE_LEN + 1:]
-            else:
-                raise AssertionError('feature_type could only be "payload-len" or "ip-above"')
-            if only_images is True:
-                data_list.append(other_data)
-            elif only_images is False:
-                if feature_type == 'ip-above':
-                    data_list.append((session_info, actual_pkt_count, other_data))
-                elif feature_type == 'payload-len':
-                    data_list.append((session_info, actual_pkt_count, actual_byte_count, other_data))
-                else:
-                    raise AssertionError('feature_type could only be "payload-len" or "ip-above"')
-            else:
-                raise AssertionError('only_images could only be True or False')
+            each_data_point=_read(dimensions, f)
+            session_info=_extract_session_info(each_data_point[:SESSION_BYTE_LEN])
+            actual_pkt_count = each_data_point[SESSION_BYTE_LEN]
+            other_data=each_data_point[SESSION_BYTE_LEN+1:]
+            # data_list.append((session_info, actual_pkt_count, other_data))
+            data_list.append(other_data)
 
         assert f.read() == b''
-
+        
     data_list = np.array(data_list)
     return data_list
-
-
-def read_skype_sample(name_str='facebook', n=1000):
-    data_path = '../data/fixed-length-transport-layer-payload/session/{}'.format(name_str)
-    train_images_file = '{}/{}-byte-payload-per-flow-{}-train-images-idx2-ubyte.gz'.format(data_path, n, name_str)
-    train_labels_file = '{}/{}-byte-payload-per-flow-{}-train-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
-    test_images_file = '{}/{}-byte-payload-per-flow-{}-test-images-idx2-ubyte.gz'.format(data_path, n, name_str)
-    test_labels_file = '{}/{}-byte-payload-per-flow-{}-test-labels-idx1-ubyte.gz'.format(data_path, n, name_str)
-    # X_train, X_test = np.expand_dims(idx_reader.read_images(train_images_file), 1), np.expand_dims(
-    #     idx_reader.read_images(test_images_file), 1)
-    X_train, X_test = idx_reader.read_images(train_images_file, feature_type='payload-len',
-                                             only_images=True), idx_reader.read_images(test_images_file,
-                                                                                       feature_type='payload-len',
-                                                                                       only_images=True)
-    y_train, y_test = idx_reader.read_labels(train_labels_file), idx_reader.read_labels(test_labels_file)
-
-    # return X_train, y_train, X_test, y_test
-    train_output_file = '../results/%s_%dBytes_train.csv' % (name_str, n)
-    with open(train_output_file, 'w') as fid_out:
-        (m, n) = X_train.shape
-        for row in range(m):
-            line = ''
-            for col in range(n):
-                line += str(X_train[row][col]) + ','
-            line += str(int(y_train[row])) + '\n'
-            fid_out.write(line)
-
-    test_output_file = '../results/%s_%dBytes_test.csv' % (name_str, n)
-    with open(test_output_file, 'w') as fid_out:
-        (m, n) = X_test.shape
-        for row in range(m):
-            line = ''
-            for col in range(n):
-                line += str(X_test[row][col]) + ','
-            line += str(int(y_test[row])) + '\n'
-            fid_out.write(line)
-
-    return train_output_file, test_output_file
-
 
 def read_labels(idx_filename):
     """
