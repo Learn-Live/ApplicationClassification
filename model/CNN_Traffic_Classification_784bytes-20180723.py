@@ -535,12 +535,8 @@ if __name__ == '__main__':
 
     name_str ='vpn-app'
     name_str ='hangout'
-<<<<<<< HEAD
     # name_str='skype'
     name_str = 'non-vpn-app'
-=======
-    name_str='skype'
->>>>>>> 3f4cb0a792861b410897a20e9ea8487cdbe431b6
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
@@ -553,11 +549,7 @@ if __name__ == '__main__':
     batch_size = 100
     EPOCHES = 100
     num_classes = num_c
-<<<<<<< HEAD
     num_features = 80
-=======
-    num_features = 50
->>>>>>> 3f4cb0a792861b410897a20e9ea8487cdbe431b6
     learning_rate = 0.001
     run_main(input_file, num_features * first_n_pkts)
 
