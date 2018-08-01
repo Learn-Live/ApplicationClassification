@@ -3,6 +3,7 @@
 
     refer: https://raw.githubusercontent.com/yunjey/pytorch-tutorial/master/tutorials/02-intermediate/convolutional_neural_network/main.py
 """
+import random
 from collections import Counter
 
 import numpy as np
@@ -126,6 +127,57 @@ class ConvNet(nn.Module):
     def l2_penalty(self, var):
         return torch.sqrt(torch.pow(var, 2).sum())
 
+    def upsampling_data(self, b_x, b_y):
+        """
+            to make proportition as equal
+        :param b_x:
+        :param b_y:
+        :return:
+        """
+        b_y_items = Counter(b_y.data.tolist())
+        max_label, max_label_num = sorted(b_y_items.items(), key=lambda x: x[1], reverse=False)[
+            -1]  # get max value in dictionary
+
+        # c =  list(zip(b_x, b_y))
+        # a=[]
+        # for key in b_y_items.keys():
+        #     for b_x_i, b_y_i in zip(b_x, b_y):
+        #         if key == b_y_i.data.tolist():
+        #             a[key].append(b_x_i)
+
+        new_b_x = []
+        new_b_y = []
+        for key in b_y_items.keys():
+            b_x_tmp = list(b_x.data.numpy()[np.asarray(b_y.data.tolist()) == key])
+            b_x_tmp = list(map(lambda x: torch.Tensor(x), b_x_tmp))
+            b_y_tmp = b_y.data.numpy()[np.asarray(b_y.data.tolist()) == key]
+            b_y_tmp = [torch.Tensor([key]) for _ in range(len(b_y_tmp))]
+            new_b_x.extend(b_x_tmp)
+            new_b_y.extend(b_y_tmp)
+            if b_y_items[key] != max_label_num:
+                for c in range((max_label_num - len(b_y_tmp)) // len(b_y_tmp)):
+                    b_x_tmp = random.sample(list(b_x.data.numpy()[np.asarray(b_y.data.tolist()) == key]), len(b_y_tmp))
+                    b_x_tmp = list(map(lambda x: torch.Tensor(x), b_x_tmp))
+                    b_y_tmp = [torch.Tensor([key]) for _ in range(len(b_y_tmp))]
+                    new_b_x.extend(b_x_tmp)
+                    new_b_y.extend(b_y_tmp)
+                if max_label_num % len(b_y_tmp):
+                    b_x_tmp = random.sample(list(b_x.data.numpy()[np.asarray(b_y.data.tolist()) == key]),
+                                            max_label_num % len(b_y_tmp))
+                    b_x_tmp = list(map(lambda x: torch.Tensor(x), b_x_tmp))
+                    b_y_tmp = [torch.Tensor([key]) for _ in range(max_label_num % len(b_y_tmp))]
+                    new_b_x.extend(b_x_tmp)
+                    new_b_y.extend(b_y_tmp)
+
+        new_b_x = torch.stack(new_b_x, dim=0)
+        new_b_y = torch.stack(new_b_y, dim=-1)[0]
+        # c = list(zip(new_b_x, new_b_y))
+        # np.random.shuffle(c)
+        # new_b_x, new_b_y = list(zip(*c))
+
+        return new_b_x, new_b_y
+
+
     def run_train(self, train_loader, mode=True):
         # Train the model
         self.results = {}
@@ -143,6 +195,7 @@ class ConvNet(nn.Module):
 
                 # b_x=self.achieve_sentence(b_x,first_n_pkts)
                 b_x = b_x[:, :first_n_pkts * num_features]
+                b_x, b_y = self.upsampling_data(b_x, b_y)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1])
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
@@ -482,7 +535,7 @@ if __name__ == '__main__':
 
     name_str ='vpn-app'
     name_str ='hangout'
-    name_str='skype'
+    # name_str='skype'
     name_str = 'non-vpn-app'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
@@ -496,7 +549,7 @@ if __name__ == '__main__':
     batch_size = 100
     EPOCHES = 100
     num_classes = num_c
-    num_features = 500
+    num_features = 80
     learning_rate = 0.001
     run_main(input_file, num_features * first_n_pkts)
 
