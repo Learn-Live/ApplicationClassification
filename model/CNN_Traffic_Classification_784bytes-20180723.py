@@ -67,7 +67,7 @@ class ConvNet(nn.Module):
         self.layer2 = nn.Sequential(
             nn.Conv2d(64, 32, kernel_size=(1, 1), stride=1, padding=(2, 0)),
             # nn.BatchNorm2d(2),
-            nn.ReLU(),
+            nn.Tanh(),
             # nn.MaxPool2d(kernel_size=(2,1), stride=2)
         )
         self.fc1 = nn.Linear(32 * ((((num_features - 1 + 2 * 2) // 1 + 1) - 1 + 2 * 2) // 1 + 1),
@@ -77,8 +77,14 @@ class ConvNet(nn.Module):
         self.fc = nn.Linear(num_classes * 20,
                             num_classes)  # (1, 16, 60*i +i-1-(5-1),1) -> (16, 32, 60*i +i-1-(5-1) -(3-1),1)
 
-        # Loss and optimizer
-        self.criterion = nn.CrossEntropyLoss()
+        # # Loss and optimizer
+        # self.criterion = nn.CrossEntropyLoss()
+        weights = np.asarray(
+            [1.0 / 204, 1.0 / 4606, 1.0 / 7078, 1.0 / 5184, 1.0 / 33131, 1.0 / 97466, 1.0 / 1429]) * 0.9 * batch_size
+        print('loss weights:', weights)
+        class_weights = torch.FloatTensor(weights)
+        self.criterion = nn.CrossEntropyLoss(weight=class_weights)
+
         # self.criterion=nn.NLLLoss()
         self.optimizer = torch.optim.Adam(self.parameters(), lr=learning_rate, betas=(0.9, 0.999))
         # self.optimizer = torch.optim.Adadelta(self.parameters(), lr=learning_rate)
@@ -195,7 +201,7 @@ class ConvNet(nn.Module):
 
                 # b_x=self.achieve_sentence(b_x,first_n_pkts)
                 b_x = b_x[:, :first_n_pkts * num_features]
-                b_x, b_y = self.upsampling_data(b_x, b_y)
+                # b_x, b_y = self.upsampling_data(b_x, b_y)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1])
                 b_x = Variable(b_x).float()
                 b_y = Variable(b_y).type(torch.LongTensor)
@@ -207,14 +213,14 @@ class ConvNet(nn.Module):
                 # l1_regularization += self.l1_penalty(b_y_preds)
                 # # l2_regularization = 1e-2 * self.l2_penalty(layer2_out)
                 # l1_regularization= self.l1_penalty(self.parameters())
-                l2_reg = Variable(torch.FloatTensor(1), requires_grad=True)
-                for W in self.parameters():
-                    # l2_reg = l2_reg+ W.norm(1)
-                    l2_reg = l2_reg + W.norm(2) ** 2
-                    # l2_reg +=  torch.pow(W, 2).sum()
-                    # print(W.data.tolist())
-                #
-                loss = self.criterion(b_y_preds, b_y) + 0 * l2_reg
+                # l2_reg = Variable(torch.FloatTensor(1), requires_grad=True)
+                # for W in self.parameters():
+                #     # l2_reg = l2_reg+ W.norm(1)
+                #     l2_reg = l2_reg + W.norm(2) ** 2
+                #     # l2_reg +=  torch.pow(W, 2).sum()
+                #     # print(W.data.tolist())
+                # #
+                loss = self.criterion(b_y_preds, b_y)
 
                 # Backward and optimize
                 self.optimizer.zero_grad()
@@ -284,7 +290,7 @@ class ConvNet(nn.Module):
                     cm += confusion_matrix(b_y, predicted, labels=[i for i in range(num_classes)])
                     sk_accuracy += accuracy_score(b_y, predicted) * len(b_y)
 
-            # print(cm, sk_accuracy / total)
+            print(cm, sk_accuracy / total)
             # # print('Evaluation Accuracy of the model on the {} samples: {} %'.format(total, 100 * correct / total))
 
         acc = correct / total
@@ -540,7 +546,7 @@ if __name__ == '__main__':
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
 
-    remove_labels_lst = [0,6]
+    remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
     print(input_file)
 
