@@ -525,6 +525,30 @@ def merge_files(train_output_file1,train_output_file2,train_output_file3):
     return output_file
 
 
+def sample_data(input_file):
+    output_file = input_file + '_sample_data.csv'
+    dict_data = {}
+    with open(output_file, 'w') as fid_out:
+        with open(input_file, 'r') as fid_in:
+            line = fid_in.readline()
+            while line:
+                line_arr = line.strip().split(',')
+                if line_arr[-1] in dict_data.keys():
+                    if len(dict_data[line_arr[-1]]) < 204:
+                        dict_data[line_arr[-1]].append(line)
+                else:
+                    dict_data[line_arr[-1]] = []
+                line = fid_in.readline()
+
+        for key in dict_data.keys():
+            lst_data = dict_data[key]
+            for i in range(len(lst_data)):
+                fid_out.write(lst_data[i])
+            fid_out.flush()
+
+    return output_file
+
+
 if __name__ == '__main__':
     torch.manual_seed(1)
 
@@ -545,6 +569,8 @@ if __name__ == '__main__':
     name_str = 'non-vpn-app'
     train_output_file, test_output_file = read_skype_sample(name_str, n)
     input_file = train_output_file
+
+    inputfile = sample_data(input_file)
 
     remove_labels_lst = []
     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
