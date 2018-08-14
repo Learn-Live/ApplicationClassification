@@ -28,6 +28,35 @@ import matplotlib.pyplot as plt
 # from CythonUtil import c_parse_records_tshark
 from preprocess.data_preprocess import compute_mean
 
+def pcap2sessions(pcap_file_name):
+    """
+        refer to : https://osqa-ask.wireshark.org/questions/4677/easy-way-to-save-tcp-streams
+    :return:
+    """
+    import subprocess
+    cmd ="tshark -r %s -T fields -e tcp.stream | sort -n | uniq" %(pcap_file_name)
+    result = subprocess.run(cmd,shell=True, stdout=subprocess.PIPE)
+    res_str= result.stdout.decode('utf-8').strip()
+    print("tcp:",res_str)
+    for stream in res_str.split():
+        # echo $stream
+        cmd = "tshark -r %s -w %s-tcp-stream-%s.cap -R \"tcp.stream==%d\" -2" % (pcap_file_name,pcap_file_name, stream, int(stream))
+        cmd = "tshark -r %s -w %s-tcp-stream-%s.cap -Y \"tcp.stream==%d\"" % (
+        pcap_file_name, pcap_file_name, stream, int(stream))
+        print('cmd->',cmd)
+        subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
+
+    cmd = "tshark -r %s -T fields -e udp.stream | sort -n | uniq" % (pcap_file_name)
+    res_str = result.stdout.decode('utf-8').strip()
+    print("udp:", res_str)
+    for stream in res_str.split():
+        # echo $stream
+        cmd = "tshark -r %s -w %s-udp-stream-%s.cap -R \"udp.stream==%d\" -2" % (pcap_file_name,pcap_file_name, stream, int(stream))
+        cmd = "tshark -r %s -w %s-udp-stream-%s.cap -Y \"udp.stream==%d\" " % (
+        pcap_file_name, pcap_file_name, stream, int(stream))
+        print('cmd->', cmd)
+        subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
+
 
 def export_to_txt(f_name, txt_f_name):
     """
@@ -378,6 +407,10 @@ def add_arff_header(all_in_one_file, attributes_num=2, label=['a','b','c']):
                 line=fid_in.readline()
 
 if __name__ == '__main__':
+
+    input_file = '../data/history_data/Skype_Voice_Workstation.pcap'
+    pcap2sessions(input_file)
+
     # pcap_file_name = '../data/WorldOfWarcraft.pcap'
     # pcap_file_name = '../data/BitTorrent.pcap'
     # extract_packet_payload(pcap_file_name, 'payload.txt')
@@ -429,3 +462,4 @@ if __name__ == '__main__':
         add_arff_header(all_in_one_file, attributes_num=2 * 1 + 1, label=file_lst)
     else:
         add_arff_header(all_in_one_file, attributes_num=2 * first_n_pkts + 1, label=file_lst)
+
