@@ -16,7 +16,7 @@ from collections import Counter
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 
-from preprocess.data_preprocess import achieve_train_test_data, load_data, normalize_data, change_label
+from utilities.preprocess import achieve_train_test_data, load_data, normalize_data, change_label
 
 __author__ = 'Learn_live'
 
@@ -57,14 +57,14 @@ class MLP():
         # new_X = []
         # for i in range(len(X)):
         #     lst_tmp = []
-        #     lst_tmp.append(flow_dur[i].data.tolist())
-        #     lst_tmp.extend(pkts_outputs[i].data.tolist())
-        #     lst_tmp.extend(intr_outputs[i].data.tolist())
+        #     lst_tmp.append(flow_dur[i].input_data.tolist())
+        #     lst_tmp.extend(pkts_outputs[i].input_data.tolist())
+        #     lst_tmp.extend(intr_outputs[i].input_data.tolist())
         #     new_X.append(lst_tmp)
         # # X = [pkts_outputs, flow_dur, intr_outputs]
         # new_X = torch.Tensor(new_X)
         # y_preds = self.classify_ann(new_X)
-        # # _, y_preds=y_preds.data.max(dim=1) # get max value of each row
+        # # _, y_preds=y_preds.input_data.max(dim=1) # get max value of each row
         #
         # return y_preds
         #

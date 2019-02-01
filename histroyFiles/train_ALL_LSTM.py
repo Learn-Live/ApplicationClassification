@@ -18,10 +18,10 @@ def train(train_iter, dev_iter, test_iter, model, args):
     if args.cuda:
         model.cuda()
 
-    # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-8)
-    # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.init_weight_decay)
-    # optimizer = torch.optim.SGD(model.parameters(), lr=args.lr,momentum=)
-    # optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=args.lr)
+    # optimizer = torch.optim.Adam(proposed_algorithms.parameters(), lr=args.lr, weight_decay=1e-8)
+    # optimizer = torch.optim.Adam(proposed_algorithms.parameters(), lr=args.lr, weight_decay=args.init_weight_decay)
+    # optimizer = torch.optim.SGD(proposed_algorithms.parameters(), lr=args.lr,momentum=)
+    # optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, proposed_algorithms.parameters()), lr=args.lr)
 
     if args.Adam is True:
         print("Adam Training......")
@@ -161,7 +161,7 @@ def test_eval(data_iter, model, save_path, args, model_count):
         file = open("./Test_Result.txt", "a")
     else:
         file = open("./Test_Result.txt", "w")
-    file.write("model " + save_path + "\n")
+    file.write("proposed_algorithms " + save_path + "\n")
     file.write("Evaluation - loss: {:.6f}  acc: {:.4f}%({}/{}) \n".format(avg_loss, accuracy, corrects, size))
     file.write("model_count {} \n".format(model_count))
     file.write("\n")
@@ -180,6 +180,6 @@ def test_eval(data_iter, model, save_path, args, model_count):
         file.write("\n\n")
         file.close()
     shutil.copy("./Test_Result.txt", "./snapshot/" + args.mulu + "/Test_Result.txt")
-    # whether to delete the model after test acc so that to save space
+    # whether to delete the proposed_algorithms after test acc so that to save space
     if os.path.isfile(save_path) and args.rm_model is True:
         os.remove(save_path)

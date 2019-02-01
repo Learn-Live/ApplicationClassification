@@ -1,4 +1,13 @@
-# Requirements
+<!--- comment 
+> ## 'data' folder
+>>>--- raw data (pcap)
+--->
+
+
+# Purpose
+    "To identify pkts or flow progressively".
+
+## 1. Requirements
    - python3 > 3.6
    - pytorch > 0.4
    - numpy
@@ -6,28 +15,41 @@
    - sklearn
 
 
-# Application Classification Project
-> "To identify pkts or flow progressively".
+## 2. Project Directory Structure
+### |- input_data: raw data
+    data/Wednesday-workingHours-withoutInfinity-Sampled.pcap_ISCX.csv
 
-<!--- comment 
-> ## 'data' folder
->>>--- raw data (pcap)
---->
+### |- output_data: results
+    ...
+    
+### |- log: use to log middle or tmp results.
+    ...
+    
+### |- visualization: plot data to visualize 
+    ..
+    
+### |- proposed_algorithms
+    ### |- deep_autoencoder_pytorch
+            main_autoencoder.py
 
-## 'pcap2flow' folder
->>>--- toolkit to convert pcap files to txt or feature data.
+### |- compared_algorithms
+    ### |- DT_Sklearn
+        main_DT.py
+        basic_svm.py
 
-## 'preprocess' folder 
->>>--- toolkit to preprocess input data, such as 'load data', 'normalization data'
+### |- utilities
+    CSV_Dataloder.py
+    common_funcs.py
+    
+    ## 'pcap2flow' folder
+    >>>--- toolkit to convert pcap files to txt or feature data.
+    
+    ## 'preprocess' folder 
+    >>>--- toolkit to preprocess input data, such as 'load data', 'normalization data'
 
-## 'model' folder 
->>>--- LSTM model or CNN model to identify pkts or flow progressively.
+### |-history_files: backup 
+    ...
 
-## 'results' folder
->>>--- store the middle data and results
-
-## 'historyFiles' folder
->>>--- store the tmp files or backup files
-
-
+## Note:
+    since 10/13, we focus on case3, please read the codes related to case3.
 

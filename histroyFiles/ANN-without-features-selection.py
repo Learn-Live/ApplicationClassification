@@ -18,7 +18,7 @@ from sklearn.preprocessing import OneHotEncoder
 from torch import optim
 from torch.autograd import Variable
 
-from preprocess.data_preprocess import achieve_train_test_data, load_data, normalize_data, change_label
+from utilities.preprocess import achieve_train_test_data, load_data, normalize_data, change_label
 
 __author__ = 'Learn_live'
 
@@ -84,7 +84,7 @@ class ANN(nn.Module):
         self.criterion = nn.MSELoss(size_average=False)
         # self.criterion = nn.MultiLabelMarginLoss()
         self.learning_rate = 1e-4
-        # self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
+        # self.optimizer = torch.optim.Adam(self.proposed_algorithms.parameters(), lr=self.learning_rate)
         # self.optimizer = optim.Adam([self.pkts_ann, self.intr_tm_ann, self.classify_ann], lr=self.d_learning_rate,
         #                             betas=(0.5, 0.9))
         # params = list(self.pkts_ann.parameters()) + list(self.intr_tm_ann.parameters()) + list(
@@ -105,21 +105,21 @@ class ANN(nn.Module):
     #     new_X = []
     #     for i in range(len(X)):
     #         lst_tmp = []
-    #         lst_tmp.append(flow_dur[i].data.tolist())
-    #         lst_tmp.extend(pkts_outputs[i].data.tolist())
-    #         lst_tmp.extend(intr_outputs[i].data.tolist())
+    #         lst_tmp.append(flow_dur[i].input_data.tolist())
+    #         lst_tmp.extend(pkts_outputs[i].input_data.tolist())
+    #         lst_tmp.extend(intr_outputs[i].input_data.tolist())
     #         new_X.append(lst_tmp)
     #     # X = [pkts_outputs, flow_dur, intr_outputs]
     #     new_X = torch.Tensor(new_X)
     #     y_preds = self.classify_ann(new_X)
-    #     # _, y_preds=y_preds.data.max(dim=1) # get max value of each row
+    #     # _, y_preds=y_preds.input_data.max(dim=1) # get max value of each row
     #
     #     return y_preds
 
     def forward(self, X):
 
         y_preds = self.classify_ann(X)
-        # _, y_preds=y_preds.data.max(dim=1) # get max value of each row
+        # _, y_preds=y_preds.input_data.max(dim=1) # get max value of each row
 
         return y_preds
 
@@ -157,7 +157,7 @@ class ANN(nn.Module):
         y_preds = self.forward(X)
         _, y_ = y_preds.data.max(dim=1, keepdim=False)  # return max_value as predicted value
 
-        # y_preds=y_preds.data.tolist()
+        # y_preds=y_preds.input_data.tolist()
         # y_=[]
         # for i in range(len(y_preds)):
         #     if y_preds[i][0] > 0.5:
@@ -237,7 +237,7 @@ if __name__ == '__main__':
     print('testing accuracy:', acc)
 #
 #     # Hyper Parameters
-#     EPOCH = 1  # train the training data n times, to save time, we just train 1 epoch
+#     EPOCH = 1  # train the training input_data n times, to save time, we just train 1 epoch
 #     BATCH_SIZE = 50
 #     LR = 0.001  # learning rate
 #     DOWNLOAD_MNIST = False
@@ -297,7 +297,7 @@ if __name__ == '__main__':
 # plt.ion()
 # # training and testing
 # for epoch in range(EPOCH):
-#     for step, (b_x, b_y) in enumerate(train_loader):   # gives batch data, normalize x when iterate train_loader
+#     for step, (b_x, b_y) in enumerate(train_loader):   # gives batch input_data, normalize x when iterate train_loader
 #
 #         output = cnn(b_x)[0]               # cnn output
 #         loss = loss_func(output, b_y)   # cross entropy loss
@@ -307,20 +307,20 @@ if __name__ == '__main__':
 #
 #         if step % 50 == 0:
 #             test_output, last_layer = cnn(test_x)
-#             pred_y = torch.max(test_output, 1)[1].data.squeeze()
+#             pred_y = torch.max(test_output, 1)[1].input_data.squeeze()
 #             accuracy = float(sum(pred_y == test_y)) / float(test_y.size(0))
-#             print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.2f' % accuracy)
+#             print('Epoch: ', epoch, '| train loss: %.4f' % loss.input_data.numpy(), '| test accuracy: %.2f' % accuracy)
 #             if HAS_SK:
 #                 # Visualization of trained flatten layer (T-SNE)
 #                 tsne = TSNE(perplexity=30, n_components=2, init='pca', n_iter=5000)
 #                 plot_only = 500
-#                 low_dim_embs = tsne.fit_transform(last_layer.data.numpy()[:plot_only, :])
+#                 low_dim_embs = tsne.fit_transform(last_layer.input_data.numpy()[:plot_only, :])
 #                 labels = test_y.numpy()[:plot_only]
 #                 plot_with_labels(low_dim_embs, labels)
 # plt.ioff()
 #
-# # print 10 predictions from test data
+# # print 10 predictions from test input_data
 # test_output, _ = cnn(test_x[:10])
-# pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()
+# pred_y = torch.max(test_output, 1)[1].input_data.numpy().squeeze()
 # print(pred_y, 'prediction number')
 # print(test_y[:10].numpy(), 'real number')

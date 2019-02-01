@@ -6,7 +6,7 @@ At this point, we have seen various feed-forward networks. That is,
 there is no state maintained by the network at all. This might not be
 the behavior we want. Sequence models are central to NLP: they are
 models where there is some sort of dependence through time between your
-inputs. The classical example of a sequence model is the Hidden Markov
+inputs. The classical example of a sequence proposed_algorithms is the Hidden Markov
 Model for part-of-speech tagging. Another example is the conditional
 random field.
 A recurrent neural network is a network that maintains some kind of
@@ -15,7 +15,7 @@ so that information can propogate along as the network passes over the
 sequence. In the case of an LSTM, for each element in the sequence,
 there is a corresponding *hidden state* :math:`h_t`, which in principle
 can contain information from arbitrary points earlier in the sequence.
-We can use the hidden state to predict words in a language model,
+We can use the hidden state to predict words in a language proposed_algorithms,
 part-of-speech tags, and a myriad of other things.
 LSTM's in Pytorch
 ~~~~~~~~~~~~~~~~~
@@ -25,7 +25,7 @@ tensors is important. The first axis is the sequence itself, the second
 indexes instances in the mini-batch, and the third indexes elements of
 the input. We haven't discussed mini-batching, so lets just ignore that
 and assume we will always have just 1 dimension on the second axis. If
-we want to run the sequence model over the sentence "The cow jumped",
+we want to run the sequence proposed_algorithms over the sentence "The cow jumped",
 our input should look like
 .. math::
    \begin{bmatrix}
@@ -87,13 +87,13 @@ torch.manual_seed(1)
 # (challenging) exercise to the reader, think about how Viterbi could be
 # used after you have seen what is going on.
 #
-# The model is as follows: let our input sentence be
+# The proposed_algorithms is as follows: let our input sentence be
 # :math:`w_1, \dots, w_M`, where :math:`w_i \in V`, our vocab. Also, let
 # :math:`T` be our tag set, and :math:`y_i` the tag of word :math:`w_i`.
 # Denote our prediction of the tag of word :math:`w_i` by
 # :math:`\hat{y}_i`.
 #
-# This is a structure prediction, model, where our output is a sequence
+# This is a structure prediction, proposed_algorithms, where our output is a sequence
 # :math:`\hat{y}_1, \dots, \hat{y}_M`, where :math:`\hat{y}_i \in T`.
 #
 # To do the prediction, pass an LSTM over the sentence. Denote the hidden
@@ -109,7 +109,7 @@ torch.manual_seed(1)
 # target space of :math:`A` is :math:`|T|`.
 #
 #
-# Prepare data:
+# Prepare input_data:
 
 def prepare_sequence(seq, to_ix):
     idxs = [to_ix[w] for w in seq]
@@ -135,7 +135,7 @@ HIDDEN_DIM = 6
 
 
 ######################################################################
-# Create the model:
+# Create the proposed_algorithms:
 
 
 class LSTMTagger(nn.Module):
@@ -173,7 +173,7 @@ class LSTMTagger(nn.Module):
 
 
 ######################################################################
-# Train the model:
+# Train the proposed_algorithms:
 
 
 model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, len(word_to_ix), len(tag_to_ix))
@@ -188,7 +188,7 @@ with torch.no_grad():
     tag_scores = model(inputs)
     print(tag_scores)
 
-for epoch in range(1):  # again, normally you would NOT do 300 epochs, it is toy data
+for epoch in range(1):  # again, normally you would NOT do 300 epochs, it is toy input_data
     for sentence, tags in training_data:
         # Step 1. Remember that Pytorch accumulates gradients.
         # We need to clear them out before each instance
@@ -234,7 +234,7 @@ with torch.no_grad():
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # In the example above, each word had an embedding, which served as the
-# inputs to our sequence model. Let's augment the word embeddings with a
+# inputs to our sequence proposed_algorithms. Let's augment the word embeddings with a
 # representation derived from the characters of the word. We expect that
 # this should help significantly, since character-level information like
 # affixes have a large bearing on part-of-speech. For example, words with
@@ -242,7 +242,7 @@ with torch.no_grad():
 #
 # To do this, let :math:`c_w` be the character-level representation of
 # word :math:`w`. Let :math:`x_w` be the word embedding as before. Then
-# the input to our sequence model is the concatenation of :math:`x_w` and
+# the input to our sequence proposed_algorithms is the concatenation of :math:`x_w` and
 # :math:`c_w`. So if :math:`x_w` has dimension 5, and :math:`c_w`
 # dimension 3, then our LSTM should accept an input of dimension 8.
 #
@@ -250,9 +250,9 @@ with torch.no_grad():
 # characters of a word, and let :math:`c_w` be the final hidden state of
 # this LSTM. Hints:
 #
-# * There are going to be two LSTM's in your new model.
+# * There are going to be two LSTM's in your new proposed_algorithms.
 #   The original one that outputs POS tag scores, and the new one that
 #   outputs a character-level representation of each word.
-# * To do a sequence model over characters, you will have to embed characters.
+# * To do a sequence proposed_algorithms over characters, you will have to embed characters.
 #   The character embeddings will be the input to the character LSTM.
 #

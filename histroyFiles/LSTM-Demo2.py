@@ -18,7 +18,7 @@ torch.manual_seed(hyperparams.seed_num)
 random.seed(hyperparams.seed_num)
 np.random.seed(hyperparams.seed_num)
 """
-Neural Networks model : LSTM
+Neural Networks proposed_algorithms : LSTM
 """
 
 

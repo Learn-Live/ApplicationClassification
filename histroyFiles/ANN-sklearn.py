@@ -19,7 +19,7 @@ from sklearn.preprocessing import OneHotEncoder
 from torch import optim
 from torch.autograd import Variable
 
-from preprocess.data_preprocess import achieve_train_test_data, normalize_data, change_label, \
+from utilities.preprocess import achieve_train_test_data, normalize_data, change_label, \
     load_data_compute_mean
 
 __author__ = 'Learn_live'
@@ -66,14 +66,14 @@ class MLP():
         # new_X = []
         # for i in range(len(X)):
         #     lst_tmp = []
-        #     lst_tmp.append(flow_dur[i].data.tolist())
-        #     lst_tmp.extend(pkts_outputs[i].data.tolist())
-        #     lst_tmp.extend(intr_outputs[i].data.tolist())
+        #     lst_tmp.append(flow_dur[i].input_data.tolist())
+        #     lst_tmp.extend(pkts_outputs[i].input_data.tolist())
+        #     lst_tmp.extend(intr_outputs[i].input_data.tolist())
         #     new_X.append(lst_tmp)
         # # X = [pkts_outputs, flow_dur, intr_outputs]
         # new_X = torch.Tensor(new_X)
         # y_preds = self.classify_ann(new_X)
-        # # _, y_preds=y_preds.data.max(dim=1) # get max value of each row
+        # # _, y_preds=y_preds.input_data.max(dim=1) # get max value of each row
         #
         # return y_preds
         #
@@ -149,7 +149,7 @@ class ANN(nn.Module):
         self.criterion = nn.MultiLabelMarginLoss()
         self.d_learning_rate = 1e-4
         self.g_learning_rate = 1e-4
-        # self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
+        # self.optimizer = torch.optim.Adam(self.proposed_algorithms.parameters(), lr=self.learning_rate)
         # self.optimizer = optim.Adam([self.pkts_ann, self.intr_tm_ann, self.classify_ann], lr=self.d_learning_rate,
         #                             betas=(0.5, 0.9))
         params = list(self.pkts_ann.parameters()) + list(self.intr_tm_ann.parameters()) + list(
@@ -193,7 +193,7 @@ class ANN(nn.Module):
         y_preds = self.forward(X)
         _, y_ = y_preds.data.max(dim=1, keepdim=False)  # return max_value as predicted value
 
-        # y_preds=y_preds.data.tolist()
+        # y_preds=y_preds.input_data.tolist()
         # y_=[]
         # for i in range(len(y_preds)):
         #     if y_preds[i][0] > 0.5:

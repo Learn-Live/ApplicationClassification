@@ -15,7 +15,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from sklearn.preprocessing import OneHotEncoder
 
-from preprocess.data_preprocess import achieve_train_test_data, change_label, normalize_data
+from utilities.preprocess import achieve_train_test_data, change_label, normalize_data
 
 
 def load_sequence_data_backup(first_n_pkts_input_file, separator=','):
@@ -67,7 +67,7 @@ def load_sequence_data_by_tshark(first_n_pkts_input_file, separator=','):
                 line = fid_in.readline()
                 continue
             # len_tmp = int(line_arr[4])  # length of pkts_list
-            # data.append(line_arr[:-1])
+            # input_data.append(line_arr[:-1])
             data.append([line_arr[-3], line_arr[-2]])
             # print([line_arr[-3], line_arr[-3]])
             label.append(line_arr[-1].split('\n')[0])
@@ -105,7 +105,7 @@ def one_hot_sklearn(label_integer):
 
 
 #
-# # Prepare data:
+# # Prepare input_data:
 #
 # def prepare_sequence(seq, to_ix):
 #     idxs = [to_ix[w] for w in seq]
@@ -130,7 +130,7 @@ tag_to_ix = {"DET": 0, "NN": 1, "V": 2}
 
 
 ######################################################################
-# Create the model:
+# Create the proposed_algorithms:
 
 
 class LSTMTagger(nn.Module):
@@ -145,7 +145,7 @@ class LSTMTagger(nn.Module):
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
 
-        # model = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, len(word_to_ix), len(tag_to_ix))
+        # proposed_algorithms = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, len(word_to_ix), len(tag_to_ix))
         # self.loss_function = nn.NLLLoss()
         self.loss_function = nn.MSELoss()
         self.optimizer = optim.SGD(self.lstm.parameters(), lr=0.1)
@@ -187,7 +187,7 @@ class LSTMTagger(nn.Module):
         return tag_scores  # when tag_scores.shape > 1, only return the last cell output.
 
     ######################################################################
-    # Train the model:
+    # Train the proposed_algorithms:
 
     def train(self, X_train, y_train):
 
@@ -197,9 +197,9 @@ class LSTMTagger(nn.Module):
         # # Here we don't need to train, so the code is wrapped in torch.no_grad()
         # with torch.no_grad():
         #     inputs = prepare_sequence(training_data[0][0], word_to_ix)
-        #     tag_scores = model(inputs)
+        #     tag_scores = proposed_algorithms(inputs)
         #     print(tag_scores)
-        for epoch in range(2):  # again, normally you would NOT do 300 epochs, it is toy data
+        for epoch in range(2):  # again, normally you would NOT do 300 epochs, it is toy input_data
             # print('epoch:', epoch)
             t = 0
             training_data = zip(X_train, y_train)
@@ -291,11 +291,11 @@ def main_train_RNN(input_file, first_n=1):
         y_train = one_hot_sklearn(y_train)
         model.train(X_train[1:100], y_train[1:100])
 
-        # show_figure(model.loss_hist)
-        # model.predict(X_train, y_train)
+        # show_figure(proposed_algorithms.loss_hist)
+        # proposed_algorithms.predict(X_train, y_train)
         #
         # y_test = one_hot_sklearn(y_test)
-        # model.predict(X_test, y_test)
+        # proposed_algorithms.predict(X_test, y_test)
 
     return model
 
@@ -343,7 +343,7 @@ def online_identify(input_file='', model='', threshold=0.8):
             (subflow_flg, pred_value, first_n_pkts_data) = flow_table[five_tuple]
             if not subflow_flg:
                 first_n_pkts_data.append(pkt_data)
-                # if first_n_pkts_identify(torch.Tensor(first_n_pkts_data),model):
+                # if first_n_pkts_identify(torch.Tensor(first_n_pkts_data),proposed_algorithms):
                 flg, pred_value = first_n_pkts_identify(torch.Tensor(first_n_pkts_data), model, threshold)
                 if flg:
                     flow_table[five_tuple] = (
@@ -387,8 +387,8 @@ def online_identify(input_file='', model='', threshold=0.8):
 if __name__ == '__main__':
     torch.manual_seed(1)
 
-    input_file_training = '../data/BROWSING_gate_SSL_Browsing_tshark.txt'
+    input_file_training = '../input_data/BROWSING_gate_SSL_Browsing_tshark.txt'
     model = main_train_RNN(input_file_training, first_n=2)
 
-    input_file_Online_identify = '../data/AUDIO_spotifygateway_tshark.txt'
+    input_file_Online_identify = '../input_data/AUDIO_spotifygateway_tshark.txt'
     online_identify(input_file_Online_identify, model, threshold=0.2)
