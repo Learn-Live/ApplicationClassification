@@ -24,10 +24,7 @@
     
 ### |- log: use to log middle or tmp results.
     ...
-    
-### |- visualization: plot data to visualize 
-    ..
-    
+
 ### |- proposed_algorithms
     ### |- deep_autoencoder_pytorch
             main_autoencoder.py
@@ -46,6 +43,10 @@
     
     ## 'preprocess' folder 
     >>>--- toolkit to preprocess input data, such as 'load data', 'normalization data'
+        
+    ## |- visualization: plot data to visualize 
+        ..
+    
 
 ### |-history_files: backup 
     ...
