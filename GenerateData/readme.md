@@ -20,7 +20,9 @@ Use the following command to filter save labels into a file:
 ndpi2label.py ndpiout.txt label.txt
 ```
 
-Statistics will be in the log.\n Wanted protocol list can be changed
+Statistics will be in the log.
+
+Wanted protocol list can be changed
 
 ## 4. Use label2flow.py to generate pcap files we want from the labels
 Use the following command: 
