@@ -21,8 +21,11 @@ if __name__ == "__main__":
 				break			
 			parselist = re.findall("TCP([\s\S]*?)proto: ([\s\S]*?)cat:",s)
 			
-			if (len(parselist) != 0):
+			
+			if (len(parselist) == 0):
+				parselist = re.findall("UDP([\s\S]*?)proto: ([\s\S]*?)cat:",s)
 				
+			if (len(parselist) != 0):
 				protocol = parselist[0][1].split("/")[1][:-2]
 				if ("." not in protocol and protocol not in wantedProtocol):
 					s = rfile.readline()
@@ -55,6 +58,10 @@ if __name__ == "__main__":
 		print("Finished, no desired flow found")	
 	else:
 		print("Finished:")
+		with open("log.txt", "a",encoding="UTF-8") as logfile:
+			for key, value in statdic.items():
+				logfile.write(key+": "+str(value)+"\n")
+			logfile.write("\n\n")
 		for key, value in statdic.items():
 			print(key,": ",value)
 	fout.close()
