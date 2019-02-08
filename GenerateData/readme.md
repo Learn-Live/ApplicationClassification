@@ -10,7 +10,7 @@ https://github.com/ntop/nDPI
 Use the following command to use nDPI and save results into a file:
 
 ```
-sudo ./ndpiReader -i YourPcapFile.pcap -v 1> ndpiout.txt
+sudo ./ndpiReader -i YourPcapFile.pcap -v 1 > ndpiout.txt
 ```
 
 ## 3. Use ndpi2label.py to filter the flows we want
