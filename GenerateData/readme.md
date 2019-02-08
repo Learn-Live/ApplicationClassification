@@ -61,6 +61,6 @@ https://www.secrepo.com/
 
 https://www.simpleweb.org/wiki/index.php/Traces
 
-https://www.stratosphereips.org/datasets-overview/
+https://www.stratosphereips.org/datasets-overview/ --Kartik Aggarwal
 
 https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/ --Lu Xu
