@@ -32,3 +32,10 @@ python label2flow.py YourPcapFile.pcap label.txt
 ```
 
 generate pcap files in each flow in ./result/protocols
+
+## Tips:Use parseall.py to parse all the pcap and pcapng files in the current folder
+Use the following command: 
+
+```
+python parseall.py
+```
