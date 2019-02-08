@@ -17,7 +17,7 @@ sudo ./ndpiReader -i YourPcapFile.pcap -v 1 > ndpiout.txt
 Use the following command to filter save labels into a file:
 
 ```
-ndpi2label.py ndpiout.txt label.txt
+python ndpi2label.py ndpiout.txt label.txt
 ```
 
 Statistics will be in the log.
@@ -28,7 +28,7 @@ Wanted protocol list can be changed
 Use the following command: 
 
 ```
-label2flow.py YourPcapFile.pcap label.txt
+python label2flow.py YourPcapFile.pcap label.txt
 ```
 
 generate pcap files in each flow in ./result/protocols
