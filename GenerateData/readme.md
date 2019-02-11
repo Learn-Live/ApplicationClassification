@@ -63,4 +63,4 @@ https://www.simpleweb.org/wiki/index.php/Traces
 
 https://www.stratosphereips.org/datasets-overview/ --Kartik Aggarwal
 
-https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/ --Lu Xu(Good Source)
+https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/ --Lu Xu(No encrypted data. almost all http)
