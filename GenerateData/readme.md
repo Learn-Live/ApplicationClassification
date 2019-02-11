@@ -67,4 +67,4 @@ https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Dataset
 
 ISCX-IDS-2012 --Lu Xu
 
-ISCX-IDS-2017 --Kartik Aggarwal (good source)
+ISCX-IDS-2017 --Kartik Aggarwal
