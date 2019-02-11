@@ -30,7 +30,7 @@ if __name__ == "__main__":
 				if ("." not in protocol and protocol not in wantedProtocol):
 					s = rfile.readline()
 					continue
-				if (protocol.split(".")[0].strip() == "DNS"):
+				if (protocol.split(".")[0].strip() == "DNS" or protocol.split(".")[0].strip() == "HTTP"):
 					s = rfile.readline()
 					continue
 				if protocol not in statdic:
