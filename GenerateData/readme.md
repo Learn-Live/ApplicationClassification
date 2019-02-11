@@ -49,7 +49,7 @@ https://cybervan.appcomsci.com:9000/datasets    ---Lu Xu(not applicable)
 
 DARPA_Scalable_Network_Monitoring-20091103 (11/03/2009 to 11/12/2009) --- Lu Xu(Too old not used)
 
-https://www.caida.org/data/ --- Lu Xu(applying for privilege to get data)
+https://www.caida.org/data/ --- Lu Xu
 
 https://github.com/awesomedata/awesome-public-datasets --Lu Xu(most not applicable)
 
