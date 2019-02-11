@@ -59,14 +59,12 @@ https://wand.net.nz/wits/index.php
 
 https://www.secrepo.com/
 
-https://www.simpleweb.org/wiki/index.php/Traces --Lu Xu(Most data not applicable. PCAP file too old)
+https://www.simpleweb.org/wiki/index.php/Traces --Lu Xu(Data not applicable/PCAP file too old)
 
 https://www.stratosphereips.org/datasets-overview/ --Kartik Aggarwal
 
 https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/ --Lu Xu(No encrypted data. almost all http)
 
-ISCX-IDS-2012 --Lu Xu (good source)
+ISCX-IDS-2012 --Lu Xu
 
 ISCX-IDS-2017 --Kartik Aggarwal (good source)
-
-ISCX-2018 --Lu Xu
