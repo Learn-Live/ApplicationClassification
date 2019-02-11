@@ -45,11 +45,11 @@ https://www.netresec.com/?page=PcapFiles
 
 https://toolbox.google.com/datasetsearch/search?query=
 
-https://cybervan.appcomsci.com:9000/datasets    ---Lu Xu
+https://cybervan.appcomsci.com:9000/datasets    ---Lu Xu(not applicable)
 
-DARPA_Scalable_Network_Monitoring-20091103 (11/03/2009 to 11/12/2009) --- Lu Xu
+DARPA_Scalable_Network_Monitoring-20091103 (11/03/2009 to 11/12/2009) --- Lu Xu(Too old not used)
 
-https://www.caida.org/data/
+https://www.caida.org/data/ --- Lu Xu
 
 https://github.com/awesomedata/awesome-public-datasets
 
@@ -63,4 +63,4 @@ https://www.simpleweb.org/wiki/index.php/Traces
 
 https://www.stratosphereips.org/datasets-overview/ --Kartik Aggarwal
 
-https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/ --Lu Xu
+https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/ --Lu Xu(Good Source)
