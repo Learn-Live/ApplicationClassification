@@ -54,3 +54,23 @@
 
 ## Note:
     since 10/13, ...
+
+
+## hpc login:
+ssh ky13@prince.hpc.nyu.edu
+
+cd /archive/k/ky13/Experiments
+
+# run in local host
+scp -r 'local_files' ky13@prince.hpc.nyu.edu:/archive/k/ky13/Experiments
+
+# run in hpc
+scp -r /archive/k/ky13/Experiments /scratch/ky13/Experiments
+
+sbatch main_nn_pytorch.sh
+
+squeue -u ky13
+
+ 
+
+

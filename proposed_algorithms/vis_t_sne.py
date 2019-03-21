@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    visualize high-dimensions input_data by T-SNE
+    visualize high-dimensions data by T-SNE
 
     refer to :
             1 http://alexanderfabisch.github.io/t-sne-in-scikit-learn.html
@@ -11,8 +11,32 @@ from collections import Counter
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+import umap
 
-from utilities.preprocess import load_data, remove_special_labels
+# from preprocess.data_preprocess import load_data, remove_special_labels
+from sklearn_issues.numpy_load import load_npy_data
+
+
+def vis_high_dims_data_umap(X, y, show_label_flg=False):
+    """
+
+    :param X:  features
+    :param y:  labels
+    :param show_label_flg :
+    :return:
+    """
+    # res_umap=umap.UMAP(n_neighbors=5,min_dist=0.3, metric='correlation').fit_transform(X,y)
+    res_umap = umap.UMAP(n_neighbors=20, min_dist=0.5, spread=2, metric='correlation').fit_transform(X, y)
+
+    if not show_label_flg:
+        plt.figure(figsize=(10, 5))
+        plt.scatter(res_umap[:, 0], res_umap[:, 1], c=y, cmap=plt.cm.get_cmap("jet", 10), alpha=0.7)
+        plt.colorbar(ticks=range(10))
+        plt.title('umap results')
+        plt.show()
+    else:
+        plot_with_labels(X, y, res_umap, "UMAP", min_dist=20.0)
+
 
 
 def vis_high_dims_data_t_sne(X, y, show_label_flg=False):
@@ -145,23 +169,14 @@ if __name__ == '__main__':
     if demo_flg:
         demo_t_sne()
     else:
-        input_file = '../results/skype_784Bytes_train.csv'
-        input_file = '../results/facebook_1000Bytes_train.csv'
-        input_file = '../results/hangout_1000Bytes_train.csv'
-        # input_file = '../results/skype_1000Bytes_train.csv'
-        # input_file='../results/skype_1000Bytes_train_merged_files.csv'
-        # input_file = '../results/vpn-app_1000Bytes_train.csv'
-        # input_file = '../results/non-vpn-app_1000Bytes_train.csv'
-        # input_file =merge_features_labels('../input_data/3combined/train_images.csv','../input_data/3combined/train_labels.csv')
-
-        remove_labels_lst = []
-        input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
-        print(input_file)
-        X, y = load_data(input_file)
-        X = list(map(lambda t: t[:1000], X))
+        input_file = '../input_data/trdata-8000B.npy'
+        session_size=80
+        X, y = load_npy_data(input_file,session_size)
+        # X = list(map(lambda t: t[:session_size], X))
         y = list(map(lambda t: int(float(t)), y))
         # change_labels(y)
         cntr = Counter(y)
         print('X: ', len(X), ' y:', sorted(cntr.items()))
-        vis_high_dims_data_pca(X, y, show_label_flg=False)
-        vis_high_dims_data_t_sne(X, y, show_label_flg=False)
+        # vis_high_dims_data_pca(X, y, show_label_flg=False)
+        # vis_high_dims_data_t_sne(X, y, show_label_flg=False)
+        vis_high_dims_data_umap(X, y, show_label_flg=False)
