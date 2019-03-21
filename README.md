@@ -71,6 +71,13 @@ sbatch main_nn_pytorch.sh
 
 squeue -u ky13
 
+
+## Mounting the remote file system to local 
+mkdir ~/nyu_hpc
+sshfs ky13@prince.hpc.nyu.edu:/scratch/ky13/Experiments ~/nyu_hpc
+# unmounting
+sudo umount ~/nyu_hpc
+
  
 
 
