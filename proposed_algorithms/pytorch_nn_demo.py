@@ -506,7 +506,8 @@ def app_main(input_file, epochs, out_dir='../log'):
 
 if __name__ == '__main__':
     args = parse_params()
-    input_file = eval(args['input_file'])
+    # print(args['input_file'])
+    input_file = args['input_file']
     epochs = eval(args['epochs'])
     out_dir = args['out_dir']
     print('args:%s\n' % args)
