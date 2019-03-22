@@ -266,7 +266,7 @@ class NeuralNetworkDemo():
         print('training')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
-        self.batch_size = 50
+        self.batch_size = 500
         train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
