@@ -71,6 +71,9 @@ sbatch main_nn_pytorch.sh
 
 squeue -u ky13
 
+# kill jobID 
+scancel 56937
+
 
 ## Mounting the remote file system to local 
 mkdir ~/nyu_hpc
