@@ -122,6 +122,7 @@ class PrintLayer(nn.Module):
         print('print_%sth_layer (batch_size x out_dim)=%s' % (self.idx_layer, x.shape))
         return x
 
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 class NeuralNetworkDemo():
     r"""
@@ -139,41 +140,41 @@ class NeuralNetworkDemo():
 
         self.epochs = epochs
 
-        # method 1: network structure (recommend), however it is not easy to print values in each layer
-        in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
-        hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
-        hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 10, bias=False)
-        hid_lay_3 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
-        out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
-        # self.net = nn.Sequential(
+        # # method 1: network structure (recommend), however it is not easy to print values in each layer
+        # in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
+        # hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
+        # hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 10, bias=False)
+        # hid_lay_3 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
+        # out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
+        # # self.net = nn.Sequential(
+        # #                          in_lay,
+        # #                          nn.Sigmoid(),
+        # #                          hid_lay,
+        # #                          nn.LeakyReLU(),
+        # #                          hid_lay_2,
+        # #                          nn.LeakyReLU(),
+        # #                          out_lay
+        # #                          )
+        # # refer to : https://discuss.pytorch.org/t/how-do-i-print-output-of-each-layer-in-sequential/5773/4
+        # self.net = nn.Sequential(#PrintLayer(idx_layer=0),  # Add Print layer for debug
         #                          in_lay,
-        #                          nn.Sigmoid(),
+        #                          #PrintLayer(idx_layer=1),  # Add Print layer for debug
+        #                          nn.LeakyReLU(),
         #                          hid_lay,
+        #                          #PrintLayer(idx_layer=2),  # Add Print layer for debug
         #                          nn.LeakyReLU(),
-        #                          hid_lay_2,
+        #                         #  hid_lay_2,
+        #                         # nn.LeakyReLU(),
+        #                         # hid_lay_2,
+        #                         # nn.LeakyReLU(),
+        #                         # hid_lay_2,
         #                          nn.LeakyReLU(),
-        #                          out_lay
+        #                          hid_lay_3,
+        #                          #PrintLayer(idx_layer=3),  # Add Print layer for debug
+        #                          nn.LeakyReLU(),
+        #                          out_lay,
+        #                          #PrintLayer(idx_layer='out'),  # Add Print layer for debug
         #                          )
-        # refer to : https://discuss.pytorch.org/t/how-do-i-print-output-of-each-layer-in-sequential/5773/4
-        self.net = nn.Sequential(#PrintLayer(idx_layer=0),  # Add Print layer for debug
-                                 in_lay,
-                                 #PrintLayer(idx_layer=1),  # Add Print layer for debug
-                                 nn.LeakyReLU(),
-                                 hid_lay,
-                                 #PrintLayer(idx_layer=2),  # Add Print layer for debug
-                                 nn.LeakyReLU(),
-                                #  hid_lay_2,
-                                # nn.LeakyReLU(),
-                                # hid_lay_2,
-                                # nn.LeakyReLU(),
-                                # hid_lay_2,
-                                 nn.LeakyReLU(),
-                                 hid_lay_3,
-                                 #PrintLayer(idx_layer=3),  # Add Print layer for debug
-                                 nn.LeakyReLU(),
-                                 out_lay,
-                                 #PrintLayer(idx_layer='out'),  # Add Print layer for debug
-                                 )
 
         # # method 2 : it is not easy to use , however it is easy to print values in each layer.
         # class NN(nn.Module):
@@ -201,12 +202,43 @@ class NeuralNetworkDemo():
         #         return out
 
         # self.net = NN(self.in_dim, self.h_dim, self.out_dim)
+
+        # Convolutional neural network (two convolutional layers)
+        class ConvNet(nn.Module):
+            def __init__(self, num_classes=10):
+                super(ConvNet, self).__init__()
+                # 1 input image channel, 6 output channels, 5x1 square convolution
+                self.layer1 = nn.Sequential(
+                    nn.Conv2d(1, 16, kernel_size=(5, 1), stride=1),
+                    # nn.BatchNorm2d(16),
+                    nn.Tanh(),
+                    # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+                )
+                self.layer2 = nn.Sequential(
+                    nn.Conv2d(16, 32, kernel_size=(5, 1), stride=1, padding=0),
+                    # nn.BatchNorm2d(32),
+                    nn.Tanh(),
+                    # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+                )
+                self.fc1 = nn.Linear(32 * 1992 * 1, 1000*1)
+                self.fc2 = nn.Linear(1000 * 1, num_classes)
+
+            def forward(self, x):
+                out = self.layer1(x)
+                out = self.layer2(out)
+                out = out.reshape(out.size(0), -1)
+                out = self.fc1(out)
+                out = self.fc2(out)
+                return out
+
+        self.net = ConvNet(self.out_dim).to(device)
+
         ## evaluation standards
         ## self.criterion = nn.MSELoss()  # class_issues initialization
         self.criterion = nn.CrossEntropyLoss()  # class_issues initialization
 
         # optimizer
-        self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
+        self.optim = optim.Adam(self.net.parameters(), lr=1e-4, betas=(0.9, 0.99))
         print(callable(self.optim))
 
         if display_flg:
@@ -225,10 +257,10 @@ class NeuralNetworkDemo():
         out = F.softmax(out)
         return out
 
-    def forward_sequential(self, X):
-        o1 = self.net(X)
-
-        return o1
+    # def forward_sequential(self, X):
+    #     o1 = self.net(X)
+    #
+    #     return o1
 
     def train(self, train_set, train_set_tuple, test_set):
         print('training')
@@ -247,7 +279,8 @@ class NeuralNetworkDemo():
             param_order_dict = OrderedDict()
             loss_tmp = torch.Tensor([0.0])
             for batch_idx, (b_x, b_y) in enumerate(train_loader):
-                b_x = b_x.view([b_x.shape[0], -1]).float()
+                # b_x = b_x.view([b_x.shape[0], -1]).float()
+                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
                 b_y = b_y.view(b_y.shape[0], 1).long()
                 b_y = b_y.squeeze_()
 
@@ -284,7 +317,9 @@ class NeuralNetworkDemo():
 
                 # evaluation on train set
                 X_train, y_train = train_set_tuple
-                y_preds = self.forward(torch.Tensor(X_train))
+                b_x=torch.Tensor(X_train)
+                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
+                y_preds = self.forward(b_x)
                 y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
                 print(confusion_matrix(y_train, y_preds))
                 train_acc = metrics.accuracy_score(y_train, y_preds)
@@ -293,7 +328,9 @@ class NeuralNetworkDemo():
 
                 # evaluation on Test set
                 X_test, y_test = test_set
-                y_preds = self.forward(torch.Tensor(X_test))
+                b_x = torch.Tensor(X_test)
+                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
+                y_preds = self.forward(b_x)
                 y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
                 print(confusion_matrix(y_test, y_preds))
                 test_acc = metrics.accuracy_score(y_test, y_preds)
@@ -495,7 +532,7 @@ def app_main(input_file, epochs, out_dir='../log'):
 
     # # train_set = generated_train_set(100)
     # input_file = '../input_data/trdata-8000B.npy'
-    session_size = 3000
+    session_size = 2000
     print(f'session_size:{session_size}')
     X, y = load_npy_data(input_file, session_size,norm_flg=True)
     test_percent = 0.2
@@ -505,7 +542,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     train_set = TrafficDataset(X_train, y_train, normalization_flg=False)
     # test_set = TrafficDataset(X_test, y_test, normalization_flg=False)
 
-    nn_demo = NeuralNetworkDemo(in_dim=session_size, epochs=epochs, display_flg=False)
+    nn_demo = NeuralNetworkDemo(in_dim=session_size, epochs=epochs, display_flg=True)
     nn_demo.train(train_set, (X_train, y_train), (X_test, y_test))
 
     end_time = time.strftime('%Y-%h-%d %H:%M:%S', time.localtime())
