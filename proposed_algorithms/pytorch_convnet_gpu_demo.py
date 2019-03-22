@@ -122,8 +122,6 @@ class PrintLayer(nn.Module):
         return x
 
 
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
 
 class NeuralNetworkDemo():
     r"""
@@ -140,69 +138,6 @@ class NeuralNetworkDemo():
         self.out_dim = out_dim
 
         self.epochs = epochs
-
-        # # method 1: network structure (recommend), however it is not easy to print values in each layer
-        # in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
-        # hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
-        # hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 10, bias=False)
-        # hid_lay_3 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
-        # out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
-        # # self.net = nn.Sequential(
-        # #                          in_lay,
-        # #                          nn.Sigmoid(),
-        # #                          hid_lay,
-        # #                          nn.LeakyReLU(),
-        # #                          hid_lay_2,
-        # #                          nn.LeakyReLU(),
-        # #                          out_lay
-        # #                          )
-        # # refer to : https://discuss.pytorch.org/t/how-do-i-print-output-of-each-layer-in-sequential/5773/4
-        # self.net = nn.Sequential(#PrintLayer(idx_layer=0),  # Add Print layer for debug
-        #                          in_lay,
-        #                          #PrintLayer(idx_layer=1),  # Add Print layer for debug
-        #                          nn.LeakyReLU(),
-        #                          hid_lay,
-        #                          #PrintLayer(idx_layer=2),  # Add Print layer for debug
-        #                          nn.LeakyReLU(),
-        #                         #  hid_lay_2,
-        #                         # nn.LeakyReLU(),
-        #                         # hid_lay_2,
-        #                         # nn.LeakyReLU(),
-        #                         # hid_lay_2,
-        #                          nn.LeakyReLU(),
-        #                          hid_lay_3,
-        #                          #PrintLayer(idx_layer=3),  # Add Print layer for debug
-        #                          nn.LeakyReLU(),
-        #                          out_lay,
-        #                          #PrintLayer(idx_layer='out'),  # Add Print layer for debug
-        #                          )
-
-        # # method 2 : it is not easy to use , however it is easy to print values in each layer.
-        # class NN(nn.Module):
-        #     def __init__(self, in_dim, h_dim, out_dim):
-        #         super(NN, self).__init__()
-        #         self.in_dim = in_dim
-        #         self.h_dim = h_dim
-        #         self.out_dim = out_dim
-        #         self.in_lay = nn.Linear(self.in_dim, self.h_dim * 20, bias=True)  # class_issues initialization
-        #         self.hid_lay = nn.Linear(self.h_dim * 20, self.h_dim * 10, bias=True)
-        #         self.hid_lay_2 = nn.Linear(self.h_dim * 10, self.h_dim * 20, bias=False)
-        #         self.out_lay = nn.Linear(self.h_dim * 20, self.out_dim, bias=True)
-        #
-        #     def forward(self, X):
-        #         z1 = self.in_lay(X)
-        #         # a1=nn.Sigmoid(z1)
-        #         a1 = F.leaky_relu(z1)
-        #         z2 = self.hid_lay(a1)
-        #         a2 = F.leaky_relu(z2)
-        #         z3 = self.hid_lay_2(a2)
-        #         a3 = F.leaky_relu(z3)
-        #         z4 = self.out_lay(a3)
-        #         out = F.softmax(z4)
-        #
-        #         return out
-
-        # self.net = NN(self.in_dim, self.h_dim, self.out_dim)
 
         # Convolutional neural network (two convolutional layers)
         class ConvNet(nn.Module):
@@ -261,17 +196,16 @@ class NeuralNetworkDemo():
         out = self.net(X)
         return out
 
-    # def forward_sequential(self, X):
-    #     o1 = self.net(X)
-    #
-    #     return o1
 
     def train(self, train_set, train_set_tuple, test_set):
         print('training')
+        print(f'cuda:{torch.cuda.is_available()}')
+        cuda_0 = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
         self.batch_size = 500
-        train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
+        train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4, device=cuda_0)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
         learn_rate_lst = []
@@ -281,11 +215,11 @@ class NeuralNetworkDemo():
         train_acc_lst = []
         for epoch in range(self.epochs):
             param_order_dict = OrderedDict()
-            loss_tmp = torch.Tensor([0.0])
+            loss_tmp = torch.Tensor([0.0],device=cuda_0)
             for batch_idx, (b_x, b_y) in enumerate(train_loader):
                 # b_x = b_x.view([b_x.shape[0], -1]).float()
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
-                b_y = b_y.view(b_y.shape[0], 1).long()
+                b_x = b_x.view([b_x.shape[0], 1, -1, 1], device=cuda_0).float()
+                b_y = b_y.view(b_y.shape[0], 1,device=cuda_0).long()
                 b_y = b_y.squeeze_()
 
                 self.optim.zero_grad()
@@ -321,7 +255,7 @@ class NeuralNetworkDemo():
 
                 # evaluation on train set
                 X_train, y_train = train_set_tuple
-                b_x = torch.Tensor(X_train)
+                b_x = torch.Tensor(X_train, device=cuda_0)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
                 y_preds = self.forward(b_x)
                 y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
@@ -332,7 +266,7 @@ class NeuralNetworkDemo():
 
                 # evaluation on Test set
                 X_test, y_test = test_set
-                b_x = torch.Tensor(X_test)
+                b_x = torch.Tensor(X_test,device=cuda_0)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
                 y_preds = self.forward(b_x)
                 y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
