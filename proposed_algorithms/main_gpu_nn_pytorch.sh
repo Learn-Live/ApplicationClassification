@@ -15,7 +15,7 @@
 #SBATCH --time=60:00:00
 #
 # expect the job to use no more than 24GB of memory
-#SBATCH --mem=60GB
+#SBATCH --mem=5GB
 #
 # once job ends, send me an email
 #SBATCH --mail-type=END
@@ -46,4 +46,4 @@ cd /scratch/ky13/Experiments/application_classification/proposed_algorithms/
 
 ### ------------------------------------------------------------------------------------------
 #### Case5
-python3 pytorch_convnet_demo.py -i '../input_data/trdata-8000B.npy' -e 1000 -o '../log'
+python3 pytorch_convnet_gpu_demo.py -i '../input_data/trdata-8000B.npy' -e 1000 -o '../log'

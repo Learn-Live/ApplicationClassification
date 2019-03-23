@@ -19,6 +19,8 @@ from sklearn.model_selection import train_test_split
 from sys_path_export import *  # it is no need to do in IDE environment, however, it must be done in shell/command environment
 from torch import nn, optim
 from torch.utils.data import Dataset
+import sys
+sys.stdout.flush()
 
 # # matplotlib.use("Agg")
 # import matplotlib.animation as manimation
@@ -122,6 +124,9 @@ class PrintLayer(nn.Module):
         return x
 
 
+print(f'cuda:{torch.cuda.is_available()}')
+cuda_0 = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
 
 class NeuralNetworkDemo():
     r"""
@@ -150,18 +155,19 @@ class NeuralNetworkDemo():
                     # nn.Tanh(),
                     nn.LeakyReLU()
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
-                )
+                ).to(device=cuda_0)
                 self.layer2 = nn.Sequential(
                     nn.Conv2d(16, 32, kernel_size=(5, 1), stride=1, padding=0),
                     # nn.BatchNorm2d(32),
                     # nn.Tanh(),
                     nn.LeakyReLU()
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
-                )
-                self.fc1 = nn.Linear(32 * 1992 * 1, 1000 * 1)
-                self.fc2 = nn.Linear(1000 * 1, num_classes)
+                ).to(device=cuda_0)
+                self.fc1 = nn.Linear(32 * 1992 * 1, 1000 * 1).to(device=cuda_0)
+                self.fc2 = nn.Linear(1000 * 1, num_classes).to(device=cuda_0)
 
             def forward(self, x):
+                # x = x.to(device=cuda_0)
                 out = self.layer1(x)
                 out = self.layer2(out)
                 out = out.reshape(out.size(0), -1)
@@ -171,7 +177,7 @@ class NeuralNetworkDemo():
 
                 return out
 
-        self.net = ConvNet(self.out_dim).to(device)
+        self.net = ConvNet(self.out_dim).to(device=cuda_0)
 
         ## evaluation standards
         ## self.criterion = nn.MSELoss()  # class_issues initialization
@@ -196,16 +202,15 @@ class NeuralNetworkDemo():
         out = self.net(X)
         return out
 
-
     def train(self, train_set, train_set_tuple, test_set):
-        print('training')
-        print(f'cuda:{torch.cuda.is_available()}')
-        cuda_0 = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-
+        print('ddd')
+        print('training...')
+        print(f'cuda:{cuda_0}')
+        print('ddd')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
         self.batch_size = 500
-        train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4, device=cuda_0)
+        train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
         learn_rate_lst = []
@@ -215,11 +220,12 @@ class NeuralNetworkDemo():
         train_acc_lst = []
         for epoch in range(self.epochs):
             param_order_dict = OrderedDict()
-            loss_tmp = torch.Tensor([0.0],device=cuda_0)
+            loss_tmp = torch.Tensor([0.0]).cuda()
             for batch_idx, (b_x, b_y) in enumerate(train_loader):
+                # print(f'{b_x.device}')
                 # b_x = b_x.view([b_x.shape[0], -1]).float()
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1], device=cuda_0).float()
-                b_y = b_y.view(b_y.shape[0], 1,device=cuda_0).long()
+                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float().cuda()
+                b_y = b_y.view(b_y.shape[0], 1).long().to(device=cuda_0)
                 b_y = b_y.squeeze_()
 
                 self.optim.zero_grad()
@@ -238,15 +244,16 @@ class NeuralNetworkDemo():
                 #         epoch, batch_idx * len(b_x), len(train_loader.dataset),
                 #                100. * batch_idx / len(train_loader), loss.input_data[0]))
                 if batch_idx == 0:
+                    print(f'{b_x.device}')
                     print('%d/%d, batch_ith = %d, loss=%f, lr=%s' % (epoch, self.epochs, batch_idx, loss.data, lr))
                 # for idx, param in enumerate(self.net.parameters()):
                 for name, param in self.net.named_parameters():
                     # print(name, param)  # even is weigh and bias, odd is activation function, it's no parameters.
                     if name not in param_order_dict.keys():
-                        param_order_dict[name] = copy.deepcopy(param.data.numpy())  # numpy arrary
+                        param_order_dict[name] = copy.deepcopy(param.cpu().data.numpy())  # numpy arrary
                     else:
                         # param_order_dict[name].append(copy.deepcopy(np.reshape(param.input_data.numpy(), (-1, 1))))
-                        param_order_dict[name] += copy.deepcopy(param.data.numpy())  # numpy arrary
+                        param_order_dict[name] += copy.deepcopy(param.cpu().data.numpy())  # numpy arrary
             loss_lst.append(loss_tmp.data / len(train_loader))
             if epoch not in all_params_order_dict.keys():  # key = epoch, value =param_order_dict
                 # average parameters
@@ -255,10 +262,10 @@ class NeuralNetworkDemo():
 
                 # evaluation on train set
                 X_train, y_train = train_set_tuple
-                b_x = torch.Tensor(X_train, device=cuda_0)
+                b_x = torch.Tensor(X_train)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
-                y_preds = self.forward(b_x)
-                y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
+                y_preds = self.forward(b_x.cuda())
+                y_preds = torch.argmax(y_preds.cpu(), dim=1).numpy()  # get argmax value, predict label
                 print(confusion_matrix(y_train, y_preds))
                 train_acc = metrics.accuracy_score(y_train, y_preds)
                 print("train acc", train_acc)
@@ -266,10 +273,10 @@ class NeuralNetworkDemo():
 
                 # evaluation on Test set
                 X_test, y_test = test_set
-                b_x = torch.Tensor(X_test,device=cuda_0)
+                b_x = torch.Tensor(X_test)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
-                y_preds = self.forward(b_x)
-                y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
+                y_preds = self.forward(b_x.cuda())
+                y_preds = torch.argmax(y_preds.cpu(), dim=1).numpy()  # get argmax value, predict label
                 print(confusion_matrix(y_test, y_preds))
                 test_acc = metrics.accuracy_score(y_test, y_preds)
                 print("test acc", test_acc)
@@ -480,7 +487,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     train_set = TrafficDataset(X_train, y_train, normalization_flg=False)
     # test_set = TrafficDataset(X_test, y_test, normalization_flg=False)
 
-    nn_demo = NeuralNetworkDemo(in_dim=session_size, epochs=epochs, display_flg=True)
+    nn_demo = NeuralNetworkDemo(in_dim=session_size, epochs=epochs, display_flg=False)
     nn_demo.train(train_set, (X_train, y_train), (X_test, y_test))
 
     end_time = time.strftime('%Y-%h-%d %H:%M:%S', time.localtime())
