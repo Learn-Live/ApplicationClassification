@@ -23,7 +23,7 @@ from sys_path_export import *  # it is no need to do in IDE environment, however
 
 # # matplotlib.use("Agg")
 # import matplotlib.animation as manimation
-from proposed_algorithms.numpy_load import load_npy_data
+from proposed_algorithms.numpy_load_and_arff import load_npy_data
 
 
 def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
@@ -494,7 +494,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     print('It starts at ', start_time)
 
     # # train_set = generated_train_set(100)
-    # input_file = '../input_data/trdata-8000B.npy'
+    # input_file = '../input_data/trdata-8000B_payload.npy'
     session_size = 3000
     print(f'session_size:{session_size}')
     X, y = load_npy_data(input_file, session_size,norm_flg=True)

@@ -32,6 +32,8 @@ def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
 
 
 def load_npy_data(input_file, session_size=8000, balance_flg=True, norm_flg=False):
+
+    print(f'input_file:{input_file}')
     data = np.load(input_file)
     y, X = data[1:, 0], data[1:, 1]
     data_dict = {}
@@ -53,7 +55,7 @@ def load_npy_data(input_file, session_size=8000, balance_flg=True, norm_flg=Fals
         y_new.extend([key] * len(data_dict[key]))
 
     if norm_flg:
-        range_value = [0., 0.1]
+        range_value = [-0.1, 0.1]
         print(f'range_value:{range_value}')
         X_new= normalize_data(X_new, range_value, eps=1e-5)  # down=-1, up=1
 
@@ -108,7 +110,8 @@ def load_new_npy(input_file,session_size=8000, balance_flg=True):
     return truetrainX, truetrainY
 
 if __name__ == '__main__':
-    input_file = '../input_data/trdata-8000B.npy'
-    X, y = load_npy_data(input_file, session_size=2000)
+    input_file = '../input_data/trdata-8000B_payload.npy'
+    input_file = '../input_data/trdata-8000B_header_payload_20190326.npy'
+    X, y = load_npy_data(input_file, session_size=200)
     # X, y = load_new_npy(input_file)
     save_to_arff(X, y)

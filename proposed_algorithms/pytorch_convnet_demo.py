@@ -22,7 +22,7 @@ from torch.utils.data import Dataset
 
 # # matplotlib.use("Agg")
 # import matplotlib.animation as manimation
-from proposed_algorithms.numpy_load import load_npy_data
+from proposed_algorithms.numpy_load_and_arff import load_npy_data
 
 
 def normalize_data(X, range_value=[-1, 1], eps=1e-5):  # down=-1, up=1
@@ -210,28 +210,29 @@ class NeuralNetworkDemo():
                 super(ConvNet, self).__init__()
                 # 1 input image channel, 6 output channels, 5x1 square convolution
                 self.layer1 = nn.Sequential(
-                    nn.Conv2d(1, 16, kernel_size=(5, 1), stride=1),
+                    nn.Conv2d(1, 8, kernel_size=(2, 1), stride=1),
                     # nn.BatchNorm2d(16),
                     # nn.Tanh(),
                     nn.LeakyReLU()
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
                 )
                 self.layer2 = nn.Sequential(
-                    nn.Conv2d(16, 32, kernel_size=(5, 1), stride=1, padding=0),
+                    nn.Conv2d(8, 2, kernel_size=(2, 1), stride=1, padding=0),
                     # nn.BatchNorm2d(32),
                     # nn.Tanh(),
                     nn.LeakyReLU()
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
                 )
-                self.fc1 = nn.Linear(32 * 1992 * 1, 1000 * 1)
-                self.fc2 = nn.Linear(1000 * 1, num_classes)
+                # self.fc1 = nn.Linear(4 * 1992 * 1, 1000 * 1)
+                self.fc1 = nn.Linear(2 * 7998 * 1, num_classes)
+                # self.fc2 = nn.Linear(1000 * 1, num_classes)
 
             def forward(self, x):
                 out = self.layer1(x)
                 out = self.layer2(out)
                 out = out.reshape(out.size(0), -1)
                 out = self.fc1(out)
-                out = self.fc2(out)
+                # out = self.fc2(out)
                 out = F.softmax(out)
 
                 return out
@@ -243,7 +244,7 @@ class NeuralNetworkDemo():
         self.criterion = nn.CrossEntropyLoss()  # class_issues initialization
 
         # optimizer
-        self.optim = optim.Adam(self.net.parameters(), lr=1e-4, betas=(0.9, 0.99))
+        self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
         print(callable(self.optim))
 
         if display_flg:
@@ -270,7 +271,7 @@ class NeuralNetworkDemo():
         print('training')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
-        self.batch_size = 500
+        self.batch_size = 8
         train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
@@ -319,16 +320,16 @@ class NeuralNetworkDemo():
                 all_params_order_dict[epoch] = {key: value / len(train_loader) for key, value in
                                                 param_order_dict.items()}
 
-                # evaluation on train set
-                X_train, y_train = train_set_tuple
-                b_x = torch.Tensor(X_train)
-                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
-                y_preds = self.forward(b_x)
-                y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
-                print(confusion_matrix(y_train, y_preds))
-                train_acc = metrics.accuracy_score(y_train, y_preds)
-                print("train acc", train_acc)
-                train_acc_lst.append(train_acc)
+                # # evaluation on train set
+                # X_train, y_train = train_set_tuple
+                # b_x = torch.Tensor(X_train)
+                # b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
+                # y_preds = self.forward(b_x)
+                # y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
+                # print(confusion_matrix(y_train, y_preds))
+                # train_acc = metrics.accuracy_score(y_train, y_preds)
+                # print("train acc", train_acc)
+                # train_acc_lst.append(train_acc)
 
                 # evaluation on Test set
                 X_test, y_test = test_set
@@ -340,6 +341,7 @@ class NeuralNetworkDemo():
                 test_acc = metrics.accuracy_score(y_test, y_preds)
                 print("test acc", test_acc)
                 test_acc_lst.append(test_acc)
+                b_x = []
 
         save_data(train_acc_lst, 'train_acc_lst.txt')
         save_data(test_acc_lst, 'test_acc_lst.txt')
@@ -535,8 +537,8 @@ def app_main(input_file, epochs, out_dir='../log'):
     print('It starts at ', start_time)
 
     # # train_set = generated_train_set(100)
-    # input_file = '../input_data/trdata-8000B.npy'
-    session_size = 2000
+    # input_file = '../input_data/trdata-8000B_payload.npy'
+    session_size = 8000
     print(f'session_size:{session_size}')
     X, y = load_npy_data(input_file, session_size, norm_flg=True)
     test_percent = 0.2
@@ -558,6 +560,12 @@ if __name__ == '__main__':
     args = parse_params()
     # print(args['input_file'])
     input_file = args['input_file']
+    # input_file = '../input_data/trdata-8000B_header_payload_20190326.npy'
+    input_file = '../input_data/trdata_P_8000.npy'  # test acc: [0.26696329254727474, 0.42936596218020023, 0.43492769744160176, 0.492769744160178, 0.6651835372636262, 0.6685205784204672]
+    # input_file = '../input_data/trdata_PH_8000.npy'  # test acc: [0.22024471635150167, 0.5183537263626251, 0.5717463848720801, 0.610678531701891, 0.8153503893214683, 0.8209121245828699]
+    # input_file = '../input_data/trdata_PHT_8000.npy'  # test acc: [0.27697441601779754, 0.5116796440489433, 0.6028921023359288, 0.6062291434927698, 0.8075639599555061, 0.8186874304783093]
+    input_file = '../input_data/trdata_PT_8000.npy'   # test acc: [0.24916573971078976, 0.45161290322580644, 0.5617352614015573, 0.5761957730812013, 0.7552836484983315, 0.7552836484983315]
+
     epochs = eval(args['epochs'])
     out_dir = args['out_dir']
     print('args:%s\n' % args)

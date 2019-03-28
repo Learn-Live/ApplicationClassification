@@ -44,4 +44,4 @@ cd /scratch/ky13/Experiments/application_classification/proposed_algorithms/
 
 ### ------------------------------------------------------------------------------------------
 #### Case5
-python3 pytorch_convnet_demo.py -i '../input_data/trdata-8000B.npy' -e 1000 -o '../log'
+python3 pytorch_convnet_demo.py -i '../input_data/trdata-8000B_payload.npy' -e 1000 -o '../log'

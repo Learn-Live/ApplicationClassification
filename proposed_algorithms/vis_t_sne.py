@@ -14,7 +14,7 @@ from sklearn.manifold import TSNE
 import umap
 
 # from preprocess.data_preprocess import load_data, remove_special_labels
-from sklearn_issues.numpy_load import load_npy_data
+from numpy_load_and_arff import load_npy_data
 
 
 def vis_high_dims_data_umap(X, y, show_label_flg=False):
@@ -26,7 +26,7 @@ def vis_high_dims_data_umap(X, y, show_label_flg=False):
     :return:
     """
     # res_umap=umap.UMAP(n_neighbors=5,min_dist=0.3, metric='correlation').fit_transform(X,y)
-    res_umap = umap.UMAP(n_neighbors=20, min_dist=0.5, spread=2, metric='correlation').fit_transform(X, y)
+    res_umap = umap.UMAP(n_neighbors=10, min_dist=0.3, spread=2, metric='correlation').fit_transform(X, y)
 
     if not show_label_flg:
         plt.figure(figsize=(10, 5))
@@ -169,8 +169,9 @@ if __name__ == '__main__':
     if demo_flg:
         demo_t_sne()
     else:
-        input_file = '../input_data/trdata-8000B.npy'
-        session_size=80
+        input_file = '../input_data/trdata-8000B_payload.npy'
+        input_file = '../input_data/trdata-8000B_header_payload_20190326.npy'
+        session_size=8000
         X, y = load_npy_data(input_file,session_size)
         # X = list(map(lambda t: t[:session_size], X))
         y = list(map(lambda t: int(float(t)), y))
