@@ -39,7 +39,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 1
+        self.num_layers = 10
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -448,7 +448,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     HIDDEN_DIM = 30
     # proposed_algorithms = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
 
-    for i in range(4, 11):
+    for i in range(5, 11):
         print('first_%d_pkts' % i)
         global first_n_pkts
         first_n_pkts = i
@@ -496,36 +496,10 @@ if __name__ == '__main__':
     print('args:%s\n' % args)
 
     global batch_size, EPOCHES, num_classes, num_features, unit_input_size
-    batch_size = 20
+    batch_size = 10
     EPOCHES = 50
     num_classes = 10
     num_features = 1460  # 1460B
     unit_input_size = num_features  # the input size of lstm cell
 
     app_main(input_file, epochs, out_dir='../log')
-
-#
-# if __name__ == '__main__':
-#     torch.manual_seed(1)
-#
-#     n = 10
-#     # feature_file = '../input_data/first_n_pkts/pkt_train/train_%dpkt_images.csv' % n
-#     # label_file = '../input_data/first_n_pkts/pkt_train/train_%dpkt_labels.csv' % n
-#     # input_file = merge_features_labels(feature_file, label_file)
-#     input_file = '../input_data/trdata_PT_8000_padding.npy'
-#     name_str = 'non-vpn-app'
-#     # name_str = 'facebook'
-#     # name_str = 'hangout'
-#     train_output_file, test_output_file = read_skype_sample(name_str, n)
-#     input_file = train_output_file
-#
-#     remove_labels_lst = []
-#     input_file, num_c = remove_special_labels(input_file, remove_labels_lst)
-#     print(input_file)
-#
-#     global batch_size, EPOCHES, num_classes, num_features
-#     batch_size = 200
-#     EPOCHES = 5000
-#     num_classes = num_c - len(remove_labels_lst)
-#     num_features = 60
-#     run_main(input_file)
