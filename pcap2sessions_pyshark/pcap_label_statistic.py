@@ -65,16 +65,17 @@ def extract_url_from_pcap(input_f, output_file):
                         five_tuple = pkt.payload.src + ':' + str(
                             pkt.payload.payload.sport) + '-' + pkt.payload.dst + ':' + str(
                             pkt.payload.payload.dport) + '-' + pkt.payload.payload.name.upper()
-                        url_str = pkt.payload.payload.payload.msg[0].ext[00].fields['servernames'][0].fields[
-                            'servername']
-                        print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
-                            pkt.payload.src, pkt.payload.payload.sport, pkt.payload.dst, pkt.payload.payload.dport,
-                            pkt.payload.payload.name, url_str))
-                        if five_tuple not in res_dict.keys():
-                            res_dict[five_tuple] = url_str
-                        else:
-                            print(f'\'{url_str}\' appears')
-                            res_dict[five_tuple] = url_str
+                        if 'servernames' in pkt.payload.payload.payload.msg[0].ext[00].fields.keys():
+                            url_str = pkt.payload.payload.payload.msg[0].ext[00].fields['servernames'][0].fields[
+                                'servername']
+                            print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
+                                pkt.payload.src, pkt.payload.payload.sport, pkt.payload.dst, pkt.payload.payload.dport,
+                                pkt.payload.payload.name, url_str))
+                            if five_tuple not in res_dict.keys():
+                                res_dict[five_tuple] = url_str
+                            else:
+                                print(f'\'{url_str}\' appears')
+                                res_dict[five_tuple] = url_str
         else:  # step 2. if this pkt can not be recognized as "Ethernet", then try to parse it as (IP,IPv4)
             pkt = IP(pkt)  # without ethernet header,  then try to parse it as (IP,IPv4)
             if pkt.payload.name.upper() in ["TCP", "UDP"]:
@@ -101,7 +102,7 @@ if __name__ == '__main__':
         os.mkdir(root_dir)
     pcap_root_dir = '../input_data'
     os.listdir()
-    file_lst = ['10.10.5.170_60219_52.202.180.164_443_SSL.Amazon.pcap',
+    file_lst = ['10.10.3.71_38176_54.230.87.139_443_SSL.Amazon.pcap',
                 '10.10.5.170_60219_52.202.180.164_443_SSL.Amazon.pcap']
 
     output_file = os.path.join(root_dir, 'out_result.txt')
@@ -112,3 +113,5 @@ if __name__ == '__main__':
         print(pcap_file_name)
         # file_name_prefix = os.path.basename(pcap_file_name)
         extract_url_from_pcap(pcap_file_name, output_file)
+
+    # statistic_info(output_file)
