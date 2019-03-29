@@ -62,14 +62,14 @@ def extract_url_from_pcap(input_f, output_file):
                 if pkt.payload.payload.name.upper() in ["TCP", "UDP"]:
                     if pkt.payload.payload.payload.name.upper() in 'TLS' and "Client Hello" in \
                             pkt.payload.payload.payload.msg[0].name:
-                        print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
-                            pkt.payload.src, pkt.payload.payload.sport, pkt.payload.dst, pkt.payload.payload.dport,
-                            pkt.payload.payload.name, pkt.payload.payload.payload.name))
                         five_tuple = pkt.payload.src + ':' + str(
                             pkt.payload.payload.sport) + '-' + pkt.payload.dst + ':' + str(
                             pkt.payload.payload.dport) + '-' + pkt.payload.payload.name.upper()
                         url_str = pkt.payload.payload.payload.msg[0].ext[00].fields['servernames'][0].fields[
                             'servername']
+                        print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
+                            pkt.payload.src, pkt.payload.payload.sport, pkt.payload.dst, pkt.payload.payload.dport,
+                            pkt.payload.payload.name, url_str))
                         if five_tuple not in res_dict.keys():
                             res_dict[five_tuple] = url_str
                         else:
@@ -79,13 +79,13 @@ def extract_url_from_pcap(input_f, output_file):
             pkt = IP(pkt)  # without ethernet header,  then try to parse it as (IP,IPv4)
             if pkt.payload.name.upper() in ["TCP", "UDP"]:
                 if "Client Hello" in pkt.payload.payload.msg[0].name:
-                    print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
-                        pkt.src, pkt.payload.sport, pkt.dst, pkt.payload.dport,
-                        pkt.payload.name, pkt.payload.payload.name))
                     five_tuple = pkt.payload.src + ':' + str(
                         pkt.payload.payload.sport) + '-' + pkt.payload.dst + ':' + str(
                         pkt.payload.payload.dport) + '-' + pkt.payload.payload.name.upper()
-                    pkt.payload.payload.msg[0].ext[00].fields['servernames'][0].fields['servername']
+                    url_str = pkt.payload.payload.msg[0].ext[00].fields['servernames'][0].fields['servername']
+                    print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
+                        pkt.src, pkt.payload.sport, pkt.dst, pkt.payload.dport,
+                        pkt.payload.name, url_str))
                     if five_tuple not in res_dict.keys():
                         res_dict[five_tuple] = url_str
                     else:
