@@ -25,9 +25,9 @@ from scapy.utils import PcapReader
 
 def save_to_file(output_file, input_f, res_dict):
     with open(output_file, 'a') as out:
-        out.write(os.path.basename(input_f) + '\n')
+        out.write(os.path.basename(input_f))
         for idx, (key, value) in enumerate(res_dict.items()):
-            out.write(key + ':' + str(value) + '\n')
+            out.write("---" + str(value) + '\n')
 
     return output_file
 
@@ -100,6 +100,7 @@ if __name__ == '__main__':
     if not os.path.exists(root_dir):
         os.mkdir(root_dir)
     pcap_root_dir = '../input_data'
+    os.listdir()
     file_lst = ['10.10.5.170_60219_52.202.180.164_443_SSL.Amazon.pcap',
                 '10.10.5.170_60219_52.202.180.164_443_SSL.Amazon.pcap']
 
