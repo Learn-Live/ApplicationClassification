@@ -13,8 +13,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.cross_validation import train_test_split
+# from sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from torch.autograd import Variable
 from torch.utils.data import Dataset
@@ -421,6 +422,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     test_percent = 0.2
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_percent, random_state=42)
     print(f'train_test_ratio:[{1-test_percent}:{test_percent}]')
+
 
     train_set = TrafficDataset(X_train, y_train, normalization_flg=False)
     test_set = TrafficDataset(X_test, y_test, normalization_flg=False)
