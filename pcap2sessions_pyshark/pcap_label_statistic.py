@@ -27,7 +27,7 @@ def save_to_file(output_file, input_f, res_dict):
     with open(output_file, 'a') as out:
         out.write(os.path.basename(input_f))
         for idx, (key, value) in enumerate(res_dict.items()):
-            out.write("---" + str(value) + '\n')
+            out.write( str(key)+ ' : '+ str(len(value))+ "---" + str(value) + '\n')
 
     return output_file
 
@@ -65,17 +65,21 @@ def extract_url_from_pcap(input_f, output_file):
                         five_tuple = pkt.payload.src + ':' + str(
                             pkt.payload.payload.sport) + '-' + pkt.payload.dst + ':' + str(
                             pkt.payload.payload.dport) + '-' + pkt.payload.payload.name.upper()
-                        if 'servernames' in pkt.payload.payload.payload.msg[0].ext[00].fields.keys():
-                            url_str = pkt.payload.payload.payload.msg[0].ext[00].fields['servernames'][0].fields[
-                                'servername']
-                            print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
-                                pkt.payload.src, pkt.payload.payload.sport, pkt.payload.dst, pkt.payload.payload.dport,
-                                pkt.payload.payload.name, url_str))
-                            if five_tuple not in res_dict.keys():
-                                res_dict[five_tuple] = url_str
-                            else:
-                                print(f'\'{url_str}\' appears')
-                                res_dict[five_tuple] = url_str
+                        try:
+                            if 'servernames' in pkt.payload.payload.payload.msg[0].ext[00].fields.keys():
+                                url_str = pkt.payload.payload.payload.msg[0].ext[00].fields['servernames'][0].fields[
+                                    'servername']
+                                print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
+                                    pkt.payload.src, pkt.payload.payload.sport, pkt.payload.dst, pkt.payload.payload.dport,
+                                    pkt.payload.payload.name, url_str))
+                                if url_str not in res_dict.keys():
+                                    res_dict[url_str]=[five_tuple]
+                                else:
+                                    res_dict[url_str].append(five_tuple)
+                                    print(f'\'{url_str}\' appears: {len(res_dict[url_str])} times')
+
+                        except TypeError as e:
+                            print(f'{five_tuple}')
         else:  # step 2. if this pkt can not be recognized as "Ethernet", then try to parse it as (IP,IPv4)
             pkt = IP(pkt)  # without ethernet header,  then try to parse it as (IP,IPv4)
             if pkt.payload.name.upper() in ["TCP", "UDP"]:
@@ -87,14 +91,29 @@ def extract_url_from_pcap(input_f, output_file):
                     print('packet[0] info: "%s:%d-%s:%d-%s"+%s' % (
                         pkt.src, pkt.payload.sport, pkt.dst, pkt.payload.dport,
                         pkt.payload.name, url_str))
-                    if five_tuple not in res_dict.keys():
-                        res_dict[five_tuple] = url_str
+                    if url_str not in res_dict.keys():
+                        res_dict[url_str] = [five_tuple]
                     else:
-                        print(f'\'{url_str}\' appears')
-                        res_dict[five_tuple] = url_str
+                        res_dict[url_str].append(five_tuple)
+                        print(f'\'{url_str}\' appears: {len(res_dict[url_str])} times')
+
 
     save_to_file(output_file, input_f, res_dict)
 
+
+# def statistic_info(output_file):
+#
+#     with open(output_file,'r') as in_hdr:
+#
+#         line = in_hdr.readline()
+#         res_dict = {}
+#         while line:
+#             line_arr = line.split(':')
+#             res_dict[line_arr[0]] = line_arr[1]
+#             line = in_hdr.readline()
+#
+#
+#
 
 if __name__ == '__main__':
     root_dir = '../results'
@@ -102,7 +121,7 @@ if __name__ == '__main__':
         os.mkdir(root_dir)
     pcap_root_dir = '../input_data'
     os.listdir()
-    file_lst = ['10.10.3.71_38176_54.230.87.139_443_SSL.Amazon.pcap',
+    file_lst = ['ssl_20190329.pcapng','10.10.3.71_38176_54.230.87.139_443_SSL.Amazon.pcap',
                 '10.10.5.170_60219_52.202.180.164_443_SSL.Amazon.pcap']
 
     output_file = os.path.join(root_dir, 'out_result.txt')

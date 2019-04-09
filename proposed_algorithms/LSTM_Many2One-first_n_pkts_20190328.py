@@ -13,8 +13,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.cross_validation import train_test_split
+# from sklearn.cross_validation import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from torch.autograd import Variable
 from torch.utils.data import Dataset
@@ -39,7 +40,7 @@ class LSTMTagger(nn.Module):
         self.hidden_dim = hidden_dim
 
         # self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.num_layers = 10
+        self.num_layers = 1
         # The LSTM takes word embeddings as inputs, and outputs hidden states
         # with dimensionality hidden_dim.
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers=self.num_layers)
@@ -48,7 +49,7 @@ class LSTMTagger(nn.Module):
         # self.loss_function = nn.NLLLoss()
         self.loss_function = nn.CrossEntropyLoss()
         # self.optimizer = optim.SGD(self.lstm.parameters(), lr=0.1)
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-2, weight_decay=1e-4)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=1e-1, weight_decay=1e-4)
         #
 
         # The linear layer that maps from hidden state space to tag space
@@ -422,6 +423,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_percent, random_state=42)
     print(f'train_test_ratio:[{1-test_percent}:{test_percent}]')
 
+
     train_set = TrafficDataset(X_train, y_train, normalization_flg=False)
     test_set = TrafficDataset(X_test, y_test, normalization_flg=False)
     #
@@ -448,7 +450,7 @@ def app_main(input_file, epochs, out_dir='../log'):
     HIDDEN_DIM = 30
     # proposed_algorithms = LSTMTagger(EMBEDDING_DIM, HIDDEN_DIM, '', num_classes)
 
-    for i in range(5, 11):
+    for i in range(5, 6):
         print('first_%d_pkts' % i)
         global first_n_pkts
         first_n_pkts = i
@@ -497,7 +499,7 @@ if __name__ == '__main__':
 
     global batch_size, EPOCHES, num_classes, num_features, unit_input_size
     batch_size = 10
-    EPOCHES = 50
+    EPOCHES = 500
     num_classes = 10
     num_features = 1460  # 1460B
     unit_input_size = num_features  # the input size of lstm cell
