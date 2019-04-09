@@ -7,6 +7,7 @@ import copy
 import time
 from collections import OrderedDict
 
+from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -206,29 +207,52 @@ class NeuralNetworkDemo():
 
         # Convolutional neural network (two convolutional layers)
         class ConvNet(nn.Module):
-            def __init__(self, num_classes=10):
+            def __init__(self, in_dim, num_classes=10):
                 super(ConvNet, self).__init__()
+                n = 10
+                k = 5
+                s = 1
                 # 1 input image channel, 6 output channels, 5x1 square convolution
                 self.layer1 = nn.Sequential(
-                    nn.Conv2d(1, 8, kernel_size=(2, 1), stride=1),
+                    nn.Conv2d(1, n, kernel_size=(k, 1), stride=s),  # (in_dim - (k-1)-1//s)
                     # nn.BatchNorm2d(16),
+                    # nn.Dropout(),
+                    nn.Tanh(),
+                    # nn.Sigmoid()
+                    # nn.RReLU()
+                    # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+                )
+                self.layer12 = nn.Sequential(
+                    nn.Conv2d(n, n // 2, kernel_size=(k, 1), stride=s),  # ((in_dim - (k-1)-1//s)-(k-1)-1))//s
+                    # nn.BatchNorm2d(32),
                     # nn.Tanh(),
+                    # nn.Sigmoid(),
                     nn.LeakyReLU()
+                    # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+                )
+                self.layer13 = nn.Sequential(
+                    nn.Conv2d(n // 2, n // 2, kernel_size=(k, 1), stride=s),  # ((in_dim - (k-1)-1//s)-(k-1)-1))//s
+                    # nn.BatchNorm2d(32),
+                    # nn.Tanh(),
+                    # nn.Sigmoid(),
+                    nn.RReLU()
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
                 )
                 self.layer2 = nn.Sequential(
-                    nn.Conv2d(8, 2, kernel_size=(2, 1), stride=1, padding=0),
+                    nn.Conv2d(n // 2, 4, kernel_size=(k, 1), stride=s),  # ((in_dim - (k-1)-1//s)-(k-1)-1))//s
                     # nn.BatchNorm2d(32),
-                    # nn.Tanh(),
-                    nn.LeakyReLU()
+                    nn.Tanh(),
+                    # nn.RReLU()
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
                 )
                 # self.fc1 = nn.Linear(4 * 1992 * 1, 1000 * 1)
-                self.fc1 = nn.Linear(2 * 7998 * 1, num_classes)
+                self.fc1 = nn.Linear(4 * ((in_dim - (k - 1)) - (k - 1) - (k - 1) - (k - 1)), num_classes)
                 # self.fc2 = nn.Linear(1000 * 1, num_classes)
 
             def forward(self, x):
                 out = self.layer1(x)
+                out = self.layer12(out)
+                out = self.layer13(out)
                 out = self.layer2(out)
                 out = out.reshape(out.size(0), -1)
                 out = self.fc1(out)
@@ -237,7 +261,7 @@ class NeuralNetworkDemo():
 
                 return out
 
-        self.net = ConvNet(self.out_dim).to(device)
+        self.net = ConvNet(self.in_dim, self.out_dim).to(device)
 
         ## evaluation standards
         ## self.criterion = nn.MSELoss()  # class_issues initialization
@@ -245,6 +269,7 @@ class NeuralNetworkDemo():
 
         # optimizer
         self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
+        # self.optim = optim.RMSprop(self.net.parameters(), lr=1e-3, weight_decay=1)
         print(callable(self.optim))
 
         if display_flg:
@@ -271,18 +296,19 @@ class NeuralNetworkDemo():
         print('training')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
-        self.batch_size = 8
+        self.batch_size = 16
         train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
         learn_rate_lst = []
-
+        c =1
         loss_lst = []
         test_acc_lst = []
         train_acc_lst = []
         for epoch in range(self.epochs):
             param_order_dict = OrderedDict()
             loss_tmp = torch.Tensor([0.0])
+            lr_flg = True
             for batch_idx, (b_x, b_y) in enumerate(train_loader):
                 # b_x = b_x.view([b_x.shape[0], -1]).float()
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
@@ -320,28 +346,46 @@ class NeuralNetworkDemo():
                 all_params_order_dict[epoch] = {key: value / len(train_loader) for key, value in
                                                 param_order_dict.items()}
 
-                # # evaluation on train set
-                # X_train, y_train = train_set_tuple
-                # b_x = torch.Tensor(X_train)
-                # b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
-                # y_preds = self.forward(b_x)
-                # y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
-                # print(confusion_matrix(y_train, y_preds))
-                # train_acc = metrics.accuracy_score(y_train, y_preds)
-                # print("train acc", train_acc)
-                # train_acc_lst.append(train_acc)
+                # evaluation on train set
+                X_train, y_train = train_set_tuple
+                b_x = torch.Tensor(X_train)
+                b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
+                y_preds = self.forward(b_x)
+                b_y = torch.Tensor(y_train)
+                b_y = b_y.view(b_y.shape[0], 1).long()
+                b_y = b_y.squeeze_()
+                train_loss = self.criterion(y_preds, b_y)
+                y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
+                print(confusion_matrix(y_train, y_preds))
+                train_acc = metrics.accuracy_score(y_train, y_preds)
+                print("train acc", train_acc)
+                train_acc_lst.append(train_loss)
 
                 # evaluation on Test set
                 X_test, y_test = test_set
                 b_x = torch.Tensor(X_test)
                 b_x = b_x.view([b_x.shape[0], 1, -1, 1]).float()
                 y_preds = self.forward(b_x)
+                b_y = torch.Tensor(y_test)
+                b_y = b_y.view(b_y.shape[0], 1).long()
+                b_y = b_y.squeeze_()
+                train_loss = self.criterion(y_preds, b_y)
+                test_loss = self.criterion(y_preds, b_y)
                 y_preds = torch.argmax(y_preds, dim=1).numpy()  # get argmax value, predict label
                 print(confusion_matrix(y_test, y_preds))
                 test_acc = metrics.accuracy_score(y_test, y_preds)
                 print("test acc", test_acc)
-                test_acc_lst.append(test_acc)
+                test_acc_lst.append(test_loss)
                 b_x = []
+
+                if len(test_acc_lst) > 0 and train_acc - test_acc > 0.02:
+                    if lr_flg:
+                        c += 1
+                        if c % 5 == 0:
+                            self.optim.param_groups[0]['lr'] /= 2
+                            if self.optim.param_groups[0]['lr'] < 1e-5:
+                                self.optim.param_groups[0]['lr'] = 1e-3
+                            lr_flg = False
 
         save_data(train_acc_lst, 'train_acc_lst.txt')
         save_data(test_acc_lst, 'test_acc_lst.txt')
@@ -380,6 +424,7 @@ def plot_data(data, x_label, y_label, title=''):
     ax.plot(data)
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
+    # ax.ylim(1,3)
     ax.set_title(title)
     # ax.set_ylabel()
     plt.show()
@@ -523,7 +568,7 @@ def load_data_and_plot(input_file):
     plot_data(data)
 
 
-def app_main(input_file, epochs, out_dir='../log'):
+def app_main(input_file, epochs, out_dir='../log', reduce_feature_flg=True):
     """
 
     :param input_file:
@@ -538,10 +583,22 @@ def app_main(input_file, epochs, out_dir='../log'):
 
     # # train_set = generated_train_set(100)
     # input_file = '../input_data/trdata-8000B_payload.npy'
-    session_size = 8000
+    session_size = 6000
     print(f'session_size:{session_size}')
     X, y = load_npy_data(input_file, session_size, norm_flg=True)
-    test_percent = 0.2
+
+    input_size = 50
+    if reduce_feature_flg:
+        print(f'Using PCA to reduce features.')
+        pca_model = PCA(n_components=input_size, random_state=0)
+        pca_model.fit_transform(X, y)
+        X = pca_model.transform(X)
+        explained_variance = pca_model.explained_variance_ratio_
+        print(f'explained_variance={explained_variance}')
+
+    session_size = input_size  # X.shape[1]
+    print(f'X.shape={X.shape}')
+    test_percent = 0.1
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_percent, random_state=42)
     print(f'train_test_ratio:[{1-test_percent}:{test_percent}]')
 
@@ -565,6 +622,9 @@ if __name__ == '__main__':
     # input_file = '../input_data/trdata_PH_8000.npy'  # test acc: [0.22024471635150167, 0.5183537263626251, 0.5717463848720801, 0.610678531701891, 0.8153503893214683, 0.8209121245828699]
     # input_file = '../input_data/trdata_PHT_8000.npy'  # test acc: [0.27697441601779754, 0.5116796440489433, 0.6028921023359288, 0.6062291434927698, 0.8075639599555061, 0.8186874304783093]
     input_file = '../input_data/trdata_PT_8000.npy'   # test acc: [0.24916573971078976, 0.45161290322580644, 0.5617352614015573, 0.5761957730812013, 0.7552836484983315, 0.7552836484983315]
+    # input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_PT_8000_padding.npy'
+    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy'
+    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy_over_sample_data.npy'
 
     epochs = eval(args['epochs'])
     out_dir = args['out_dir']

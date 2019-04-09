@@ -17,6 +17,7 @@ from sklearn import metrics
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from torch import nn, optim
+from torch.optim.lr_scheduler import MultiStepLR, ReduceLROnPlateau, StepLR, ExponentialLR
 from torch.utils.data import Dataset
 
 from sys_path_export import *  # it is no need to do in IDE environment, however, it must be done in shell/command environment
@@ -160,6 +161,7 @@ class NeuralNetworkDemo():
                                  #PrintLayer(idx_layer=1),  # Add Print layer for debug
                                  nn.LeakyReLU(),
                                  hid_lay,
+            # nn.Dropout(),
                                  #PrintLayer(idx_layer=2),  # Add Print layer for debug
                                  nn.LeakyReLU(),
                                 #  hid_lay_2,
@@ -209,6 +211,11 @@ class NeuralNetworkDemo():
         self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
         print(callable(self.optim))
 
+        # adaptvie learning rate
+        # self.scheduler = MultiStepLR(self.optim, milestones=[30, 80], gamma=0.1)
+        # self.scheduler = ExponentialLR(self.optim, gamma=0.1)
+        # self.scheduler= ReduceLROnPlateau(self.optim, 'min')
+
         if display_flg:
             # print network architecture
             print_network('demo', self.net)
@@ -239,13 +246,14 @@ class NeuralNetworkDemo():
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
         learn_rate_lst = []
-
+        c = 1
         loss_lst = []
         test_acc_lst = []
         train_acc_lst = []
         for epoch in range(self.epochs):
             param_order_dict = OrderedDict()
             loss_tmp = torch.Tensor([0.0])
+            lr_flg = True
             for batch_idx, (b_x, b_y) in enumerate(train_loader):
                 b_x = b_x.view([b_x.shape[0], -1]).float()
                 b_y = b_y.view(b_y.shape[0], 1).long()
@@ -255,8 +263,11 @@ class NeuralNetworkDemo():
                 b_y_preds = self.forward(b_x)
                 loss = self.criterion(b_y_preds, b_y)
                 lr = self.optim.param_groups[0]['lr']
+
                 loss.backward()
                 self.optim.step()
+                # self.scheduler.step(loss)
+
 
                 # for graphing purposes
                 learn_rate_lst.append(lr)
@@ -298,7 +309,19 @@ class NeuralNetworkDemo():
                 print(confusion_matrix(y_test, y_preds))
                 test_acc = metrics.accuracy_score(y_test, y_preds)
                 print("test acc", test_acc)
+
+                if len(test_acc_lst) > 0 and train_acc - test_acc > 0.1:
+                    if lr_flg:
+                        c += 1
+                        if c % 5 == 0:
+                            self.optim.param_groups[0]['lr'] /= 2
+                            if self.optim.param_groups[0]['lr'] < 1e-5:
+                                self.optim.param_groups[0]['lr'] = 1e-3
+                            lr_flg = False
+
+
                 test_acc_lst.append(test_acc)
+
 
         save_data(train_acc_lst, 'train_acc_lst.txt')
         save_data(test_acc_lst, 'test_acc_lst.txt')
@@ -495,7 +518,7 @@ def app_main(input_file, epochs, out_dir='../log'):
 
     # # train_set = generated_train_set(100)
     # input_file = '../input_data/trdata-8000B_payload.npy'
-    session_size = 3000
+    session_size = 6000
     print(f'session_size:{session_size}')
     X, y = load_npy_data(input_file, session_size,norm_flg=True)
     test_percent = 0.2
@@ -517,6 +540,7 @@ if __name__ == '__main__':
     args = parse_params()
     # print(args['input_file'])
     input_file = args['input_file']
+    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_PT_8000_padding.npy'
     epochs = eval(args['epochs'])
     out_dir = args['out_dir']
     print('args:%s\n' % args)
