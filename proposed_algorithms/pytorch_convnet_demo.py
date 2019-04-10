@@ -5,7 +5,7 @@ r"""
 import argparse
 import copy
 import time
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
@@ -133,7 +133,7 @@ class NeuralNetworkDemo():
             print the weights and bias values
     """
 
-    def __init__(self, in_dim, out_dim=10, epochs=10, display_flg=False):
+    def __init__(self, in_dim, out_dim=8, epochs=10, display_flg=False):
         self.display_flg = display_flg
 
         self.in_dim = in_dim
@@ -210,7 +210,7 @@ class NeuralNetworkDemo():
             def __init__(self, in_dim, num_classes=10):
                 super(ConvNet, self).__init__()
                 n = 10
-                k = 5
+                k = 3
                 s = 1
                 # 1 input image channel, 6 output channels, 5x1 square convolution
                 self.layer1 = nn.Sequential(
@@ -227,8 +227,8 @@ class NeuralNetworkDemo():
                     # nn.BatchNorm2d(32),
                     # nn.Tanh(),
                     # nn.Sigmoid(),
-                    nn.LeakyReLU()
-                    # nn.MaxPool2d(kernel_size=(2,1), stride=2)
+                    nn.LeakyReLU(),
+                    nn.MaxPool2d(kernel_size=(4, 1), stride=4)
                 )
                 self.layer13 = nn.Sequential(
                     nn.Conv2d(n // 2, n // 2, kernel_size=(k, 1), stride=s),  # ((in_dim - (k-1)-1//s)-(k-1)-1))//s
@@ -246,8 +246,8 @@ class NeuralNetworkDemo():
                     # nn.MaxPool2d(kernel_size=(2,1), stride=2)
                 )
                 # self.fc1 = nn.Linear(4 * 1992 * 1, 1000 * 1)
-                self.fc1 = nn.Linear(4 * ((in_dim - (k - 1)) - (k - 1) - (k - 1) - (k - 1)), num_classes)
-                # self.fc2 = nn.Linear(1000 * 1, num_classes)
+                self.fc1 = nn.Linear(4 * (((in_dim - (k - 1)) - (k - 1)) // 4 - (k - 1) - (k - 1)), 1000)
+                self.fc2 = nn.Linear(1000 * 1, num_classes)
 
             def forward(self, x):
                 out = self.layer1(x)
@@ -256,7 +256,7 @@ class NeuralNetworkDemo():
                 out = self.layer2(out)
                 out = out.reshape(out.size(0), -1)
                 out = self.fc1(out)
-                # out = self.fc2(out)
+                out = self.fc2(out)
                 out = F.softmax(out)
 
                 return out
@@ -265,7 +265,10 @@ class NeuralNetworkDemo():
 
         ## evaluation standards
         ## self.criterion = nn.MSELoss()  # class_issues initialization
-        self.criterion = nn.CrossEntropyLoss()  # class_issues initialization
+        # weights = np.asarray([1.0/1054,1/2729, 1/1300, 1/1331, 1.0/3000, 1.0/2625, 1.0/1254, 1.0/3000, 1.0/2084])
+        # class_weights = torch.FloatTensor(weights)
+        # self.criterion = nn.CrossEntropyLoss(weight=class_weights, size_average=False)  # class_issues initialization
+        self.criterion = nn.CrossEntropyLoss()
 
         # optimizer
         self.optim = optim.Adam(self.net.parameters(), lr=1e-3, betas=(0.9, 0.99))
@@ -296,7 +299,7 @@ class NeuralNetworkDemo():
         print('training')
         # X,y = train_set
         # train_set = (torch.from_numpy(X).double(), torch.from_numpy(y).double())
-        self.batch_size = 16
+        self.batch_size = 64
         train_loader = Data.DataLoader(train_set, self.batch_size, shuffle=True, num_workers=4)
         all_params_order_dict = OrderedDict()
         ith_layer_out_dict = OrderedDict()
@@ -378,14 +381,14 @@ class NeuralNetworkDemo():
                 test_acc_lst.append(test_loss)
                 b_x = []
 
-                if len(test_acc_lst) > 0 and train_acc - test_acc > 0.02:
-                    if lr_flg:
-                        c += 1
-                        if c % 5 == 0:
-                            self.optim.param_groups[0]['lr'] /= 2
-                            if self.optim.param_groups[0]['lr'] < 1e-5:
-                                self.optim.param_groups[0]['lr'] = 1e-3
-                            lr_flg = False
+                # if len(test_acc_lst) > 0 and train_acc - test_acc > 0.02:
+                #     if lr_flg:
+                #         c += 1
+                #         if c % 5 == 0:
+                #             self.optim.param_groups[0]['lr'] /= 2
+                #             if self.optim.param_groups[0]['lr'] < 1e-5:
+                #                 self.optim.param_groups[0]['lr'] = 1e-3
+                #             lr_flg = False
 
         save_data(train_acc_lst, 'train_acc_lst.txt')
         save_data(test_acc_lst, 'test_acc_lst.txt')
@@ -583,11 +586,11 @@ def app_main(input_file, epochs, out_dir='../log', reduce_feature_flg=True):
 
     # # train_set = generated_train_set(100)
     # input_file = '../input_data/trdata-8000B_payload.npy'
-    session_size = 6000
+    session_size = 8000
     print(f'session_size:{session_size}')
-    X, y = load_npy_data(input_file, session_size, norm_flg=True)
-
-    input_size = 50
+    X, y = load_npy_data(input_file, session_size, norm_flg=True, over_sample_flg=False)
+    print('Original dataset shape %s' % Counter(y))
+    input_size = 300
     if reduce_feature_flg:
         print(f'Using PCA to reduce features.')
         pca_model = PCA(n_components=input_size, random_state=0)
@@ -623,8 +626,10 @@ if __name__ == '__main__':
     # input_file = '../input_data/trdata_PHT_8000.npy'  # test acc: [0.27697441601779754, 0.5116796440489433, 0.6028921023359288, 0.6062291434927698, 0.8075639599555061, 0.8186874304783093]
     input_file = '../input_data/trdata_PT_8000.npy'   # test acc: [0.24916573971078976, 0.45161290322580644, 0.5617352614015573, 0.5761957730812013, 0.7552836484983315, 0.7552836484983315]
     # input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_PT_8000_padding.npy'
-    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy'
-    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy_over_sample_data.npy'
+    # input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy'
+    # input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy_over_sample_data.npy'
+
+    input_file = '../input_data/newapp_10220_pt.npy'
 
     epochs = eval(args['epochs'])
     out_dir = args['out_dir']

@@ -11,6 +11,7 @@ from imblearn.over_sampling import SMOTE  # doctest: +NORMALIZE_WHITESPACE
 
 
 def random_selects_n_items_from_list(value_list, num=10):
+    random.seed(20)
     length = len(value_list)
     if num > length:
         return value_list
@@ -42,31 +43,37 @@ def load_npy_data(input_file, session_size=8000, balance_flg=True, norm_flg=Fals
 
     print(f'input_file:{input_file}')
     data = np.load(input_file)
-    if over_sample_flg:
-        if 'over_sample' not in input_file:
-            input_file = over_sample_SMOTE(input_file)
-            data = np.load(input_file)
-        X_new = data[:, :session_size]
-        y_new = data[:, -1]
-    else:
-        y, X = data[1:, 0], data[1:, 1]
-        data_dict = {}
-        for i, (x_tmp, y_tmp) in enumerate(zip(X, y)):
-            if y_tmp not in data_dict.keys():
-                data_dict[y_tmp] = []
-            else:
-                data_dict[y_tmp].append(x_tmp[0, :session_size].tolist())
-        # data_stat=Counter(data_dict)
-        X_new = []
-        y_new = []
+    # if over_sample_flg:
+    #     if 'over_sample' not in input_file:
+    #         input_file = over_sample_SMOTE(input_file)
+    #         data = np.load(input_file)
+    #     X_new = data[:, :session_size]
+    #     y_new = data[:, -1]
+    # else:
+    y, X = data[1:, 0], data[1:, 1]
+    data_dict = {}
+    for i, (x_tmp, y_tmp) in enumerate(zip(X, y)):
+        if y_tmp in [3, 5]:
+            continue
+        if y_tmp == 4:
+            y_tmp = 4 - 1
+        if y_tmp > 5:
+            y_tmp = y_tmp - 2
+        if y_tmp not in data_dict.keys():
+            data_dict[y_tmp] = []
+        else:
+            data_dict[y_tmp].append(x_tmp[0, :session_size].tolist())
+    # data_stat=Counter(data_dict)
+    X_new = []
+    y_new = []
 
-        for i, key in enumerate(data_dict):
-            if balance_flg:
-                # the number of samples for each application
-                data_dict[key] = random_selects_n_items_from_list(data_dict[key], num=900)
-                # data_dict[y_tmp] = random.choices(value, k=500)
-            X_new.extend(data_dict[key])
-            y_new.extend([key] * len(data_dict[key]))
+    for i, key in enumerate(data_dict):
+        if balance_flg:
+            # the number of samples for each application
+            data_dict[key] = random_selects_n_items_from_list(data_dict[key], num=700)
+            # data_dict[y_tmp] = random.choices(value, k=500)
+        X_new.extend(data_dict[key])
+        y_new.extend([key] * len(data_dict[key]))
 
     if norm_flg:
         range_value = [-0.1, 0.1]
@@ -148,7 +155,7 @@ def over_sample_SMOTE(input_file):
 
     print('Original dataset shape %s' % Counter(y))
     print('new Original dataset shape %s' % Counter(y_new))
-    sm = SMOTE(sampling_strategy='auto', random_state=42)
+    sm = SMOTE(sampling_strategy='not minority', random_state=42)
     X = np.asarray(X_new, dtype=np.uint8)
     y = np.asarray(y_new, dtype=int)
     X_new, y_new = sm.fit_resample(X, y)
@@ -207,13 +214,13 @@ def over_sample_demo(input_file, flg=True):
 
 
 if __name__ == '__main__':
-    # input_file = '../input_data/trdata-8000B_payload.npy'
-    # input_file = '../input_data/trdata-8000B_header_payload_20190326.npy'
-    # input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy'
-    # # input_file='./over_sample_data.npy'
-    # input_file = over_sample_SMOTE(input_file)
+    input_file = '../input_data/trdata-8000B_payload.npy'
+    input_file = '../input_data/trdata-8000B_header_payload_20190326.npy'
+    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy'
+    # input_file='./over_sample_data.npy'
+    input_file = over_sample_SMOTE(input_file)
 
-    input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy_over_sample_data.npy'
-    X, y = load_npy_data(input_file, session_size=200)
-    # # X, y = load_new_npy(input_file)
-    save_to_arff(X, y)
+    # input_file = '/Users/kunyang/PycharmProjects/ApplicationClassification/input_data/trdata_P_8000.npy_over_sample_data.npy'
+    # X, y = load_npy_data(input_file, session_size=200)
+    # # # X, y = load_new_npy(input_file)
+    # save_to_arff(X, y)
