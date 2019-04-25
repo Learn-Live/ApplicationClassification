@@ -1,3 +1,5 @@
+import random
+
 from sklearn import metrics
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
@@ -8,6 +10,8 @@ from sklearn.tree import DecisionTreeClassifier
 from numpy_load_and_arff import load_npy_data
 from xgboost import XGBClassifier
 from sklearn.preprocessing import StandardScaler
+
+random.seed(20)
 
 def main_xgboost(X, Y, session_size=2000, test_percent=0.1):
     input_size = 500
@@ -51,8 +55,8 @@ def main_xgboost(X, Y, session_size=2000, test_percent=0.1):
     # value = [100]
     value = 100
     print("n_estimators: ", value)
-    # truncatelist = [10, 100, 300, 500, 3000, 6000, session_size]
-    truncatelist = [i * 100 + 500 for i in range(50, 100, 5)]
+    truncatelist = [10, 100, 300, 500, 2000, 3000, 6000, 7000, 8000, session_size]
+    # truncatelist = [i * 100 + 500 for i in range(50, 100, 5)]
     print(f'{truncatelist}')
     # for i in range(50,1500,50):
     for i in truncatelist:
@@ -102,6 +106,6 @@ if __name__ == '__main__':
     # input_file = '../input_data/trdata_PT_8000.npy'  # test acc: [0.24916573971078976, 0.45161290322580644, 0.5617352614015573, 0.5761957730812013, 0.7552836484983315, 0.7552836484983315]
     # input_file ='../input_data/trdata_PT_8000_padding.npy'  # test acc: [0.389321468298109, 0.5828698553948832, 0.6262513904338154, 0.6551724137931034, 0.8731924360400445, 0.8921023359288098]
     input_file = '../input_data/newapp_10220_pt.npy'
-    session_size = 6000
+    session_size = 10220
     X, y = load_npy_data(input_file, session_size)
     main_xgboost(X, y, session_size)

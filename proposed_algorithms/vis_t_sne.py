@@ -26,16 +26,16 @@ def vis_high_dims_data_umap(X, y, show_label_flg=False):
     :return:
     """
     # res_umap=umap.UMAP(n_neighbors=5,min_dist=0.3, metric='correlation').fit_transform(X,y)
-    res_umap = umap.UMAP(n_neighbors=10, min_dist=0.3, spread=2, metric='correlation').fit_transform(X, y)
+    res_umap = umap.UMAP(n_neighbors=30, min_dist=0.12, spread=1.8, metric='correlation').fit_transform(X, y)
 
     if not show_label_flg:
         plt.figure(figsize=(10, 5))
-        plt.scatter(res_umap[:, 0], res_umap[:, 1], c=y, cmap=plt.cm.get_cmap("jet", 10), alpha=0.7)
-        plt.colorbar(ticks=range(10))
+        plt.scatter(res_umap[:, 0], res_umap[:, 1], c=y, cmap=plt.cm.get_cmap("jet", 7), alpha=0.7)
+        plt.colorbar(ticks=range(7))
         plt.title('umap results')
         plt.show()
     else:
-        plot_with_labels(X, y, res_umap, "UMAP", min_dist=20.0)
+        plot_with_labels(X, y, res_umap, "UMAP", min_dist=2.0)
 
 
 
@@ -91,7 +91,7 @@ def demo_t_sne():
     import matplotlib.pyplot as plt
 
     iris = load_iris()
-    X_tsne = TSNE(learning_rate=100, n_components=3, perplexity=40, verbose=2).fit_transform(iris.data)
+    X_tsne = TSNE(learning_rate=100, n_components=2, perplexity=10, verbose=2).fit_transform(iris.data)
     X_pca = PCA().fit_transform(iris.data)
 
     plt.figure(figsize=(10, 5))
@@ -171,8 +171,10 @@ if __name__ == '__main__':
     else:
         input_file = '../input_data/trdata-8000B_payload.npy'
         input_file = '../input_data/trdata-8000B_header_payload_20190326.npy'
-        session_size=8000
-        X, y = load_npy_data(input_file,session_size)
+        input_file = '../input_data/newapp_10220_pt.npy'
+
+        session_size = 3000
+        X, y = load_npy_data(input_file, session_size, norm_flg=True)
         # X = list(map(lambda t: t[:session_size], X))
         y = list(map(lambda t: int(float(t)), y))
         # change_labels(y)

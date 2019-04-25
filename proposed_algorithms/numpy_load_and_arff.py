@@ -11,7 +11,7 @@ from imblearn.over_sampling import SMOTE  # doctest: +NORMALIZE_WHITESPACE
 
 
 def random_selects_n_items_from_list(value_list, num=10):
-    random.seed(20)
+    # random.seed(20)
     length = len(value_list)
     if num > length:
         return value_list
