@@ -21,6 +21,37 @@ from matplotlib import rcParams
 
 rcParams.update({'figure.autolayout': True})
 
+import umap
+import numpy as np
+
+
+def vis_high_dims_data_umap_2(X, y, show_label_flg=False):
+    """
+
+    :param X:  features
+    :param y:  labels
+    :param show_label_flg :
+    :return:
+    """
+    # res_umap=umap.UMAP(n_neighbors=5,min_dist=0.3, metric='correlation').fit_transform(X,y)
+    res_umap = umap.UMAP(n_neighbors=50, min_dist=0.8, metric='correlation', random_state=42).fit_transform(X, y)
+
+    if not show_label_flg:
+        # plt.figure(figsize=(10, 5))
+        fig, ax = plt.subplots(figsize=(12, 7))
+        plt.scatter(res_umap[:, 0], res_umap[:, 1], c=y, cmap=plt.cm.get_cmap("jet", 8), alpha=0.8)
+        # cbar = fig.colorbar(cax, ticks=[1, 2, 3, 4, 5, 6, 7, 8], orientation='horizontal')
+        cbar = fig.colorbar(ax, ticks=[1, 2, 3, 4, 5, 6, 7, 8])
+        cbar.ax.set_xticklabels(
+            ['Google', 'Twitter', 'Youtube', 'Outlook', 'Github', 'Facebook', 'Slack', 'Bing'])  # horizontal colorbar
+
+        # plt.colorbar(ticks=range(0,9))
+        plt.setp(ax, xticks=[], yticks=[])
+        # plt.title('umap results')
+        plt.show()
+    else:
+        plot_with_labels(X, y, res_umap, "UMAP", min_dist=2.0)
+
 
 def vis_high_dims_data_umap(X, y, show_label_flg=False):
     """

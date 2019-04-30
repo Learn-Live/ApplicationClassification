@@ -26,7 +26,7 @@ def vis_high_dims_data_umap(X, y, show_label_flg=False):
     :return:
     """
     # res_umap=umap.UMAP(n_neighbors=5,min_dist=0.3, metric='correlation').fit_transform(X,y)
-    res_umap = umap.UMAP(n_neighbors=30, min_dist=0.12, spread=1.8, metric='correlation').fit_transform(X, y)
+    res_umap = umap.UMAP(n_neighbors=50, min_dist=0.12, spread=1.8, metric='correlation').fit_transform(X, y)
 
     if not show_label_flg:
         plt.figure(figsize=(10, 5))
