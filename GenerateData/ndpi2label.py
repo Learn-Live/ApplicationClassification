@@ -1,6 +1,6 @@
 import re
 import sys
-wantedProtocol = ["SSH","Bittorrent","RDP","FTP"] #all protocols with "." in it do not need to be filled in to it.
+wantedProtocol = ["SSL.Google"] #all protocols with "." in it do not need to be filled in to it.
 
 if __name__ == "__main__":
 	statdic = {}
@@ -10,10 +10,15 @@ if __name__ == "__main__":
 		print("usage: ndpi2lable.py ndpiresult.txt label.txt\ngetting statistics on the log and generate labels. Wanted protocol list can be changed\n* use ndpi -i pcap -v 1 to generate ndpiresult.txt")
 		exit(0)
 	ndpiResult = sys.argv[1]
+	print "ndpiResult: "+ndpiResult
+	with open(ndpiResult, "r") as rf:
+		with open("ndpilog."+ndpiResult.split("t")[1], "w") as wf:
+			s = rf.read()
+			wf.write(s+ "\n")
 	fout = open(sys.argv[2], "w")
 	fout.close()
 	fout = open(sys.argv[2], "a")
-	with open(ndpiResult,"r",encoding = "UTF-8") as rfile:
+	with open(ndpiResult,"r") as rfile:
 		s = rfile.readline()
 		while (s):
 			s = s.strip()
@@ -27,7 +32,7 @@ if __name__ == "__main__":
 				
 			if (len(parselist) != 0):
 				protocol = parselist[0][1].split("/")[1][:-2]
-				if ("." not in protocol and protocol not in wantedProtocol):
+				if (protocol.strip() not in wantedProtocol):
 					s = rfile.readline()
 					continue
 				if (protocol.split(".")[0].strip() == "DNS" or protocol.split(".")[0].strip() == "HTTP" or protocol.split(".")[0].strip() == "SSH"):
@@ -61,7 +66,7 @@ if __name__ == "__main__":
 		print("Finished, no desired flow found")	
 	else:
 		print("Finished:")
-		with open("log.txt", "a",encoding="UTF-8") as logfile:
+		with open("log.txt", "a") as logfile:
 			for key, value in statdic.items():
 				logfile.write(key+": "+str(value)+"\n")
 			logfile.write("\n\n")
@@ -69,3 +74,4 @@ if __name__ == "__main__":
 			print(key,": ",value)
 	fout.close()
 			
+
