@@ -53,6 +53,7 @@ len = [0.0, 3.3820054628624083, 4.8554581426022185, 6.311031461569096, 7.1890204
 plt.plot(session, len, 'b-^')
 plt.ylabel("The number of packets needed")
 plt.xlabel('Input size (Bytes) of the model')
+plt.ylim(0, 10)
 
 # plt.savefig("pkt_len.jpg")
 plt.savefig("relation_inputsize_pktsnum.pdf")

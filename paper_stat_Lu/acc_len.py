@@ -42,12 +42,12 @@ test = np.asarray(test, dtype=float) * 100
 
 # plt.figure(figsize=(4.5, 2.5))
 
-plt.plot(ide, test, 'b-o')
+plt.plot(ide, test, 'bo-')
 # plt.plot(ide, test, 'b-^', ide, test, 'g')
 plt.ylabel("Classification accuracy (%)")
 plt.xlabel('Input size (bytes) of the classification model')
 plt.ylim(0, 100)
-plt.tight_layout(.5)
+# plt.tight_layout(.5)
 
 plt.savefig("relation_inputsize_accuracy.pdf")  # should use before plt.show()
 
