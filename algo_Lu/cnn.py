@@ -14,20 +14,26 @@ from sklearn.preprocessing import MinMaxScaler
 SAMPLE= 700
 marco = 44
 resample = True
-#random.seed(5)
+# random.seed(5)
 epochs = 100
 batch_size = 64
 ts = str(int(time.time()))
-#loaddata
+# loaddata
 print("loading data.....")
-removelist = [3,5]  # remove y label
+removelist = [3, 5]  # remove y label
 catenumber = 8
-a = np.load('newapp_2000_t.npy')[1:]
-trainY = (a[:,0]).reshape(-1,1)
-trainX = (a[:,1])
+import numpy as np
+
+# save np.load
+np_load_old = np.load
+# modify the default parameters of np.load
+np.load = lambda *a, **k: np_load_old(*a, allow_pickle=True, **k)
+a = np.load('../input_data/newapp_10220_pt.npy')[1:]
+trainY = (a[:, 0]).reshape(-1, 1)
+trainX = (a[:, 1])
 truetrainX = []
 truetrainY = []
-for i in range(0,len(trainX)):
+for i in range(0, len(trainX)):
 	if i % 1000 == 0:
 		print(i)
 	Xli = trainX[i][0]
