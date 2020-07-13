@@ -49,23 +49,62 @@ lrdata = [[66, 0, 0, 0, 2, 1, 1, 0],
           [0, 6, 0, 3, 15, 2, 38, 4],
           [0, 1, 19, 0, 5, 1, 6, 38]]
 
-GaussianNBdata = [[52, 0, 12, 0, 1, 3, 0, 2],
-                  [1, 32, 2, 1, 0, 4, 1, 30],
-                  [0, 6, 11, 2, 0, 0, 1, 41],
-                  [0, 1, 1, 41, 0, 17, 0, 7],
-                  [2, 7, 0, 1, 0, 4, 3, 56],
-                  [2, 5, 0, 0, 0, 40, 1, 32],
-                  [7, 5, 2, 1, 2, 5, 2, 44],
-                  [6, 5, 0, 0, 0, 1, 0, 58]]
+GaussianNBdata = [[130, 1, 2, 0, 0, 0, 0, 0]
+                  [0 144  10   0   0   0   0, 0]
+[0
+6
+148
+0
+0
+0
+0, 0]
+[0   0   0 142   0   0   0, 0]
+[0
+0
+0
+0
+143
+0
+0, 0]
+[0   0   0   0   0 155   0, 0]
+[0
+0
+0
+0
+0
+0
+152, 0]
+[0   0   0   0   0   0, 0, 146]]
 
-KNNdata = [[65, 0, 1, 1, 0, 1, 1, 1],
-           [0, 60, 3, 1, 0, 1, 2, 4],
-           [0, 0, 40, 2, 7, 0, 2, 10],
-           [1, 1, 4, 57, 1, 1, 1, 1],
-           [0, 2, 13, 0, 42, 0, 8, 8],
-           [1, 5, 9, 0, 5, 52, 5, 3],
-           [1, 3, 22, 4, 8, 0, 27, 3],
-           [5, 1, 32, 0, 10, 1, 3, 18]]
+KNNdata = [[133   0   0   0   0   0   0   0]
+           [0 139  15   0   0   0   0   0]
+[0
+7
+147
+0
+0
+0
+0
+0]
+[0   0   0 142   0   0   0   0]
+[0
+0
+0
+0
+143
+0
+0
+0]
+[0   0   0   0   0 155   0   0]
+[0
+0
+0
+0
+0
+0
+152
+0]
+[0   0   0   0   0   0   0 146]]
 
 svmdata = [[65, 0, 0, 1, 2, 1, 0, 1],
            [0, 60, 3, 1, 2, 0, 5, 0],
@@ -119,7 +158,7 @@ for idx, (key, data) in enumerate(test_results_dict.items()):
         recall = tp / tpfn
         if precision + recall == 0:
             f1 = 0.0
-            print(f'{key,i}')
+            print(f'{key, i}')
         else:
             f1 = 2 * precision * recall / (precision + recall)
         f1_lst.append([precision, recall, f1])
@@ -162,6 +201,7 @@ rects5 = plt.bar(index + (5 - 1) * bar_width, f1, bar_width, alpha=opacity, colo
 key = 'CNN'
 f1 = list(map(lambda x: x[-1], f1_dict[key]))
 rects6 = plt.bar(index + (6 - 1) * bar_width, f1, bar_width, alpha=opacity, color='r', label='Frank6')
+
 
 # rects1 = plt.bar(index , f1, bar_width,alpha=opacity,color='b')
 # rects2 = plt.bar(index + bar_width, dtf1, bar_width,alpha=opacity,color='r')
